@@ -2,6 +2,7 @@
   "name": "slate",
   "version": "0.0.1",
   "description": "Start with a clean slate and get yourself going with a ready made basic static website setup",
+  "bin": "./bin/cli.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/code-computerlove/slate"
