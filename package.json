@@ -1,10 +1,10 @@
 {
-  "name": "website-basic",
+  "name": "slate",
   "version": "0.0.1",
-  "description": "A basic website setup with gulp",
+  "description": "Start with a clean slate and get yourself going with a ready made basic static website setup",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/code-computerlove/node-static-site-generator"
+    "url": "git+https://github.com/code-computerlove/slate"
   },
   "scripts": {
     "start": "gulp watch && gulp serve"
