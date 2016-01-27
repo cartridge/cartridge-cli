@@ -4,8 +4,10 @@ var program = require('commander');
 var inquirer = require('inquirer');
 var path = require('path');
 var chalk = require('chalk');
+var fs = require('fs-extra');
 
 var pkg = require(path.resolve(__dirname, '..', 'package.json'));
+var libDir = path.resolve(__dirname, '..', 'lib'); 
 
 program.version(pkg.version)
 
@@ -18,17 +20,15 @@ program
         inquirer.prompt([{
             type: "confirm",
             name: "needTravis",
-            message: "Do you need a travis.yml file?",
-            default: false 
-        }, {
-            type: "confirm",
-            name: "needAppVeyor",
-            message: "Do you need an appveyor.yml file?",
-            default: false
+            message: "Copying over files to current directory. Press enter to confirm",
+            default: true 
         }], function(answers) {
-            console.log('hits prompt callback');
-            console.log('answers ->', answers);
-            console.log('parse answers and copy over files and things');
+            console.log('copying over files...');
+
+            fs.copy(libDir, process.cwd(), function (err) {
+              if (err) return console.error(err)
+              console.log("success! - files copied");
+            })
         })
     });
 
