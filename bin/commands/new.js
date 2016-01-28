@@ -5,7 +5,7 @@ var path = require('path');
 
 var PROMPT_OPTIONS = [{
     type: "confirm",
-    name: "okToCopyFiles",
+    name: "isOkToCopyFiles",
     message: "Copying over files to current directory. Press enter to confirm",
     default: true 
 }]
@@ -23,11 +23,15 @@ module.exports = function(libDir) {
 
     function inquirerCallback(answers) {
 
-        console.log('copying over files...');
+        if(answers.isOkToCopyFiles) {
+            console.log('copying over files...');
 
-        fs.copy(libDir, process.cwd(), function (err) {
-          if (err) return console.error(err)
-          console.log("success! - files copied");
-        })
+            fs.copy(libDir, process.cwd(), function (err) {
+              if (err) return console.error(err)
+              console.log("success! - files copied");
+            })
+        } else {
+            console.log('User cancelled - no files copied')
+        }
     }
 }
