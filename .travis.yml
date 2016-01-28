@@ -3,13 +3,12 @@ language: node_js
 node_js:
     - stable
     - "0.12"
-before_install:
-    - cd app
-    - npm install
 install:
     - npm install
     - npm install -g mocha
     - npm install -g gulp
+    - cd app
+    - npm install
 script: 
     - mocha
 cache:
