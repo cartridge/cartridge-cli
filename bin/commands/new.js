@@ -16,6 +16,11 @@ module.exports = function(appDir) {
     };
 
     function init() {
+        console.log('\n');
+        console.log(chalk.inverse(' Running through setup for a new project. '));
+        console.log(chalk.underline('>> This can be exited out by pressing [Ctrl+C]'));
+        console.log('\n');
+
         inquirer.prompt(promptOptions.newOptions, inquirerCallback);
     }
 
