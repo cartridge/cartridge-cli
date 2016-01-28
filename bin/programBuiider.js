@@ -1,11 +1,12 @@
 var exports = module.exports;
 var program = require('commander');
 var path = require('path');
+var libDir = path.resolve(__dirname, '..', 'lib'); 
 
-var newCommand = require('./commands/new');
+var newCommand = require('./commands/new')(libDir);
 var pkg = require(path.resolve(__dirname, '..', 'package.json'));
 
-exports.init = function() {
+module.exports = function() {
     setProgramVersion();
     setNewCommand();
     initProgram();

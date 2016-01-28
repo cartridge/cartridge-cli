@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('./programBuiider.js').init();
+require('./programBuiider.js')();
