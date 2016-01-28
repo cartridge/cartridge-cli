@@ -3,6 +3,7 @@ var inquirer = require('inquirer');
 var fs = require('fs-extra');
 var path = require('path');
 var titleize = require('titleize');
+var extend = require('extend');
 
 var fileTemplater = require('../fileTemplater')();
 
@@ -54,8 +55,8 @@ module.exports = function(appDir) {
         return {
             projectName: _projectName,
             projectNameFileName: _projectName.toLowerCase().replace(/ /g,"-"),
-            projectAuthor: _promptAnswers.projectAuthor,
-            projectDescription: _promptAnswers.projectDescription
+            // projectAuthor: _promptAnswers.projectAuthor,
+            // projectDescription: _promptAnswers.projectDescription
         }
     }
 
@@ -81,8 +82,9 @@ module.exports = function(appDir) {
     }
 
     function templateCopiedFiles() {
-        fileTemplater.setTemplateData(getTemplateData());
+        var templateData = extend({}, _promptAnswers, getTemplateData())
 
+        fileTemplater.setTemplateData(templateData);
         fileTemplater.setFileList(['_config/creds.json', 'package.json']);
 
         fileTemplater.run(function() {
