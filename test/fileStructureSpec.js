@@ -40,9 +40,6 @@ describe('As a dev', function() {
 
             files.forEach(function(fileName) {
                 filePathToTest = path.join(ROOT_DIR, fileName);
-
-                console.log('path to test', filePathToTest);
-
                 filePathToTest.should.be.a.file().and.not.empty;
             });
         })
