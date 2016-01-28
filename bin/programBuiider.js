@@ -13,8 +13,8 @@ module.exports = function() {
 
 function setNewCommand() {
     program
-        .command('new <name>')
-        .description('Create a new project with the provided name')
+        .command('new')
+        .description('Create a new project')
         .action(newCommand.init);
 }
 

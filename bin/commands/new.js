@@ -7,7 +7,6 @@ var extend = require('extend');
 var fileTemplater = require('../fileTemplater')();
 var promptOptions = require('../promptOptions')();
 
-var _projectName;
 var _promptAnswers;
 
 module.exports = function(appDir) {
@@ -16,16 +15,13 @@ module.exports = function(appDir) {
         init: init
     };
 
-    function init(name) {
-        _projectName = name;
-        console.log('Creating a new project: %s', chalk.underline(_projectName));
+    function init() {
         inquirer.prompt(promptOptions.newOptions, inquirerCallback);
     }
 
     function getTemplateData() {
         return {
-            projectName: _projectName,
-            projectNameFileName: _projectName.toLowerCase().replace(/ /g,"-"),
+            projectNameFileName: _promptAnswers.projectName.toLowerCase().replace(/ /g,"-"),
         }
     }
 

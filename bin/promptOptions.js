@@ -12,9 +12,14 @@ module.exports = function() {
 
 _newOptions = [{
     type: "input",
+    name: "projectName",
+    message: "What is the project name?",
+    validate: function(value) { return inputNotEmpty(value, "Project Name"); },
+},{
+    type: "input",
     name: "projectAuthor",
     message: "Who is the author of the project?",
-    validate: authorValidate,
+    validate: function(value) { return inputNotEmpty(value, "Author"); },
     filter: function(value) { return titleize(value); }
 }, {
     type: "input",
@@ -28,12 +33,12 @@ _newOptions = [{
     default: true 
 }]
 
-function authorValidate(value) {
+function inputNotEmpty(value, fieldName) {
     var isValid = (value !== "");
 
     if(isValid) {
         return true;
     } else {
-        return "Author cannot be empty"
+        return fieldName + " cannot be empty";
     }
 }
