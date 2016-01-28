@@ -4,8 +4,8 @@ node_js:
     - stable
     - "0.12"
 before_install:
+    - cd lib
     - npm install
-    - cd generatorTests
 install:
     - npm install
     - npm install -g mocha
@@ -15,4 +15,9 @@ script:
 cache:
   directories:
     - node_modules
-    - generatorTests/node_modules
+    - lib/node_modules
+
+
+
+
+
