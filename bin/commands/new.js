@@ -2,42 +2,13 @@ var chalk = require('chalk');
 var inquirer = require('inquirer');
 var fs = require('fs-extra');
 var path = require('path');
-var titleize = require('titleize');
 var extend = require('extend');
 
 var fileTemplater = require('../fileTemplater')();
+var promptOptions = require('../promptOptions')();
 
 var _projectName;
 var _promptAnswers;
-
-var PROMPT_OPTIONS = [{
-    type: "input",
-    name: "projectAuthor",
-    message: "Who is the author of the project?",
-    validate: function(value) {
-        var isValid = (value !== "");
-
-        if(isValid) {
-            return true;
-        } else {
-            return "Author cannot be empty"
-        }
-
-    },
-    filter: function(value) {
-        return titleize(value);
-    }
-}, {
-    type: "input",
-    name: "projectDescription",
-    message: "What is the project description?",
-    default: function () { return ""; }
-},{
-    type: "confirm",
-    name: "isOkToCopyFiles",
-    message: "Copying over files to current directory. Press enter to confirm",
-    default: true 
-}]
 
 module.exports = function(appDir) {
 
@@ -48,7 +19,7 @@ module.exports = function(appDir) {
     function init(name) {
         _projectName = name;
         console.log('Creating a new project: %s', chalk.underline(_projectName));
-        inquirer.prompt(PROMPT_OPTIONS, inquirerCallback);
+        inquirer.prompt(promptOptions.newOptions, inquirerCallback);
     }
 
     function getTemplateData() {
