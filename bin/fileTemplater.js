@@ -38,7 +38,7 @@ module.exports = function() {
             var compiled = template(fileContents);
             var output = compiled(_templateData);
 
-            fs.writeFile(path.join(process.cwd(), filePath), output, 'utf8', function(err) {
+            fs.writeFile(path.join(_basePath, filePath), output, 'utf8', function(err) {
                 if (err) return console.error(err)
 
                 _fileNumber++;
