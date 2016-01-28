@@ -29,7 +29,7 @@ _newOptions = [{
 },{
     type: "confirm",
     name: "isOkToCopyFiles",
-    message: "Copying over files to current directory. Press enter to confirm",
+    message: "Read to start setup! Press enter to confirm",
     default: true 
 }]
 

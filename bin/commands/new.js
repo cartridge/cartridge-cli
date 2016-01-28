@@ -29,7 +29,7 @@ module.exports = function(appDir) {
         _promptAnswers = answers;
 
         if(_promptAnswers.isOkToCopyFiles) {
-            console.log('copying over files...');
+            console.log('Copying over files...');
 
             fs.copy(appDir, process.cwd(), {
                 filter: function(path) {
@@ -47,13 +47,18 @@ module.exports = function(appDir) {
     }
 
     function templateCopiedFiles() {
+        console.log('Templating files...');
+
         var templateData = extend({}, _promptAnswers, getTemplateData())
 
         fileTemplater.setTemplateData(templateData);
-        fileTemplater.setFileList(['_config/creds.json', 'package.json']);
+        fileTemplater.setFileList([
+            path.join('_config', 'creds.json'),
+            'package.json'
+        ]);
 
         fileTemplater.run(function() {
-            console.log('hits templater callback');
+            console.log('Installation complete!');
         });
     }
 }
