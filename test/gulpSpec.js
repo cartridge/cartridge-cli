@@ -6,7 +6,7 @@ var chai = require('chai');
 chai.use(require('chai-fs'));
 chai.should();
 
-const ROOT_DIR = path.join(process.cwd(), '..');
+const ROOT_DIR = path.join(process.cwd(), 'lib');
 
 function runGulpTask(options, callback) {
 
@@ -28,7 +28,7 @@ function cleanBuildAndReleaseFolders() {
     fs.removeSync(releasePath);
 }
 
-describe('As a dev', function() {
+xdescribe('As a dev', function() {
 
     this.timeout(100000);
 

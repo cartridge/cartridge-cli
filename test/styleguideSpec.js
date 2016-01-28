@@ -1,6 +1,6 @@
 var fs = require('fs');
 var chai = require('chai');
-var route = require('../../routes/main.js');
+var route = require('../lib/routes/main.js');
 
 describe('Styleguide automated content', function() {
 

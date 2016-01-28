@@ -4,7 +4,7 @@ var chai = require('chai');
 chai.use(require('chai-fs'));
 chai.should();
 
-const ROOT_DIR = path.join(process.cwd(), '..');
+const ROOT_DIR = path.join(process.cwd(), 'lib');
 
 describe('As a dev', function() {
 
