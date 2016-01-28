@@ -1,4 +1,5 @@
 var fs = require('fs');
+var path = require('path');
 var chai = require('chai');
 var route = require('../lib/routes/main.js');
 
@@ -9,9 +10,12 @@ describe('Styleguide automated content', function() {
     describe('When I request a file from disk', function() {
 
         it('should return a single file', function(done) {
-            var file = fs.readFile(__dirname + '/../../_source/styles/_settings/_settings.colors.scss', 'utf8', function (err,data) {
-              data.should.not.be.empty;
-              done();
+
+            var fileToTest = path.resolve(__dirname, '..', 'lib', '_source', 'styles', '_settings', '_settings.colors.scss')
+
+            var file = fs.readFile(fileToTest, 'utf8', function (err,data) {
+                data.should.not.be.empty;
+                done();
             });
             
         });
