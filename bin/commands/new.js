@@ -33,7 +33,7 @@ var PROMPT_OPTIONS = [{
     default: true 
 }]
 
-module.exports = function(libDir) {
+module.exports = function(appDir) {
 
     return {
         init: init
@@ -56,12 +56,14 @@ module.exports = function(libDir) {
     function inquirerCallback(answers) {
         _promptAnswers = answers;
 
-        console.log(_promptAnswers);
-
         if(_promptAnswers.isOkToCopyFiles) {
             console.log('copying over files...');
 
-            fs.copy(libDir, process.cwd(), function (err) {
+            fs.copy(appDir, process.cwd(), {
+                filter: function(path) {
+                    return path.indexOf("node_modules") === -1;
+                }
+            }, function (err) {
                 if (err) return console.error(err)
 
                 templateCopiedFiles();
@@ -73,7 +75,9 @@ module.exports = function(libDir) {
     }
 
     function templateCopiedFiles() {
-        fileTemplater.setTemplateData(getTemplateData())
+        fileTemplater.setTemplateData(getTemplateData());
+
+        fileTemplater.setFileList(['_config/creds.json', 'package.json']);
 
         fileTemplater.run(function() {
             console.log('hits templater callback');

@@ -1,8 +1,8 @@
 var program = require('commander');
 var path = require('path');
-var libDir = path.resolve(__dirname, '..', 'lib'); 
+var appDir = path.resolve(__dirname, '..', 'app'); 
 
-var newCommand = require('./commands/new')(libDir);
+var newCommand = require('./commands/new')(appDir);
 var pkg = require(path.resolve(__dirname, '..', 'package.json'));
 
 module.exports = function() {

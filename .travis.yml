@@ -19,4 +19,3 @@ cache:
 branches:
     except:
         - feature/command-line-interface 
-        - generatorTests/node_modules 

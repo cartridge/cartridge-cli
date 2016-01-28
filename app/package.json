@@ -1,5 +1,5 @@
 {
-  "name": "slate-proect-specifc-package-todo-change-this-would-be-the-input-project-name",
+  "name": "<%= projectNameFileName %>",
   "version": "0.0.1",
   "description": "Start with a clean slate and get yourself going with a ready made basic static website setup",
   "repository": {
