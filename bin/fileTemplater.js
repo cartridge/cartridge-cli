@@ -24,11 +24,9 @@ module.exports = function() {
     }
 
     function run(callback) {
-
         _fileList.forEach(function(element, index, array) {
             templateFile(element, callback);
         });
-
     }
 
     function templateFile(filePath, callback) {
