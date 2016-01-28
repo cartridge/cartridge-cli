@@ -1,4 +1,3 @@
-var exports = module.exports;
 var program = require('commander');
 var path = require('path');
 var libDir = path.resolve(__dirname, '..', 'lib'); 
