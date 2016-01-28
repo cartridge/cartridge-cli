@@ -5,8 +5,7 @@ var template = require('lodash/template');
 var _templateData;
 var _fileList;
 var _fileNumber = 1;
-
-var FILES = ['creds.json']
+var _basePath = process.cwd();
 
 module.exports = function() {
 
@@ -33,7 +32,7 @@ module.exports = function() {
     }
 
     function templateFile(filePath, callback) {
-        fs.readFile(path.join(process.cwd(), filePath), 'utf8', function(err, fileContents) {
+        fs.readFile(path.join(_basePath, filePath), 'utf8', function(err, fileContents) {
             if (err) return console.error(err)
 
             var compiled = template(fileContents);
