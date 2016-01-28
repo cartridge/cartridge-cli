@@ -22,18 +22,39 @@ module.exports = function(libDir) {
     function init(name) {
         _projectName = name;
         console.log('Creating a new project: %s', chalk.underline(_projectName));
-        inquirer.prompt(PROMPT_OPTIONS, inquirerCallback)
+        inquirer.prompt(PROMPT_OPTIONS, inquirerCallback);
     }
 
     function inquirerCallback(answers) {
+
+        /**
+         * THIS IS HORRIBLE
+         * REFACTOR!!!111
+         */
 
         if(answers.isOkToCopyFiles) {
             console.log('copying over files...');
 
             fs.copy(libDir, process.cwd(), function (err) {
-              if (err) return console.error(err)
-              console.log("success! - files copied");
+                if (err) return console.error(err)
+
+                fs.readFile(path.join(process.cwd(), '_config', 'creds.json'), 'utf8', function(err, data) {
+                    if (err) return console.error(err)
+
+                    var compiled = template(data);
+                    var output = compiled({
+                        projectName: _projectName
+                    });
+
+                    fs.writeFile(path.join(process.cwd(), '_config', 'creds.json'), output, 'utf8', function(err) {
+                        if (err) return console.error(err)
+
+                        console.log("success! - files copied");
+                    });
+
+                });
             })
+
         } else {
             console.log('User cancelled - no files copied')
         }

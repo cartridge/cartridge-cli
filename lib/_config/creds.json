@@ -1,5 +1,5 @@
 {
-	"Site": "Static Site",
+	"Site": "<%= projectName %>",
 	"Author": "Andrew Brandwood",
 	"packageName": "static-site-build"
 }
