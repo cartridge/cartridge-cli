@@ -17,8 +17,8 @@ module.exports = function(appDir) {
 
     function init() {
         console.log('\n');
-        console.log(chalk.inverse(' Running through setup for a new project. '));
-        console.log(chalk.underline('>> This can be exited out by pressing [Ctrl+C]'));
+        console.log(chalk.bold('Running through setup for a new project.'));
+        console.log(chalk.underline('This can be exited out by pressing [Ctrl+C]'));
         console.log('\n');
 
         inquirer.prompt(promptOptions.newOptions, inquirerCallback);
@@ -34,7 +34,8 @@ module.exports = function(appDir) {
         _promptAnswers = answers;
 
         if(_promptAnswers.isOkToCopyFiles) {
-            console.log('Copying over files...');
+            console.log('\n');
+            console.log('> Copying over files...');
 
             fs.copy(appDir, process.cwd(), {
                 filter: function(path) {
@@ -52,7 +53,7 @@ module.exports = function(appDir) {
     }
 
     function templateCopiedFiles() {
-        console.log('Templating files...');
+        console.log('> Templating files...');
 
         var templateData = extend({}, _promptAnswers, getTemplateData())
 
@@ -63,7 +64,8 @@ module.exports = function(appDir) {
         ]);
 
         fileTemplater.run(function() {
-            console.log('Installation complete!');
+            console.log('> Installation complete ✓');
+            console.log('\n');
         });
     }
 }
