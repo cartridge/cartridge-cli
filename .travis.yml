@@ -4,7 +4,7 @@ node_js:
     - stable
     - "0.12"
 before_install:
-    - cd lib
+    - cd app
     - npm install
 install:
     - npm install
@@ -15,4 +15,4 @@ script:
 cache:
   directories:
     - node_modules
-    - lib/node_modules
+    - app/node_modules
