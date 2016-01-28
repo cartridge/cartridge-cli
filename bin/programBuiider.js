@@ -2,7 +2,7 @@ var exports = module.exports;
 var program = require('commander');
 var path = require('path');
 
-var commandManager = require('./commandManager');
+var newCommand = require('./commands/new');
 var pkg = require(path.resolve(__dirname, '..', 'package.json'));
 
 exports.init = function() {
@@ -15,7 +15,7 @@ function setNewCommand() {
     program
         .command('new <name>')
         .description('Create a new project with the provided name')
-        .action(commandManager.newCallback);
+        .action(newCommand.init);
 }
 
 function initProgram() {

@@ -4,9 +4,9 @@ var inquirer = require('inquirer');
 var fs = require('fs-extra');
 var path = require('path');
 
-var libDir = path.resolve(__dirname, '..', 'lib'); 
+var libDir = path.resolve(__dirname, '..', '..' ,'lib'); 
 
-exports.newCallback = function(name) {
+exports.init = function(name) {
     console.log('Creating a new project: %s', chalk.underline(name));
 
     inquirer.prompt([{
