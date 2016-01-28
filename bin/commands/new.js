@@ -26,6 +26,11 @@ var PROMPT_OPTIONS = [{
     filter: function(value) {
         return titleize(value);
     }
+}, {
+    type: "input",
+    name: "projectDescription",
+    message: "What is the project description?",
+    default: function () { return ""; }
 },{
     type: "confirm",
     name: "isOkToCopyFiles",
@@ -49,7 +54,8 @@ module.exports = function(appDir) {
         return {
             projectName: _projectName,
             projectNameFileName: _projectName.toLowerCase().replace(/ /g,"-"),
-            projectAuthor: _promptAnswers.projectAuthor
+            projectAuthor: _promptAnswers.projectAuthor,
+            projectDescription: _promptAnswers.projectDescription
         }
     }
 
