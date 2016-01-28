@@ -2,11 +2,31 @@ var chalk = require('chalk');
 var inquirer = require('inquirer');
 var fs = require('fs-extra');
 var path = require('path');
-var template = require('lodash/template');
+var titleize = require('titleize');
+
+var fileTemplater = require('../fileTemplater')();
 
 var _projectName;
+var _promptAnswers;
 
 var PROMPT_OPTIONS = [{
+    type: "input",
+    name: "projectAuthor",
+    message: "Who is the author of the project?",
+    validate: function(value) {
+        var isValid = (value !== "");
+
+        if(isValid) {
+            return true;
+        } else {
+            return "Author cannot be empty"
+        }
+
+    },
+    filter: function(value) {
+        return titleize(value);
+    }
+},{
     type: "confirm",
     name: "isOkToCopyFiles",
     message: "Copying over files to current directory. Press enter to confirm",
@@ -25,38 +45,38 @@ module.exports = function(libDir) {
         inquirer.prompt(PROMPT_OPTIONS, inquirerCallback);
     }
 
+    function getTemplateData() {
+        return {
+            projectName: _projectName,
+            projectNameFileName: _projectName.toLowerCase().replace(/ /g,"-"),
+            projectAuthor: _promptAnswers.projectAuthor
+        }
+    }
+
     function inquirerCallback(answers) {
+        _promptAnswers = answers;
 
-        /**
-         * THIS IS HORRIBLE
-         * REFACTOR!!!111
-         */
+        console.log(_promptAnswers);
 
-        if(answers.isOkToCopyFiles) {
+        if(_promptAnswers.isOkToCopyFiles) {
             console.log('copying over files...');
 
             fs.copy(libDir, process.cwd(), function (err) {
                 if (err) return console.error(err)
 
-                fs.readFile(path.join(process.cwd(), '_config', 'creds.json'), 'utf8', function(err, data) {
-                    if (err) return console.error(err)
-
-                    var compiled = template(data);
-                    var output = compiled({
-                        projectName: _projectName
-                    });
-
-                    fs.writeFile(path.join(process.cwd(), '_config', 'creds.json'), output, 'utf8', function(err) {
-                        if (err) return console.error(err)
-
-                        console.log("success! - files copied");
-                    });
-
-                });
+                templateCopiedFiles();
             })
 
         } else {
             console.log('User cancelled - no files copied')
         }
+    }
+
+    function templateCopiedFiles() {
+        fileTemplater.setTemplateData(getTemplateData())
+
+        fileTemplater.run(function() {
+            console.log('hits templater callback');
+        });
     }
 }
