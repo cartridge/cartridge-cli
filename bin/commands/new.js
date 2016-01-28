@@ -2,6 +2,9 @@ var chalk = require('chalk');
 var inquirer = require('inquirer');
 var fs = require('fs-extra');
 var path = require('path');
+var template = require('lodash/template');
+
+var _projectName;
 
 var PROMPT_OPTIONS = [{
     type: "confirm",
@@ -17,7 +20,8 @@ module.exports = function(libDir) {
     };
 
     function init(name) {
-        console.log('Creating a new project: %s', chalk.underline(name));
+        _projectName = name;
+        console.log('Creating a new project: %s', chalk.underline(_projectName));
         inquirer.prompt(PROMPT_OPTIONS, inquirerCallback)
     }
 
