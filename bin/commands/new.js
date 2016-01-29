@@ -91,9 +91,11 @@ module.exports = function(appDir) {
     }
 
     function getExcludeList() {
-        return [
-            'node_modules',
+        var excludeList = [
+            'node_modules'
         ];
+
+        return excludeList;
     }
 
     function templateCopiedFiles() {
