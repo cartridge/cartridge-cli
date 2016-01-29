@@ -13,6 +13,14 @@ module.exports = function() {
 }
 
 _newOptions = [{
+    type: "list",
+    name: "projectType",
+    message: "What is the project type?",
+    choices: [
+      "Dot NET",
+      "Static Website"
+    ]
+},{
     type: "input",
     name: "projectName",
     message: "What is the project name?",

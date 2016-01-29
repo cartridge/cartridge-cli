@@ -95,6 +95,10 @@ module.exports = function(appDir) {
             'node_modules'
         ];
 
+        if(_promptAnswers.projectType === "Dot NET") {
+            excludeList.push('views');
+        }
+
         return excludeList;
     }
 
