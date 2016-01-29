@@ -27,18 +27,18 @@ module.exports = function(appDir) {
             if (err) return console.error(err);
 
             if(files.length > 1) {
-                console.log('\n');
+                console.log('');
                 console.log(chalk.underline('Warning: The directory you are currently in is not empty!'));
                 console.log(chalk.underline('Going through the setup will perform a clean slate installation.'));
                 console.log(chalk.underline('This will overwrite any user changes'));
-                console.log('\n');
+                console.log('');
 
                 inquirer.prompt(promptOptions.newOptions, inquirerCallback);
             } else {
-                console.log('\n');
+                console.log('');
                 console.log(chalk.bold('Running through setup for a new project.'));
                 console.log(chalk.underline('This can be exited out by pressing [Ctrl+C]'));
-                console.log('\n');
+                console.log('');
 
                 inquirer.prompt(promptOptions.newOptions, inquirerCallback);
             }
@@ -59,7 +59,7 @@ module.exports = function(appDir) {
         _promptAnswers = answers;
 
         if(_promptAnswers.isOkToCopyFiles) {
-            console.log('\n');
+            console.log('');
             console.log('> Copying over files...');
 
             fs.copy(appDir, process.cwd(), {
@@ -93,13 +93,14 @@ module.exports = function(appDir) {
     }
 
     function templateFinished() {
-        console.log('> Installation complete ✓');
+        console.log('> Installation complete!');
 
-        console.log('\n');
-        console.log('You\'re nearly there!');
+        console.log('');
+        console.log('Slate project "' + chalk.underline(_promptAnswers.projectName) +'" has been installed!');
+        console.log('');
         console.log(chalk.underline('Next steps:'));
         console.log('  Run  `npm install` to setup all dependencies');
         console.log('  Run `gulp` for initial setup, `gulp watch` to setup and forget about the build');
-        console.log('\n');
+        console.log('');
     }
 }
