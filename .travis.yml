@@ -9,13 +9,10 @@ install:
     - npm install -g gulp
     - cd app
     - npm install
+    - cd ..
 script: 
     - mocha
 cache:
   directories:
     - node_modules
     - app/node_modules
-
-branches:
-    except:
-        - feature/command-line-interface
