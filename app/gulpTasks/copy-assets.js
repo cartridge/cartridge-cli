@@ -2,7 +2,7 @@
     MOVE / Copy files
 \* ============================================================ */
 
-module.exports = function(gulp, config) {
+module.exports = function(gulp, config, argv, creds) {
     gulp.task('copy:fonts', function(){
         return gulp.src([config.paths.src.fonts + '**/*'])
         .pipe(gulp.dest(config.paths.dest.fonts));

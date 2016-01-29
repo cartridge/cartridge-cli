@@ -30,7 +30,7 @@ var stylesConfig = {
     }
 };
 
-module.exports = function(gulp, config, argv) {
+module.exports = function(gulp, config, argv, creds) {
 
     var sassConfig = {
         errLogToConsole: true,

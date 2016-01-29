@@ -5,7 +5,7 @@
 var browserSync = require('browser-sync');
 var nodemon = require('gulp-nodemon');
 
-module.exports = function(gulp, config) {
+module.exports = function(gulp, config, argv, creds) {
 
     gulp.task('browser-sync', function() {
         browserSync.init(null, {

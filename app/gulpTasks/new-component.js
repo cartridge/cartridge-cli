@@ -9,7 +9,7 @@ var componentPath;
 var hbsFileName;
 var scssFileName;
 
-module.exports = function(gulp, argv) {
+module.exports = function(gulp, config, argv, creds) {
 
     gulp.task('new-component', function (cb) {
 

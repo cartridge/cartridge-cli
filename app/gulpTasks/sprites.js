@@ -5,7 +5,7 @@
 var svgSpritesheet = require('gulp-svg-spritesheet');
 var svg2png = require('gulp-svg2png');
 
-module.exports = function(gulp, config) {
+module.exports = function(gulp, config, argv, creds) {
 
     gulp.task('sprites', function() {
         return gulp.src(config.paths.src.images + 'svgs/*.svg')

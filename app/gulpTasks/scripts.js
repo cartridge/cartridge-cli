@@ -16,7 +16,7 @@ var uglify       = require('gulp-uglify');
 // Config
 var jshintConfig = require('../_config/jshint.json');
 
-module.exports = function(gulp, config, argv) {
+module.exports = function(gulp, config, argv, creds) {
 
     gulp.task('scripts', function(){
         return gulp.src([config.paths.src.scripts + '**/*.js'])

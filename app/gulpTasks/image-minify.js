@@ -7,7 +7,7 @@ var imagemin = require('gulp-imagemin');
 var pngquant = require('imagemin-pngquant');
 var svgmin = require('gulp-svgmin');
 
-module.exports = function(gulp, config, argv) {
+module.exports = function(gulp, config, argv, creds) {
     gulp.task('imagemin', function () {
         return gulp.src(config.paths.src.images + '**/*')
             .pipe(gulpif(argv.prod, imagemin({

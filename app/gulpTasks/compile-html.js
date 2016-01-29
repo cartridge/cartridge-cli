@@ -9,7 +9,7 @@ var handlebarsConfig = require('../_config/handlebars.json');
 var templateDataJson = require('../_config/templateData.json');
 var templateHelpers = require('../_config/templateHelpers.js')();
 
-module.exports = function(gulp) {
+module.exports = function(gulp, config, argv, creds) {
 
     gulp.task('compile-html', function () {
         var templateData = {

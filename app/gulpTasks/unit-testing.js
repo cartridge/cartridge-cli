@@ -6,7 +6,7 @@ var path = require('path');
 
 var karmaServer = require('karma').Server
 
-module.exports = function(gulp, config, argv) {
+module.exports = function(gulp, config, argv, creds) {
 
     gulp.task('tests', function(done) {
         var karmaReportsFromConfig = config.tests.reporters;
