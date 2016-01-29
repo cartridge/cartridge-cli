@@ -8,7 +8,9 @@ install:
     - npm install -g mocha
     - npm install -g gulp
     - cd app
-    - npm install --force
+    - rm package.json
+    - mv _packageTravis.json package.json
+    - npm install
     - cd ..
 script: 
     - mocha
