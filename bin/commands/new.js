@@ -10,6 +10,7 @@ var fileTemplater = require('../fileTemplater')();
 var promptOptions = require('../promptOptions')();
 var pkg = require(path.resolve(__dirname, '..', '..' ,'package.json'));
 
+var _currentWorkingDir = process.cwd();
 var _promptAnswers;
 
 module.exports = function(appDir) {
@@ -23,7 +24,7 @@ module.exports = function(appDir) {
     }
 
     function checkIfWorkingDirIsEmpty() {
-        fs.readdir(process.cwd(), function(err, files) {
+        fs.readdir(_currentWorkingDir, function(err, files) {
             if (err) return console.error(err);
 
             if(files.length > 1) {
@@ -99,7 +100,7 @@ module.exports = function(appDir) {
         console.log('Slate project "' + chalk.underline(_promptAnswers.projectName) +'" has been installed!');
         console.log('');
         console.log(chalk.underline('Next steps:'));
-        console.log('  Run  `npm install` to setup all dependencies');
+        console.log('  Run `npm install` to setup all dependencies');
         console.log('  Run `gulp` for initial setup, `gulp watch` to setup and forget about the build');
         console.log('');
     }
