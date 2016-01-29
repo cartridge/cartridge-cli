@@ -97,6 +97,7 @@ module.exports = function(appDir) {
 
         if(_promptAnswers.projectType === "Dot NET") {
             excludeList.push('views');
+            excludeList.push('release.js');
         }
 
         return excludeList;
