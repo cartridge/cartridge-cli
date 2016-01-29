@@ -30,27 +30,6 @@ fs.readdirSync(gulpTasksDir).forEach(function(file) {
   require("./gulpTasks/" + file)(gulp, config, argv, creds);
 });
 
-// fs.readdir(gulpTasksDir, function(err, files) {
-// 	if (err) return console.error(err)
-
-// 	files.forEach(function(f, index, array) {
-// 		require('./gulpTasks/' + element);
-// 		console.log('file ->', element);
-// 	})
-
-// })
-
-// require('./gulpTasks/styles.js')(gulp, config, argv);
-// require('./gulpTasks/scripts.js')(gulp, config, argv);
-// require('./gulpTasks/sprites.js')(gulp, config);
-// require('./gulpTasks/image-minify.js')(gulp, config, argv);
-// require('./gulpTasks/copy-assets.js')(gulp, config);
-// require('./gulpTasks/release.js')(gulp, creds);
-// require('./gulpTasks/compile-html.js')(gulp);
-// require('./gulpTasks/local-testing.js')(gulp, config);
-// require('./gulpTasks/unit-testing.js')(gulp, config, argv);
-// require('./gulpTasks/new-component.js')(gulp, argv);
-
 /* ============================================================ *\
 	MAIN TASKS
 \* ============================================================ */
