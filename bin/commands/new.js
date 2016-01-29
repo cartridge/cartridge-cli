@@ -65,7 +65,20 @@ module.exports = function(appDir) {
 
             fs.copy(appDir, process.cwd(), {
                 filter: function(path) {
-                    return path.indexOf("node_modules") === -1;
+                    var needToCopyFile = true;
+                    var _excludes = [
+                        'node_modules',
+                    ];
+
+                    for (var i = 0; i < _excludes.length; i++) {
+                        //needToCopyFile is still true
+                        //Hasn't been flipped during loop
+                        if(needToCopyFile) {
+                            needToCopyFile = path.indexOf(_excludes[i]) === -1;
+                        }
+                    };
+
+                    return needToCopyFile;
                 }
             }, function (err) {
                 if (err) return console.error(err);
