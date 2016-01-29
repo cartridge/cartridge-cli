@@ -1,0 +1,4 @@
+{
+    "slateVersion": "<%= slateCurrentVersion %>",
+    "dateGenerated": "<%= projectGeneratedDate %>"
+}

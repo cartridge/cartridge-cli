@@ -6,6 +6,7 @@ var extend = require('extend');
 
 var fileTemplater = require('../fileTemplater')();
 var promptOptions = require('../promptOptions')();
+var pkg = require(path.resolve(__dirname, '..', '..' ,'package.json'));
 
 var _promptAnswers;
 
@@ -25,10 +26,14 @@ module.exports = function(appDir) {
     }
 
     function getTemplateData() {
+        var date = new Date();
+
         return {
             projectNameFileName: _promptAnswers.projectName.toLowerCase().replace(/ /g,"-"),
+            projectGeneratedDate: [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('/'),
+            slateCurrentVersion: pkg.version
         }
-    }
+    }ß
 
     function inquirerCallback(answers) {
         _promptAnswers = answers;
@@ -60,7 +65,8 @@ module.exports = function(appDir) {
         fileTemplater.setTemplateData(templateData);
         fileTemplater.setFileList([
             path.join('_config', 'creds.json'),
-            'package.json'
+            'package.json',
+            '.slaterc'
         ]);
 
         fileTemplater.run(templateFinished);
