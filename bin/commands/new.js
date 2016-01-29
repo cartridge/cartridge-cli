@@ -63,9 +63,17 @@ module.exports = function(appDir) {
             'package.json'
         ]);
 
-        fileTemplater.run(function() {
-            console.log('> Installation complete ✓');
-            console.log('\n');
-        });
+        fileTemplater.run(templateFinished);
+    }
+
+    function templateFinished() {
+        console.log('> Installation complete ✓');
+
+        console.log('\n');
+        console.log('You\'re nearly there!');
+        console.log(chalk.underline('Next steps:'));
+        console.log('  Run  `npm install` to setup all dependencies');
+        console.log('  Run `gulp` for initial setup, `gulp watch` to setup and forget about the build');
+        console.log('\n');
     }
 }
