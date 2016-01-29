@@ -60,21 +60,20 @@ module.exports = function(appDir) {
         _promptAnswers = answers;
 
         if(_promptAnswers.isOkToCopyFiles) {
+            var filesDirsToExclude = getExcludeList();
+
             console.log('');
             console.log('> Copying over files...');
 
             fs.copy(appDir, process.cwd(), {
                 filter: function(path) {
                     var needToCopyFile = true;
-                    var _excludes = [
-                        'node_modules',
-                    ];
 
-                    for (var i = 0; i < _excludes.length; i++) {
+                    for (var i = 0; i < filesDirsToExclude.length; i++) {
                         //needToCopyFile is still true
                         //Hasn't been flipped during loop
                         if(needToCopyFile) {
-                            needToCopyFile = path.indexOf(_excludes[i]) === -1;
+                            needToCopyFile = path.indexOf(filesDirsToExclude[i]) === -1;
                         }
                     };
 
@@ -89,6 +88,12 @@ module.exports = function(appDir) {
         } else {
             console.log('User cancelled - no files copied')
         }
+    }
+
+    function getExcludeList() {
+        return [
+            'node_modules',
+        ];
     }
 
     function templateCopiedFiles() {
