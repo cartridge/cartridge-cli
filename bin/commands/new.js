@@ -1,3 +1,5 @@
+"use strict";
+
 var chalk = require('chalk');
 var inquirer = require('inquirer');
 var fs = require('fs-extra');

@@ -1,3 +1,5 @@
+"use strict";
+
 var titleize = require('titleize');
 
 var _newOptions 

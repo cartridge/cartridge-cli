@@ -1,3 +1,5 @@
+"use strict";
+
 var program = require('commander');
 var path = require('path');
 var appDir = path.resolve(__dirname, '..', 'app'); 
