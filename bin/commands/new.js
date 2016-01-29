@@ -19,12 +19,30 @@ module.exports = function(appDir) {
     };
 
     function init() {
-        console.log('\n');
-        console.log(chalk.bold('Running through setup for a new project.'));
-        console.log(chalk.underline('This can be exited out by pressing [Ctrl+C]'));
-        console.log('\n');
+        checkIfWorkingDirIsEmpty();
+    }
 
-        inquirer.prompt(promptOptions.newOptions, inquirerCallback);
+    function checkIfWorkingDirIsEmpty() {
+        fs.readdir(process.cwd(), function(err, files) {
+            if (err) return console.error(err);
+
+            if(files.length > 1) {
+                console.log('\n');
+                console.log(chalk.underline('Warning: The directory you are currently in is not empty!'));
+                console.log(chalk.underline('Going through the setup will perform a clean slate installation.'));
+                console.log(chalk.underline('This will overwrite any user changes'));
+                console.log('\n');
+
+                inquirer.prompt(promptOptions.newOptions, inquirerCallback);
+            } else {
+                console.log('\n');
+                console.log(chalk.bold('Running through setup for a new project.'));
+                console.log(chalk.underline('This can be exited out by pressing [Ctrl+C]'));
+                console.log('\n');
+
+                inquirer.prompt(promptOptions.newOptions, inquirerCallback);
+            }
+        })
     }
 
     function getTemplateData() {
@@ -49,7 +67,7 @@ module.exports = function(appDir) {
                     return path.indexOf("node_modules") === -1;
                 }
             }, function (err) {
-                if (err) return console.error(err)
+                if (err) return console.error(err);
 
                 templateCopiedFiles();
             })
