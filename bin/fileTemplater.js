@@ -14,11 +14,16 @@ module.exports = function() {
     return {
         run: run,
         setTemplateData: setTemplateData,
-        setFileList: setFileList
+        setFileList: setFileList,
+        setBasePath: setBasePath
     }
 
     function setTemplateData(templateData) {
         _templateData = templateData;
+    }
+
+    function setBasePath(basePath) {
+        _basePath = basePath;
     }
 
     function setFileList(fileList) {

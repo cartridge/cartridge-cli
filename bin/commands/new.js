@@ -110,6 +110,7 @@ module.exports = function(appDir) {
         var templateData = extend({}, _promptAnswers, getTemplateData())
 
         fileTemplater.setTemplateData(templateData);
+        fileTemplater.setBasePath(process.cwd());
         fileTemplater.setFileList([
             path.join('_config', 'creds.json'),
             'package.json',
