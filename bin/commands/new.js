@@ -74,8 +74,8 @@ module.exports = function(appDir) {
         if(_promptAnswers.isOkToCopyFiles) {
             var filesDirsToExclude = getExcludeList();
 
-            log.warn('');
-            log.warn('> Copying over files...');
+            log.info('');
+            log.info('> Copying over files...');
 
             fs.copy(appDir, process.cwd(), {
                 filter: function(path) {
@@ -98,7 +98,7 @@ module.exports = function(appDir) {
             })
 
         } else {
-            log.warn('User cancelled - no files copied')
+            log.info('User cancelled - no files copied')
         }
     }
 
@@ -117,7 +117,7 @@ module.exports = function(appDir) {
     }
 
     function templateCopiedFiles() {
-        log.warn('> Templating files...');
+        log.info('> Templating files...');
 
         var templateData = extend({}, _promptAnswers, getTemplateData())
 
@@ -133,14 +133,14 @@ module.exports = function(appDir) {
     }
 
     function templateFinished() {
-        log.warn('> Installation complete!');
+        log.info('> Installation complete!');
 
-        log.warn('');
-        log.warn('Slate project "' + chalk.underline(_promptAnswers.projectName) +'" has been installed!');
-        log.warn('');
-        log.warn(chalk.underline('Next steps:'));
-        log.warn('  Run `npm install` to setup all dependencies');
-        log.warn('  Run `gulp` for initial setup, `gulp watch` to setup watching of files');
-        log.warn('');
+        log.info('');
+        log.info('Slate project "' + chalk.underline(_promptAnswers.projectName) +'" has been installed!');
+        log.info('');
+        log.info(chalk.underline('Next steps:'));
+        log.info('  Run `npm install` to setup all dependencies');
+        log.info('  Run `gulp` for initial setup, `gulp watch` to setup watching of files');
+        log.info('');
     }
 }
