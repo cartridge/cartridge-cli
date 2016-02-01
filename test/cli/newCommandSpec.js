@@ -43,7 +43,9 @@ function newCommandDotNetSetup(done) {
     this.timeout(3000);
 
     changeToOsTempDir();
-    newCommandDotNetInstance.init();
+    newCommandDotNetInstance.init({
+        silent: true
+    });
 
     setTimeout(done, 2000);
 }
@@ -52,7 +54,9 @@ function newCommandStaticSiteSetup(done) {
     this.timeout(3000);
 
     changeToOsTempDir();
-    newCommandStaticSiteInstance.init();
+    newCommandStaticSiteInstance.init({
+        silent: true
+    });
 
     setTimeout(done, 2000);
 }
