@@ -8,7 +8,7 @@ var newCommand = require('./commands/new')(appDir);
 var pkg = require(path.resolve(__dirname, '..', 'package.json'));
 
 module.exports = function() {
-    setProgramVersion();
+    setProgramBaseSettings();
     setNewCommand();
     initProgram();
 }
@@ -19,7 +19,8 @@ function setNewCommand() {
         .description('Create a new project')
         .action(function() {
             newCommand.init({
-                silent: program.silent
+                silent: program.silent,
+                verbose: program.verbose
             });
         });
 }
@@ -32,7 +33,9 @@ function initProgram() {
     }
 }
 
-function setProgramVersion() {
-    program.version(pkg.version)
-    program.option('-s, --silent', 'Surpress all on-screen messages');
+function setProgramBaseSettings() {
+    program
+        .version(pkg.version)
+        .option('-s, --silent', 'Surpress all on-screen messages')
+        .option('-v, --verbose', 'Show all on-screen messages');
 }

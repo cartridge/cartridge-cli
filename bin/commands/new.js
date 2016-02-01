@@ -30,8 +30,10 @@ module.exports = function(appDir) {
     function setUpLogLevel() {
         if(_options.silent) {
             log.setLevel(log.levels.SILENT);
+        } else if(_options.verbose) {
+            log.setLevel(log.levels.TRACE);
         } else {
-            log.setLevel(log.levels.WARN);
+            log.setLevel(log.levels.INFO);
         }
     }
 
@@ -89,6 +91,12 @@ module.exports = function(appDir) {
                         }
                     };
 
+                    if(!needToCopyFile) {
+                        log.debug('>', chalk.underline('Skipping path -' + path));
+                    } else {
+                        log.debug('>', 'Copying path -', path);
+                    }
+
                     return needToCopyFile;
                 }
             }, function (err) {
@@ -117,6 +125,7 @@ module.exports = function(appDir) {
     }
 
     function templateCopiedFiles() {
+        log.debug('');
         log.info('> Templating files...');
 
         var templateData = extend({}, _promptAnswers, getTemplateData())
