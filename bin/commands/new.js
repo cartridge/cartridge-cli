@@ -12,6 +12,7 @@ var pkg = require(path.resolve(__dirname, '..', '..' ,'package.json'));
 
 var _currentWorkingDir = process.cwd();
 var _promptAnswers;
+var _options;
 
 module.exports = function(appDir) {
 
@@ -19,7 +20,9 @@ module.exports = function(appDir) {
         init: init
     };
 
-    function init() {
+    function init(options) {
+        _options = options;
+
         checkIfWorkingDirIsEmpty();
     }
 

@@ -17,7 +17,11 @@ function setNewCommand() {
     program
         .command('new')
         .description('Create a new project')
-        .action(newCommand.init);
+        .action(function() {
+            newCommand.init({
+                silent: program.silent
+            });
+        });
 }
 
 function initProgram() {
@@ -30,4 +34,5 @@ function initProgram() {
 
 function setProgramVersion() {
     program.version(pkg.version)
+    program.option('-s, --silent', 'Surpress all on-screen messages');
 }
