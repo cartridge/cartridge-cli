@@ -126,7 +126,7 @@ module.exports = function(appDir) {
         console.log('');
         console.log(chalk.underline('Next steps:'));
         console.log('  Run `npm install` to setup all dependencies');
-        console.log('  Run `gulp` for initial setup, `gulp watch` to setup and forget about the build');
+        console.log('  Run `gulp` for initial setup, `gulp watch` to setup watching of files');
         console.log('');
     }
 }
