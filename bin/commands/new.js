@@ -5,6 +5,7 @@ var inquirer = require('inquirer');
 var fs = require('fs-extra');
 var path = require('path');
 var extend = require('extend');
+var log = require('loglevel');
 
 var fileTemplater = require('../fileTemplater')();
 var promptOptions = require('../promptOptions')();
@@ -22,8 +23,16 @@ module.exports = function(appDir) {
 
     function init(options) {
         _options = options;
-
+        setUpLogLevel();
         checkIfWorkingDirIsEmpty();
+    }
+
+    function setUpLogLevel() {
+        if(_options.silent) {
+            log.setLevel(log.levels.SILENT);
+        } else {
+            log.setLevel(log.levels.WARN);
+        }
     }
 
     function checkIfWorkingDirIsEmpty() {
@@ -31,18 +40,18 @@ module.exports = function(appDir) {
             if (err) return console.error(err);
 
             if(files.length > 1) {
-                console.log('');
-                console.log(chalk.underline('Warning: The directory you are currently in is not empty!'));
-                console.log(chalk.underline('Going through the setup will perform a clean slate installation.'));
-                console.log(chalk.underline('This will overwrite any user changes'));
-                console.log('');
+                log.warn('');
+                log.warn(chalk.underline('Warning: The directory you are currently in is not empty!'));
+                log.warn(chalk.underline('Going through the setup will perform a clean slate installation.'));
+                log.warn(chalk.underline('This will overwrite any user changes'));
+                log.warn('');
 
                 inquirer.prompt(promptOptions.newOptions, inquirerCallback);
             } else {
-                console.log('');
-                console.log(chalk.bold('Running through setup for a new project.'));
-                console.log(chalk.underline('This can be exited out by pressing [Ctrl+C]'));
-                console.log('');
+                log.warn('');
+                log.warn(chalk.bold('Running through setup for a new project.'));
+                log.warn(chalk.underline('This can be exited out by pressing [Ctrl+C]'));
+                log.warn('');
 
                 inquirer.prompt(promptOptions.newOptions, inquirerCallback);
             }
@@ -65,8 +74,8 @@ module.exports = function(appDir) {
         if(_promptAnswers.isOkToCopyFiles) {
             var filesDirsToExclude = getExcludeList();
 
-            console.log('');
-            console.log('> Copying over files...');
+            log.warn('');
+            log.warn('> Copying over files...');
 
             fs.copy(appDir, process.cwd(), {
                 filter: function(path) {
@@ -89,7 +98,7 @@ module.exports = function(appDir) {
             })
 
         } else {
-            console.log('User cancelled - no files copied')
+            log.warn('User cancelled - no files copied')
         }
     }
 
@@ -108,7 +117,7 @@ module.exports = function(appDir) {
     }
 
     function templateCopiedFiles() {
-        console.log('> Templating files...');
+        log.warn('> Templating files...');
 
         var templateData = extend({}, _promptAnswers, getTemplateData())
 
@@ -124,14 +133,14 @@ module.exports = function(appDir) {
     }
 
     function templateFinished() {
-        console.log('> Installation complete!');
+        log.warn('> Installation complete!');
 
-        console.log('');
-        console.log('Slate project "' + chalk.underline(_promptAnswers.projectName) +'" has been installed!');
-        console.log('');
-        console.log(chalk.underline('Next steps:'));
-        console.log('  Run `npm install` to setup all dependencies');
-        console.log('  Run `gulp` for initial setup, `gulp watch` to setup watching of files');
-        console.log('');
+        log.warn('');
+        log.warn('Slate project "' + chalk.underline(_promptAnswers.projectName) +'" has been installed!');
+        log.warn('');
+        log.warn(chalk.underline('Next steps:'));
+        log.warn('  Run `npm install` to setup all dependencies');
+        log.warn('  Run `gulp` for initial setup, `gulp watch` to setup watching of files');
+        log.warn('');
     }
 }
