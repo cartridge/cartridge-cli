@@ -92,9 +92,9 @@ module.exports = function(appDir) {
                     };
 
                     if(!needToCopyFile) {
-                        log.debug('>', chalk.underline('Skipping path -' + path));
+                        log.debug('>', chalk.underline('Skipping path - ' + path));
                     } else {
-                        log.debug('>', 'Copying path -', path);
+                        log.debug('>', 'Copying path  -', path);
                     }
 
                     return needToCopyFile;
@@ -113,7 +113,9 @@ module.exports = function(appDir) {
     function getExcludeList() {
         //Default exclude folders / files
         var excludeList = [
-            'node_modules'
+            'node_modules',
+            'build',
+            'public',
         ];
 
         if(_promptAnswers.projectType === "Dot NET") {
