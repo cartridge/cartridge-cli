@@ -91,6 +91,7 @@ module.exports = function(appDir) {
     }
 
     function getExcludeList() {
+        //Default exclude folders / files
         var excludeList = [
             'node_modules'
         ];
