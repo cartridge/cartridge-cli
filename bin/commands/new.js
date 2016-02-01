@@ -43,16 +43,16 @@ module.exports = function(appDir) {
 
             if(files.length > 1) {
                 log.warn('');
-                log.warn(chalk.underline('Warning: The directory you are currently in is not empty!'));
-                log.warn(chalk.underline('Going through the setup will perform a clean slate installation.'));
-                log.warn(chalk.underline('This will overwrite any user changes'));
+                log.warn(chalk.red('Warning: The directory you are currently in is not empty!'));
+                log.warn(chalk.red('Going through the setup will perform a clean slate installation.'));
+                log.warn(chalk.red('This will overwrite any user changes'));
                 log.warn('');
 
                 inquirer.prompt(promptOptions.newOptions, inquirerCallback);
             } else {
                 log.warn('');
                 log.warn(chalk.bold('Running through setup for a new project.'));
-                log.warn(chalk.underline('This can be exited out by pressing [Ctrl+C]'));
+                log.warn(chalk.red('This can be exited out by pressing [Ctrl+C]'));
                 log.warn('');
 
                 inquirer.prompt(promptOptions.newOptions, inquirerCallback);
@@ -77,7 +77,7 @@ module.exports = function(appDir) {
             var filesDirsToExclude = getExcludeList();
 
             log.info('');
-            log.info('> Copying over files...');
+            log.info('Copying over files...');
 
             fs.copy(appDir, process.cwd(), {
                 filter: function(path) {
@@ -92,9 +92,9 @@ module.exports = function(appDir) {
                     };
 
                     if(!needToCopyFile) {
-                        log.debug('>', chalk.underline('Skipping path - ' + path));
+                        log.debug(chalk.underline('Skipping path - ' + path));
                     } else {
-                        log.debug('>', 'Copying path  -', path);
+                        log.debug('Copying path  -', path);
                     }
 
                     return needToCopyFile;
@@ -126,7 +126,7 @@ module.exports = function(appDir) {
 
     function templateCopiedFiles() {
         log.debug('');
-        log.info('> Templating files...');
+        log.info('Templating files...');
 
         var templateData = extend({}, _promptAnswers, getTemplateData())
 
@@ -152,19 +152,17 @@ module.exports = function(appDir) {
     }
 
     function singleFileCallback(templateFilePath) {
-        log.debug('> Templating file -', templateFilePath);
+        log.debug('Templating file -', templateFilePath);
     }
 
     function templateFinished() {
         log.debug('');
-        log.info('> Installation complete!');
-
+        log.info(chalk.green('Setup complete!'));
+        log.info('Slate project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed!');
         log.info('');
-        log.info('Slate project "' + chalk.underline(_promptAnswers.projectName) +'" has been installed!');
-        log.info('');
-        log.info(chalk.underline('Next steps:'));
-        log.info('  Run `npm install` to setup all dependencies');
-        log.info('  Run `gulp` for initial setup, `gulp watch` to setup watching of files');
+        log.info('Final steps:');
+        log.info(' · Run ' + chalk.yellow('npm install') + ' to setup all dependencies');
+        log.info(' · Run ' + chalk.yellow('gulp') + ' for initial setup, ' + chalk.yellow('gulp watch') + ' to setup watching of files');
         log.info('');
     }
 }
