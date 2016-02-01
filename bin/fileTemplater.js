@@ -2,10 +2,14 @@
 
 var fs = require('fs');
 var path = require('path');
+var extend = require('extend');
 var template = require('lodash/template');
 
 var _fileNumber = 1;
-var _config = {};
+var _config = {
+    onEachFile: function() {},
+    onCompleted: function() {}
+};
 
 module.exports = function() {
 
@@ -15,30 +19,37 @@ module.exports = function() {
     }
 
     function setConfig(config) {
-        _config = config;
+        _config = extend(_config, config);
     }
 
     function run(callback) {
         _config.files.forEach(function(element, index, array) {
-            templateFile(element, callback);
+            templateFile(element);
         });
     }
 
-    function templateFile(filePath, callback) {
-        fs.readFile(path.join(_config.basePath, filePath), 'utf8', function(err, fileContents) {
+    function templateFile(filePath) {
+        var filePath = path.join(_config.basePath, filePath);
+        var compiled;
+        var output;
+
+        fs.readFile(filePath, 'utf8', function(err, fileContents) {
             if (err) return console.error(err)
 
-            var compiled = template(fileContents);
-            var output = compiled(_config.data);
+            compiled = template(fileContents);
+            output = compiled(_config.data);
 
-            fs.writeFile(path.join(_config.basePath, filePath), output, 'utf8', function(err) {
+            fs.writeFile(filePath, output, 'utf8', function(err) {
                 if (err) return console.error(err)
+
+                _config.onEachFile(filePath);
+
+                if(_fileNumber === _config.files.length) {
+                    _config.onCompleted();
+                }
 
                 _fileNumber++;
 
-                if(_fileNumber === _config.files.length) {
-                    callback();
-                }
             });
 
         });

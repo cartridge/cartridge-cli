@@ -133,10 +133,14 @@ module.exports = function(appDir) {
         fileTemplater.setConfig({
             data: templateData,
             basePath: process.cwd(),
-            files: getTemplateFileList()
+            files: getTemplateFileList(),
+            onEachFile: function(templateFilePath) {
+                log.debug('> Templating file -', templateFilePath);
+            },
+            onCompleted: templateFinished
         })
 
-        fileTemplater.run(templateFinished);
+        fileTemplater.run();
     }
 
     function getTemplateFileList() {
@@ -150,6 +154,7 @@ module.exports = function(appDir) {
     }
 
     function templateFinished() {
+        log.debug('');
         log.info('> Installation complete!');
 
         log.info('');
