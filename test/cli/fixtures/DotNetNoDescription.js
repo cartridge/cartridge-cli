@@ -1,7 +1,7 @@
 module.exports = {
     projectType: 'Dot NET',
-    projectName: 'test-project-name',
-    projectAuthor: 'Dfsdfsd',
+    projectName: 'test project',
+    projectAuthor: 'test author',
     projectDescription: '',
     isOkToCopyFiles: true
 }
