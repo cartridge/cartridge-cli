@@ -134,9 +134,7 @@ module.exports = function(appDir) {
             data: templateData,
             basePath: process.cwd(),
             files: getTemplateFileList(),
-            onEachFile: function(templateFilePath) {
-                log.debug('> Templating file -', templateFilePath);
-            },
+            onEachFile: singleFileCallback,
             onCompleted: templateFinished
         })
 
@@ -151,6 +149,10 @@ module.exports = function(appDir) {
         fileList.push('.slaterc');
 
         return fileList;
+    }
+
+    function singleFileCallback(templateFilePath) {
+        log.debug('> Templating file -', templateFilePath);
     }
 
     function templateFinished() {
