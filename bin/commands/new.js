@@ -130,9 +130,11 @@ module.exports = function(appDir) {
 
         var templateData = extend({}, _promptAnswers, getTemplateData())
 
-        fileTemplater.setTemplateData(templateData);
-        fileTemplater.setBasePath(process.cwd());
-        fileTemplater.setFileList(getTemplateFileList());
+        fileTemplater.setConfig({
+            data: templateData,
+            basePath: process.cwd(),
+            files: getTemplateFileList()
+        })
 
         fileTemplater.run(templateFinished);
     }
