@@ -5,7 +5,8 @@ var proxyquire = require('proxyquire');
 var chai = require('chai');
 
 var DotNetAnswersFixture = require('./fixtures/DotNetNoDescription');
-var newCommand = proxyquire('../../bin/commands/new', {
+var StaticSiteAnswersFixture = require('./fixtures/StaticNoDescription');
+var newCommandDotNet = proxyquire('../../bin/commands/new', {
     inquirer: {
         prompt: function(questions, callback) {
             return callback(DotNetAnswersFixture)
@@ -13,8 +14,17 @@ var newCommand = proxyquire('../../bin/commands/new', {
     }
 });
 
+var newCommandStaticSite = proxyquire('../../bin/commands/new', {
+    inquirer: {
+        prompt: function(questions, callback) {
+            return callback(StaticSiteAnswersFixture)
+        }
+    }
+});
+
 var appDir = path.join(__dirname, '..', '..', 'app');
-var newCommandInstance = newCommand(appDir);
+var newCommandDotNetInstance = newCommandDotNet(appDir);
+var newCommandStaticSiteInstance = newCommandStaticSite(appDir);
 
 var date = new Date();
 var timestamp = [date.getDate(), date.getDay(), date.getFullYear(), date.getHours(), date.getMinutes(), date.getMilliseconds()].join('');
@@ -24,12 +34,25 @@ var TEST_TEMP_DIR = path.join(os.tmpdir(), 'slate-' + timestamp);
 chai.use(require('chai-fs'));
 chai.should();
 
-function newCommandSetup(done) {
-    this.timeout(3000);
-
+function changeToOsTempDir() {
     fs.ensureDirSync(TEST_TEMP_DIR);
     process.chdir(TEST_TEMP_DIR);
-    newCommandInstance.init();
+}
+
+function newCommandDotNetSetup(done) {
+    this.timeout(3000);
+
+    changeToOsTempDir();
+    newCommandDotNetInstance.init();
+
+    setTimeout(done, 2000);
+}
+
+function newCommandStaticSiteSetup(done) {
+    this.timeout(3000);
+
+    changeToOsTempDir();
+    newCommandStaticSiteInstance.init();
 
     setTimeout(done, 2000);
 }
@@ -42,7 +65,7 @@ function newCommandTearDown(done) {
 describe('As a user of the CLI', function() {
 
     describe('When the new command is used', function() {
-        before(newCommandSetup);
+        before(newCommandDotNetSetup);
         after(newCommandTearDown);
 
         it('should template the `creds.json` file with the correct contents', function() {
@@ -60,10 +83,49 @@ describe('As a user of the CLI', function() {
             actual.Author.should.equal(expected.Author);
             actual.packageName.should.equal(expected.packageName);
         })
+
+        it('should template the `.slaterc` file with the correct contents', function() {
+            var filePath = path.join(TEST_TEMP_DIR, '.slaterc');
+            var packageJsonPath = path.join(TEST_TEMP_DIR, 'package.json');
+            var packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+            var actual = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            var expected = {
+                "slateVersion": packageJson.version,
+                "dateGenerated": [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('/')
+            }
+
+            filePath.should.be.a.file().with.json;
+
+            actual.slateVersion.should.equal(expected.slateVersion);
+            actual.dateGenerated.should.equal(expected.dateGenerated);
+        })
+
+        it('should template the `package.json` file with the correct contents', function() {
+            var filePath = path.join(TEST_TEMP_DIR, 'package.json');
+            var actual = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            var expected = {
+                "name": "test-project",
+                "description": ""
+            }
+
+            filePath.should.be.a.file().with.json;
+
+            actual.name.should.equal(expected.name);
+            actual.description.should.equal(expected.description);
+        })
+    })
+
+    describe('When the new command is used for the project type: Static site', function() {
+        before(newCommandStaticSiteSetup);
+        after(newCommandTearDown);
+
+        it('should populate the directory', function() {
+            TEST_TEMP_DIR.should.be.a.directory().and.not.empty;
+        })
     })
 
     describe('When the new command is used for the project type: Dot NET', function() {
-        before(newCommandSetup);
+        before(newCommandDotNetSetup);
         after(newCommandTearDown);
 
         it('should populate the directory', function() {
