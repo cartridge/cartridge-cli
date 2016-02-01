@@ -41,6 +41,27 @@ function newCommandTearDown(done) {
 
 describe('As a user of the CLI', function() {
 
+    describe('When the new command is used', function() {
+        before(newCommandSetup);
+        after(newCommandTearDown);
+
+        it('should template the `creds.json` file with the correct contents', function() {
+            var filePath = path.join(TEST_TEMP_DIR, '_config', 'creds.json');
+            var actual = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            var expected = {
+                "Site": "test project",
+                "Author": "test author",
+                "packageName": "test-project"
+            }
+
+            filePath.should.be.a.file().with.json;
+
+            actual.Site.should.equal(expected.Site);
+            actual.Author.should.equal(expected.Author);
+            actual.packageName.should.equal(expected.packageName);
+        })
+    })
+
     describe('When the new command is used for the project type: Dot NET', function() {
         before(newCommandSetup);
         after(newCommandTearDown);
@@ -61,26 +82,5 @@ describe('As a user of the CLI', function() {
             pathToTest.should.not.be.a.path();
         })
 
-    })
-
-    describe('When the new command is used', function() {
-        before(newCommandSetup);
-        after(newCommandTearDown);
-
-        it('should template the `creds.json` file with the correct contents', function() {
-            var filePath = path.join(TEST_TEMP_DIR, '_config', 'creds.json');
-            var actual = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-            var expected = {
-                "Site": "test project",
-                "Author": "test author",
-                "packageName": "test-project"
-            }
-
-            filePath.should.be.a.file().with.json;
-
-            actual.Site.should.equal(expected.Site);
-            actual.Author.should.equal(expected.Author);
-            actual.packageName.should.equal(expected.packageName);
-        })
     })
 })
