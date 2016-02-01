@@ -54,7 +54,7 @@ module.exports = function(appDir) {
             projectGeneratedDate: [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('/'),
             slateCurrentVersion: pkg.version
         }
-    }ß
+    }
 
     function inquirerCallback(answers) {
         _promptAnswers = answers;
