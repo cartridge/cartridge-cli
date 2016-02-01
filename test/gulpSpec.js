@@ -1,5 +1,5 @@
 var spawn = require('child_process').spawn;
-var fs = require('fs-plus');
+var fs = require('fs-extra');
 var path = require('path');
 var chai = require('chai');
 
