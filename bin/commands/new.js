@@ -113,9 +113,7 @@ module.exports = function(appDir) {
     function getExcludeList() {
         //Default exclude folders / files
         var excludeList = [
-            'node_modules',
-            'build',
-            'public',
+            'node_modules'
         ];
 
         if(_promptAnswers.projectType === "Dot NET") {
