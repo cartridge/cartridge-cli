@@ -132,13 +132,19 @@ module.exports = function(appDir) {
 
         fileTemplater.setTemplateData(templateData);
         fileTemplater.setBasePath(process.cwd());
-        fileTemplater.setFileList([
-            path.join('_config', 'creds.json'),
-            'package.json',
-            '.slaterc'
-        ]);
+        fileTemplater.setFileList(getTemplateFileList());
 
         fileTemplater.run(templateFinished);
+    }
+
+    function getTemplateFileList() {
+        var fileList = [];
+
+        fileList.push(path.join('_config', 'creds.json'));
+        fileList.push('package.json')
+        fileList.push('.slaterc');
+
+        return fileList;
     }
 
     function templateFinished() {
