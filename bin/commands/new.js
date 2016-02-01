@@ -48,15 +48,17 @@ module.exports = function(appDir) {
                 log.warn(chalk.red('This will overwrite any user changes'));
                 log.warn('');
 
-                inquirer.prompt(promptOptions.newOptions, inquirerCallback);
             } else {
                 log.warn('');
                 log.warn(chalk.bold('Running through setup for a new project.'));
-                log.warn(chalk.red('This can be exited out by pressing [Ctrl+C]'));
+                log.warn(chalk.bold('This can be exited out by pressing [Ctrl+C]'));
                 log.warn('');
-
-                inquirer.prompt(promptOptions.newOptions, inquirerCallback);
             }
+
+            log.warn(chalk.bold('Make sure you are running this command in the folder you want all files copied to'));
+            log.warn('')
+
+            inquirer.prompt(promptOptions.newOptions, inquirerCallback);
         })
     }
 
@@ -156,7 +158,7 @@ module.exports = function(appDir) {
     }
 
     function templateFinished() {
-        log.debug('');
+        log.info('');
         log.info(chalk.green('Setup complete!'));
         log.info('Slate project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed!');
         log.info('');
