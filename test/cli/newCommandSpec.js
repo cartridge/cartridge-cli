@@ -40,7 +40,7 @@ function changeToOsTempDir() {
 }
 
 function newCommandDotNetSetup(done) {
-    this.timeout(3000);
+    this.timeout(5000);
 
     changeToOsTempDir();
     newCommandDotNetInstance.init({
@@ -51,7 +51,7 @@ function newCommandDotNetSetup(done) {
 }
 
 function newCommandStaticSiteSetup(done) {
-    this.timeout(3000);
+    this.timeout(5000);
 
     changeToOsTempDir();
     newCommandStaticSiteInstance.init({
