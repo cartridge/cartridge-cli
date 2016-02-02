@@ -58,7 +58,7 @@ module.exports = function(appDir) {
             log.warn(chalk.bold('Make sure you are running this command in the folder you want all files copied to'));
             log.warn('')
 
-            inquirer.prompt(promptOptions.newOptions, inquirerCallback);
+            inquirer.prompt(promptOptions.getNewCommandPromptOptions(), inquirerCallback);
         })
     }
 
