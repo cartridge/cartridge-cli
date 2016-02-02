@@ -5,7 +5,6 @@ var proxyquire = require('proxyquire');
 var chai = require('chai');
 
 var DotNetAnswersFixture = require('./fixtures/DotNetNoDescription');
-var StaticSiteAnswersFixture = require('./fixtures/StaticNoDescription');
 var newCommandDotNet = proxyquire('../../bin/commands/new', {
     inquirer: {
         prompt: function(questions, callback) {
@@ -14,17 +13,8 @@ var newCommandDotNet = proxyquire('../../bin/commands/new', {
     }
 });
 
-var newCommandStaticSite = proxyquire('../../bin/commands/new', {
-    inquirer: {
-        prompt: function(questions, callback) {
-            return callback(StaticSiteAnswersFixture)
-        }
-    }
-});
-
 var appDir = path.join(__dirname, '..', '..', 'app');
 var newCommandDotNetInstance = newCommandDotNet(appDir);
-var newCommandStaticSiteInstance = newCommandStaticSite(appDir);
 
 var date = new Date();
 var timestamp = [date.getDate(), date.getDay(), date.getFullYear(), date.getHours(), date.getMinutes(), date.getMilliseconds()].join('');
@@ -44,17 +34,6 @@ function newCommandDotNetSetup(done) {
 
     changeToOsTempDir();
     newCommandDotNetInstance.init({
-        silent: true
-    });
-
-    setTimeout(done, 2000);
-}
-
-function newCommandStaticSiteSetup(done) {
-    this.timeout(5000);
-
-    changeToOsTempDir();
-    newCommandStaticSiteInstance.init({
         silent: true
     });
 
@@ -116,15 +95,6 @@ describe('As a user of the CLI', function() {
 
             actual.name.should.equal(expected.name);
             actual.description.should.equal(expected.description);
-        })
-    })
-
-    describe('When the new command is used for the project type: Static site', function() {
-        before(newCommandStaticSiteSetup);
-        after(newCommandTearDown);
-
-        it('should populate the directory', function() {
-            TEST_TEMP_DIR.should.be.a.directory().and.not.empty;
         })
     })
 
