@@ -10,9 +10,9 @@ chai.should();
 
 var TEST_TEMP_DIR = path.join(os.tmpdir(), 'file-templater');
 
-function changeToOsTempDir() {
+function changeToOsTempDirAndCopyFixtures() {
     fs.ensureDirSync(TEST_TEMP_DIR);
-
+    fs.copySync(path.resolve('./', 'test', 'cli', 'fixtures'), TEST_TEMP_DIR);
     process.chdir(TEST_TEMP_DIR);
 }
 
