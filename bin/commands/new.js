@@ -11,7 +11,6 @@ var fileTemplater = require('../fileTemplater')();
 var promptOptions = require('../promptOptions')();
 var pkg = require(path.resolve(__dirname, '..', '..' ,'package.json'));
 
-var _currentWorkingDir = process.cwd();
 var _promptAnswers;
 var _options;
 
@@ -38,7 +37,7 @@ module.exports = function(appDir) {
     }
 
     function checkIfWorkingDirIsEmpty() {
-        fs.readdir(_currentWorkingDir, function(err, files) {
+        fs.readdir(process.cwd(), function(err, files) {
             if (err) return console.error(err);
 
             if(files.length > 1) {
@@ -141,7 +140,7 @@ module.exports = function(appDir) {
             basePath: process.cwd(),
             files: getTemplateFileList(),
             onEachFile: singleFileCallback,
-            onCompleted: templateFinished
+            onCompleted: fileTemplatingCompleted
         })
 
         fileTemplater.run();
@@ -161,7 +160,7 @@ module.exports = function(appDir) {
         log.debug('Templating file -', templateFilePath);
     }
 
-    function templateFinished() {
+    function fileTemplatingCompleted() {
         log.info('');
         log.info(chalk.green('Setup complete!'));
         log.info('Slate project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed!');
