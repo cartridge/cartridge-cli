@@ -44,11 +44,12 @@ describe('As a dev', function() {
             });
         })
 
-        it('then required build files should exist', function() {
+        it('then required build and misc files should exist', function() {
             var filePathToTest;
             var files = [
                 'gulpfile.js',
-                'package.json'
+                'package.json',
+                '.slaterc'
             ];
 
             files.forEach(function(fileName) {
