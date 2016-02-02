@@ -18,10 +18,7 @@ function setNewCommand() {
         .command('new')
         .description('Create a new project')
         .action(function() {
-            newCommand.init({
-                silent: program.silent,
-                verbose: program.verbose
-            });
+            newCommand.init(getProgramOptions());
         });
 }
 
@@ -30,6 +27,13 @@ function initProgram() {
 
     if (!process.argv.slice(2).length) {
       program.outputHelp();
+    }
+}
+
+function getProgramOptions() {
+    return {
+        silent: program.silent,
+        verbose: program.verbose
     }
 }
 
