@@ -58,7 +58,7 @@ module.exports = function(appDir) {
             log.warn(chalk.bold('Make sure you are running this command in the folder you want all files copied to'));
             log.warn('')
 
-            inquirer.prompt(promptOptions.getNewCommandPromptOptions(), inquirerCallback);
+            inquirer.prompt(promptOptions.getNewCommandPromptOptions(), promptCallback);
         })
     }
 
@@ -72,44 +72,48 @@ module.exports = function(appDir) {
         }
     }
 
-    function inquirerCallback(answers) {
+    function promptCallback(answers) {
         _promptAnswers = answers;
 
         if(_promptAnswers.isOkToCopyFiles) {
-            var filesDirsToExclude = getExcludeList();
 
             log.info('');
             log.info('Copying over files...');
 
             fs.copy(appDir, process.cwd(), {
-                filter: function(path) {
-                    var needToCopyFile = true;
-
-                    for (var i = 0; i < filesDirsToExclude.length; i++) {
-                        //needToCopyFile is still true
-                        //Hasn't been flipped during loop
-                        if(needToCopyFile) {
-                            needToCopyFile = path.indexOf(filesDirsToExclude[i]) === -1;
-                        }
-                    };
-
-                    if(!needToCopyFile) {
-                        log.debug(chalk.underline('Skipping path - ' + path));
-                    } else {
-                        log.debug('Copying path  -', path);
-                    }
-
-                    return needToCopyFile;
-                }
-            }, function (err) {
-                if (err) return console.error(err);
-
-                templateCopiedFiles();
-            })
+                filter: fileCopyFilter
+            }, fileCopyComplete)
 
         } else {
             log.info('User cancelled - no files copied')
         }
+    }
+
+    function fileCopyFilter(path) {
+        var needToCopyFile = true;
+        var filesDirsToExclude = getExcludeList();
+
+        for (var i = 0; i < filesDirsToExclude.length; i++) {
+            //Check if needToCopyFile is still true and
+            //hasn't been flipped during loop
+            if(needToCopyFile) {
+                needToCopyFile = path.indexOf(filesDirsToExclude[i]) === -1;
+            }
+        };
+
+        if(!needToCopyFile) {
+            log.debug(chalk.underline('Skipping path - ' + path));
+        } else {
+            log.debug('Copying path  -', path);
+        }
+
+        return needToCopyFile;
+    }
+
+    function fileCopyComplete(err) {
+        if (err) return console.error(err);
+
+        templateCopiedFiles();
     }
 
     function getExcludeList() {
