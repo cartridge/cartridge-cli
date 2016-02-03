@@ -17,7 +17,7 @@ function changeToOsTempDirAndCopyFixtures() {
 }
 
 xdescribe('As a user of the file templater module', function() {
-    before(changeToOsTempDir);
+    before(changeToOsTempDirAndCopyFixtures);
 
     describe('When templating one file', function() {
 
