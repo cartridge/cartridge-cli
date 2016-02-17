@@ -4,10 +4,12 @@
 	"description": "Start with a clean slate and get yourself going with a ready made basic website setup",
 	"license": "ISC",
 	"main": "index.js",
-	"bin": "./bin/cli.js",
+	"bin": {
+		"slate": "./bin/cli.js"
+	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/code-computerlove/slate"
+		"url": "git+https://github.com/code-computerlove/quarry"
 	},
 	"dependencies": {
 		"chalk": "^1.1.1",
