@@ -4,6 +4,7 @@
 	"description": "Start with a clean slate and get yourself going with a ready made basic website setup",
 	"license": "ISC",
 	"main": "index.js",
+	"preferGlobal": true,
 	"bin": {
 		"slate": "./bin/cli.js"
 	},

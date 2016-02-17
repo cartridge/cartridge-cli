@@ -5,15 +5,17 @@ var del   = require('del');
 var path  = require('path');
 var chalk = require('chalk');
 
-var CONFIG_PATH = './_config/';
+var paths = {
+	project: path.resolve('../../'),
+	config: path.resolve('../../_config')
+};
 
 var Quarry = {};
 
 // Checks if the project has been set up with slate
 function hasSlate() {
-	console.log(process.cwd())
 	try {
-		fs.accessSync('.slaterc', fs.R_OK | fs.W_OK);
+		fs.accessSync(paths.project + '/.slaterc', fs.R_OK | fs.W_OK);
 	} catch(err) {
 		return false;
 	}
