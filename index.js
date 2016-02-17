@@ -20,7 +20,13 @@ modulePrototype.removeFromSlaterc = function removeModule(module) {
 
 // Checks if the project has been set up with slate
 modulePrototype.hasSlate = function hasSlate() {
-	return false;
+	try {
+		fs.accessSync('.slaterc', fs.R_OK | fs.W_OK);
+	} catch(err) {
+		return false;
+	}
+
+	return true;
 };
 
 // Modify the project configuration (project.json) with a transform function

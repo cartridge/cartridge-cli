@@ -1,10 +1,10 @@
 {
-	"name": "slate",
+	"name": "slate-cli",
 	"version": "0.0.1",
 	"description": "Start with a clean slate and get yourself going with a ready made basic website setup",
 	"license": "ISC",
-	"bin": "./bin/cli.js",
 	"main": "index.js",
+	"bin": "./bin/cli.js",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/code-computerlove/slate"
