@@ -1,25 +1,17 @@
 'use strict';
 
-var fs   = require('fs-extra');
-var del  = require('del');
-var path = require('path');
+var fs    = require('fs-extra');
+var del   = require('del');
+var path  = require('path');
+var chalk = require('chalk');
 
 var CONFIG_PATH = './_config/';
 
-var modulePrototype = {};
-
-// Adds the specified module to the .slaterc file
-modulePrototype.addToSlaterc = function addModule(module) {
-	// TODO: implement
-};
-
-// Removes the specified module from the .slaterc file
-modulePrototype.removeFromSlaterc = function removeModule(module) {
-	// TODO: implement
-};
+var Quarry = {};
 
 // Checks if the project has been set up with slate
-modulePrototype.hasSlate = function hasSlate() {
+function hasSlate() {
+	console.log(process.cwd())
 	try {
 		fs.accessSync('.slaterc', fs.R_OK | fs.W_OK);
 	} catch(err) {
@@ -27,10 +19,29 @@ modulePrototype.hasSlate = function hasSlate() {
 	}
 
 	return true;
+}
+
+var modulePrototype = {};
+
+// Adds the specified module to the .slaterc file
+Quarry.addToSlaterc = function addModule(module) {
+	// TODO: implement
+};
+
+// Removes the specified module from the .slaterc file
+Quarry.removeFromSlaterc = function removeModule(module) {
+	// TODO: implement
+};
+
+Quarry.ensureSlateExists() {
+	if(!hasSlate()) {
+		console.error(chalk.red('Slate is not set up in this directory. Please set it up first before installing this module'));
+		process.exit(1);
+	}
 };
 
 // Modify the project configuration (project.json) with a transform function
-modulePrototype.modifyProjectConfig = function modifyProjectConfig(transform) {
+Quarry.modifyProjectConfig = function modifyProjectConfig(transform) {
 	var config = require(CONFIG_PATH + 'project.json');
 	config = transform(config);
 
@@ -38,7 +49,7 @@ modulePrototype.modifyProjectConfig = function modifyProjectConfig(transform) {
 };
 
 // Add configuration files to the project _config directory for this module
-modulePrototype.addModuleConfig = function addConfig(files, callback) {
+Quarry.addModuleConfig = function addConfig(files, callback) {
 	var i;
 	var configCount = files.length;
 	var copyCount   = 0;
@@ -58,8 +69,8 @@ modulePrototype.addModuleConfig = function addConfig(files, callback) {
 };
 
 // Remove configuration files from the project _config directory for this module
-modulePrototype.removeConfig = function removeConfig() {
+Quarry.removeConfig = function removeConfig() {
 	// TODO: implement
 };
 
-module.exports = modulePrototype;
+module.exports = Quarry;
