@@ -5,7 +5,7 @@ var promptOptionsModule = require('../../bin/promptOptions')();
 
 chai.should();
 
-describe.skip('As a user of the promptOptions module', function() {
+describe('As a user of the promptOptions module', function() {
 
     it('should return an object', function() {
         var test = promptOptionsModule;
