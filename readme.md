@@ -1,8 +1,8 @@
-[![Stories in Ready](https://badge.waffle.io/code-computerlove/Quarry.svg?label=ready&title=Ready)](http://waffle.io/code-computerlove/Quarry)
-[![devDependency Status](https://david-dm.org/code-computerlove/Quarry/dev-status.svg)](https://david-dm.org/code-computerlove/Quarry#info=devDependencies)
-[![Dependency Status](https://david-dm.org/code-computerlove/Quarry.svg)](https://david-dm.org/code-computerlove/Quarry)
+[![Stories in Ready](https://badge.waffle.io/code-computerlove/quarry.svg?label=ready&title=Ready)](http://waffle.io/code-computerlove/quarry)
+[![devDependency Status](https://david-dm.org/code-computerlove/quarry/dev-status.svg)](https://david-dm.org/code-computerlove/quarry#info=devDependencies)
+[![Dependency Status](https://david-dm.org/code-computerlove/quarry.svg)](https://david-dm.org/code-computerlove/quarry)
 
-# Quarry [![Build Status](https://travis-ci.org/code-computerlove/Quarry.svg?branch=master)](https://travis-ci.org/code-computerlove/Quarry)
+# Quarry [![Build Status](https://travis-ci.org/code-computerlove/quarry.svg?branch=master)](https://travis-ci.org/code-computerlove/quarry)
 
 > Start with a clean slate and get yourself going with a ready made basic static website setup
 
