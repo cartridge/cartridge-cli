@@ -28,7 +28,7 @@ function cleanBuildAndReleaseFolders() {
     fs.removeSync(releasePath);
 }
 
-describe('As a dev', function() {
+describe.skip('As a dev', function() {
 
     this.timeout(100000);
 

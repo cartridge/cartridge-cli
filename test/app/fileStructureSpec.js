@@ -6,7 +6,7 @@ chai.should();
 
 const ROOT_DIR = path.join(process.cwd(), 'app');
 
-describe('As a dev', function() {
+describe.skip('As a dev', function() {
 
     describe('when testing generator file structure', function() {
 
