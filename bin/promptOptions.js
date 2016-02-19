@@ -1,7 +1,9 @@
 'use strict';
 
 var titleize = require('titleize');
+var chalk = require('chalk');
 var npm = require('npm');
+
 var _promptOptions = [];
 
 module.exports = function() {
@@ -20,11 +22,10 @@ function getNewCommandPromptOptions() {
 
 function getNpmRepositoryData() {
 	return new Promise(function(resolve, reject) {
+		console.log(chalk.bold('...Running pre-set...'));
+
 		npm.load({}, function(err) {
 	  		if (err) reject(err)
-
-	  		console.log('searching npm');
-	  		console.log('this may take a while..');
 
 	  		//true to surpress stdout
 			npm.commands.search(["karma-launcher"], true, function (er, data) {
@@ -45,8 +46,6 @@ function formatNpmData(npmData) {
 				name: npmPackageName
 			})
 		}
-
-		console.log('hits');
 
 		resolve(choices);
 	})
