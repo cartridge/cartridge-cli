@@ -62,7 +62,10 @@ module.exports = function(appDir) {
 	}
 
 	function initOnScreenPrompts() {
-		inquirer.prompt(promptOptions.getNewCommandPromptOptions(), promptCallback);
+		promptOptions.getNewCommandPromptOptions()
+		 	.then(function(promptOptions) {
+		 		inquirer.prompt(promptOptions, promptCallback);
+	 		})
 	}
 
 	function getTemplateData() {
