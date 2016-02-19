@@ -38,30 +38,26 @@ function getNpmRepositoryData() {
 }
 
 function formatNpmData(npmData) {
-	return new Promise(function(resolve, reject) {
-		var choices = [];
+	var choices = [];
 
-		for (var npmPackageName in npmData) {
-			choices.push({
-				name: npmPackageName
-			})
-		}
+	for (var npmPackageName in npmData) {
+		choices.push({
+			name: npmPackageName
+		})
+	}
 
-		resolve(choices);
-	})
+	return Promise.resolve(choices);
 }
 
 function setPromptOptionsData(npmModuleChoices) {
-	return new Promise(function(resolve, reject) {
-		_promptOptions.push(getProjectTypePromptOptions());
-		_promptOptions.push(getProjectNamePromptOptions());
-		_promptOptions.push(getProjectAuthorPromptOptions())
-		_promptOptions.push(getProjectDescriptionPromptOptions());
-		_promptOptions.push(getSlateModulesPromptOptions(npmModuleChoices))
-		_promptOptions.push(getUserConfirmCopyPromptOptions())
+	_promptOptions.push(getProjectTypePromptOptions());
+	_promptOptions.push(getProjectNamePromptOptions());
+	_promptOptions.push(getProjectAuthorPromptOptions())
+	_promptOptions.push(getProjectDescriptionPromptOptions());
+	_promptOptions.push(getSlateModulesPromptOptions(npmModuleChoices))
+	_promptOptions.push(getUserConfirmCopyPromptOptions())
 
-		resolve(_promptOptions);
-	})
+	return Promise.resolve(_promptOptions);
 }
 
 function getSlateModulesPromptOptions(npmModuleChoices) {
