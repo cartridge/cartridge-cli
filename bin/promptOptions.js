@@ -6,6 +6,8 @@ var npm = require('npm');
 
 var _promptOptions = [];
 
+var NPM_SEARCH_KEYWORD = "karma-launcher";
+
 module.exports = function() {
 
 	return {
@@ -28,7 +30,7 @@ function getNpmRepositoryData() {
 	  		if (err) reject(err)
 
 	  		//true to surpress stdout
-			npm.commands.search(["karma-launcher"], true, function (er, data) {
+			npm.commands.search([NPM_SEARCH_KEYWORD], true, function (er, data) {
 				if (er) reject(err)
 
 				resolve(data);
