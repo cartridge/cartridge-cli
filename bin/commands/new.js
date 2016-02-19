@@ -57,13 +57,29 @@ module.exports = function(appDir) {
 			log.warn(chalk.bold('Make sure you are running this command in the folder you want all files copied to'));
 			log.warn('');
 
-			initOnScreenPrompts();
+			showPreSetupUserPrompt();
+		})
+	}
+
+	function showPreSetupUserPrompt() {
+
+		inquirer.prompt({
+			type: 'confirm',
+			name: 'isOkToProceed',
+			message: 'Before anything, slate requires to do some pre-setup which may take 20-30 seconds. Press enter to get started.',
+			default: true
+		}, function(answers) {
+			if(answers.isOkToProceed) {
+				console.log('');
+				initOnScreenPrompts();
+			}
 		})
 	}
 
 	function initOnScreenPrompts() {
 		promptOptions.getNewCommandPromptOptions()
 		 	.then(function(promptOptions) {
+		 		console.log('');
 		 		inquirer.prompt(promptOptions, promptCallback);
 	 		})
 	}

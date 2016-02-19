@@ -22,7 +22,7 @@ function getNewCommandPromptOptions() {
 
 function getNpmRepositoryData() {
 	return new Promise(function(resolve, reject) {
-		console.log(chalk.bold('...Running pre-set...'));
+		console.log(chalk.bold('...Running pre-setup...'));
 
 		npm.load({}, function(err) {
 	  		if (err) reject(err)
@@ -56,6 +56,8 @@ function setPromptOptionsData(npmModuleChoices) {
 	_promptOptions.push(getProjectDescriptionPromptOptions());
 	_promptOptions.push(getSlateModulesPromptOptions(npmModuleChoices))
 	_promptOptions.push(getUserConfirmCopyPromptOptions())
+
+	console.log(chalk.bold('...Pre-setup complete, get ready fighters...'));
 
 	return Promise.resolve(_promptOptions);
 }
