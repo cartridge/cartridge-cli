@@ -66,7 +66,7 @@ module.exports = function(appDir) {
 		inquirer.prompt({
 			type: 'confirm',
 			name: 'isOkToProceed',
-			message: 'Before anything, slate requires to do some pre-setup which may take 20-30 seconds. Press enter to get started.',
+			message: 'Before anything, slate needs to do some pre-setup which may take 20-30 seconds. Press enter to get started.',
 			default: true
 		}, function(answers) {
 			if(answers.isOkToProceed) {
