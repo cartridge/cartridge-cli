@@ -24,8 +24,6 @@ module.exports = function(appDir) {
 		_options = options;
 		setUpLogLevel();
 		checkIfWorkingDirIsEmpty();
-
-		inquirer.prompt(promptOptions.getNewCommandPromptOptions(), promptCallback);
 	}
 
 	function setUpLogLevel() {
@@ -58,7 +56,13 @@ module.exports = function(appDir) {
 
 			log.warn(chalk.bold('Make sure you are running this command in the folder you want all files copied to'));
 			log.warn('');
+
+			initOnScreenPrompts();
 		})
+	}
+
+	function initOnScreenPrompts() {
+		inquirer.prompt(promptOptions.getNewCommandPromptOptions(), promptCallback);
 	}
 
 	function getTemplateData() {
