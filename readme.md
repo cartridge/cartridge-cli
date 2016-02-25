@@ -19,7 +19,7 @@ Command line utility for [Slate](https://github.com/code-computerlove/slate)
 ## Usage
 
 ```bash
-> quarry
+> slate
 ```
 
 ## Contributing
