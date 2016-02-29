@@ -7,8 +7,6 @@ var DEFAULT_PLUGIN_OPTIONS = require('./defaultPluginOptions');
 
 var _promptOptions = [];
 
-var NPM_SEARCH_KEYWORD = "karma-launcher";
-
 module.exports = function() {
 
 	return {
