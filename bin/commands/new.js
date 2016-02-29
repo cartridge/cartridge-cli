@@ -5,14 +5,15 @@ var inquirer = require('inquirer');
 var fs       = require('fs-extra');
 var path     = require('path');
 var extend   = require('extend');
-var log      = require('loglevel');
 var npm = require('npm');
 var inArray = require('in-array');
 
+var utils = require('../utils');
 var fileTemplater = require('../fileTemplater')();
 var promptOptions = require('../promptOptions')();
 var pkg           = require(path.resolve(__dirname, '..', '..' ,'package.json'));
 
+var _log;
 var _promptAnswers;
 var _options;
 
@@ -24,18 +25,8 @@ module.exports = function(appDir) {
 
 	function init(options) {
 		_options = options;
-		setUpLogLevel();
+		_log = utils.getLogInstance(_options);
 		checkIfWorkingDirIsEmpty();
-	}
-
-	function setUpLogLevel() {
-		if(_options.silent) {
-			log.setLevel(log.levels.SILENT);
-		} else if(_options.verbose) {
-			log.setLevel(log.levels.TRACE);
-		} else {
-			log.setLevel(log.levels.INFO);
-		}
 	}
 
 	function checkIfWorkingDirIsEmpty() {
@@ -43,21 +34,21 @@ module.exports = function(appDir) {
 			if (err) return console.error(err);
 
 			if(getWorkingDirFilteredList(files).length) {
-				log.warn('');
-				log.warn(chalk.red('Warning: The directory you are currently in is not empty!'));
-				log.warn(chalk.red('Going through the setup will perform a clean slate installation.'));
-				log.warn(chalk.red('This will overwrite any user changes'));
-				log.warn('');
+				_log.warn('');
+				_log.warn(chalk.red('Warning: The directory you are currently in is not empty!'));
+				_log.warn(chalk.red('Going through the setup will perform a clean slate installation.'));
+				_log.warn(chalk.red('This will overwrite any user changes'));
+				_log.warn('');
 
 			} else {
-				log.warn('');
-				log.warn(chalk.bold('Running through setup for a new project.'));
-				log.warn(chalk.bold('This can be exited out by pressing [Ctrl+C]'));
-				log.warn('');
+				_log.warn('');
+				_log.warn(chalk.bold('Running through setup for a new project.'));
+				_log.warn(chalk.bold('This can be exited out by pressing [Ctrl+C]'));
+				_log.warn('');
 			}
 
-			log.warn(chalk.bold('Make sure you are running this command in the folder you want all files copied to'));
-			log.warn('');
+			_log.warn(chalk.bold('Make sure you are running this command in the folder you want all files copied to'));
+			_log.warn('');
 
 			initOnScreenPrompts();
 		})
@@ -101,15 +92,15 @@ module.exports = function(appDir) {
 
 		if(_promptAnswers.isOkToCopyFiles) {
 
-			log.info('');
-			log.info('Copying over files...');
+			_log.info('');
+			_log.info('Copying over files...');
 
 			fs.copy(appDir, process.cwd(), {
 				filter: fileCopyFilter
 			}, fileCopyComplete)
 
 		} else {
-			log.info('User cancelled - no files copied')
+			_log.info('User cancelled - no files copied')
 		}
 	}
 
@@ -126,9 +117,9 @@ module.exports = function(appDir) {
 		};
 
 		if(!needToCopyFile) {
-			log.debug(chalk.underline('Skipping path - ' + path));
+			_log.debug(chalk.underline('Skipping path - ' + path));
 		} else {
-			log.debug('Copying path  -', path);
+			_log.debug('Copying path  -', path);
 		}
 
 		return needToCopyFile;
@@ -155,8 +146,8 @@ module.exports = function(appDir) {
 	}
 
 	function templateCopiedFiles() {
-		log.debug('');
-		log.info('Templating files...');
+		_log.debug('');
+		_log.info('Templating files...');
 
 		var templateData = extend({}, _promptAnswers, getTemplateData())
 
@@ -182,7 +173,7 @@ module.exports = function(appDir) {
 	}
 
 	function singleFileCallback(templateFilePath) {
-		log.debug('Templating file -', templateFilePath);
+		_log.debug('Templating file -', templateFilePath);
 	}
 
 	function installNpmPackages() {
@@ -202,13 +193,13 @@ module.exports = function(appDir) {
 	}
 
 	function finishSetup() {
-		log.info('');
-		log.info(chalk.green('Setup complete!'));
-		log.info('Slate project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed!');
-		log.info('');
-		log.info('Final steps:');
-		log.info(' · Run ' + chalk.yellow('gulp') + ' for initial setup of styles and scripts.');
-		log.info(' · Run ' + chalk.yellow('gulp watch') + ' to setup watching of files');
-		log.info('');
+		_log.info('');
+		_log.info(chalk.green('Setup complete!'));
+		_log.info('Slate project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed!');
+		_log.info('');
+		_log.info('Final steps:');
+		_log.info(' · Run ' + chalk.yellow('gulp') + ' for initial setup of styles and scripts.');
+		_log.info(' · Run ' + chalk.yellow('gulp watch') + ' to setup watching of files');
+		_log.info('');
 	}
 }
