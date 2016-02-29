@@ -5,7 +5,7 @@ var inquirer = require('inquirer');
 var fs       = require('fs-extra');
 var path     = require('path');
 var extend   = require('extend');
-var npm = require('npm');
+var npmInstallPackage = require('npm-install-package')
 var inArray = require('in-array');
 
 var utils = require('../utils');
@@ -177,18 +177,10 @@ module.exports = function(appDir) {
 	}
 
 	function installNpmPackages() {
-		npm.load({ 'save-dev': true }, function (er) {
-			if (er) return handlError(er)
+		npmInstallPackage(_promptAnswers.slateModules, { saveDev: true}, function(err) {
+			if (err) throw err;
 
-			npm.commands.install(_promptAnswers.slateModules, function (err, data) {
-				if (err) return console.error(err)
-
-				npm.on("log", function(message) {
-					console.log(message);
-				})
-
-				finishSetup();
-			})
+			finishSetup();
 		})
 	}
 

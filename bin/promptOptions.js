@@ -2,7 +2,6 @@
 
 var titleize = require('titleize');
 var chalk = require('chalk');
-var npm = require('npm');
 var DEFAULT_PLUGIN_OPTIONS = require('./defaultPluginOptions');
 
 var _promptOptions = [];
