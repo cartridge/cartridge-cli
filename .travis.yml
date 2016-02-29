@@ -4,7 +4,6 @@ node_js:
     - stable
     - '0.12'
 install:
-    - export NODE_PATH=/home/travis/.nvm/versions/node/v5.6.0/bin/npm
     - npm install
     - npm install -g mocha
     - npm install -g gulp
