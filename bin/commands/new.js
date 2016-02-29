@@ -6,6 +6,7 @@ var fs       = require('fs-extra');
 var path     = require('path');
 var extend   = require('extend');
 var log      = require('loglevel');
+var npm = require('npm');
 
 var fileTemplater = require('../fileTemplater')();
 var promptOptions = require('../promptOptions')();
@@ -148,7 +149,7 @@ module.exports = function(appDir) {
 			basePath: process.cwd(),
 			files: getTemplateFileList(),
 			onEachFile: singleFileCallback,
-			onCompleted: fileTemplatingCompleted
+			onCompleted: installNpmPackages
 		})
 
 		fileTemplater.run();
@@ -168,14 +169,30 @@ module.exports = function(appDir) {
 		log.debug('Templating file -', templateFilePath);
 	}
 
-	function fileTemplatingCompleted() {
+	function installNpmPackages() {
+		npm.load({ 'save-dev': true }, function (er) {
+			if (er) return handlError(er)
+
+			npm.commands.install(_promptAnswers.slateModules, function (err, data) {
+				if (err) return console.error(err)
+
+				npm.on("log", function(message) {
+					console.log(message);
+				})
+
+				finishSetup();
+			})
+		})
+	}
+
+	function finishSetup() {
 		log.info('');
 		log.info(chalk.green('Setup complete!'));
 		log.info('Slate project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed!');
 		log.info('');
 		log.info('Final steps:');
-		log.info(' · Run ' + chalk.yellow('npm install') + ' to setup all dependencies');
-		log.info(' · Run ' + chalk.yellow('gulp') + ' for initial setup, ' + chalk.yellow('gulp watch') + ' to setup watching of files');
+		log.info(' · Run ' + chalk.yellow('gulp') + ' for initial setup of styles and scripts.');
+		log.info(' · Run ' + chalk.yellow('gulp watch') + ' to setup watching of files');
 		log.info('');
 	}
 }
