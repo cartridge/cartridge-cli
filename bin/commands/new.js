@@ -7,6 +7,7 @@ var path     = require('path');
 var extend   = require('extend');
 var log      = require('loglevel');
 var npm = require('npm');
+var inArray = require('in-array');
 
 var fileTemplater = require('../fileTemplater')();
 var promptOptions = require('../promptOptions')();
@@ -41,7 +42,7 @@ module.exports = function(appDir) {
 		fs.readdir(process.cwd(), function(err, files) {
 			if (err) return console.error(err);
 
-			if(files.length > 1) {
+			if(getWorkingDirFilteredList(files).length) {
 				log.warn('');
 				log.warn(chalk.red('Warning: The directory you are currently in is not empty!'));
 				log.warn(chalk.red('Going through the setup will perform a clean slate installation.'));
@@ -60,6 +61,20 @@ module.exports = function(appDir) {
 
 			initOnScreenPrompts();
 		})
+	}
+
+	function getWorkingDirFilteredList(unfilteredFileList) {
+		var filesToExclude = ['.DS_Store'];
+		var filteredDirContents = [];
+
+		for (var i = 0; i < unfilteredFileList.length; i++) {
+			//if the file / folder IS NOT part of the exclude list, then add it to the filtered dir content list
+			if(!inArray(filesToExclude, unfilteredFileList[i])) {
+				filteredDirContents.push(unfilteredFileList[i]);
+			}
+		}
+
+		return filteredDirContents;
 	}
 
 	function initOnScreenPrompts() {
