@@ -3,6 +3,7 @@
 var titleize = require('titleize');
 var chalk = require('chalk');
 var npm = require('npm');
+var DEFAULT_PLUGIN_OPTIONS = require('./defaultPluginOptions');
 
 var _promptOptions = [];
 
@@ -17,59 +18,26 @@ module.exports = function() {
 }
 
 function getNewCommandPromptOptions() {
-	 return getNpmRepositoryData()
-	 	.then(formatNpmData)
-	 	.then(setPromptOptionsData);
+	 return setPromptOptionsData();
 }
 
-function getNpmRepositoryData() {
-	return new Promise(function(resolve, reject) {
-		console.log(chalk.bold('...Running pre-setup...'));
-
-		npm.load({}, function(err) {
-	  		if (err) reject(err)
-
-	  		//true to surpress stdout
-			npm.commands.search([NPM_SEARCH_KEYWORD], true, function (er, data) {
-				if (er) reject(err)
-
-				resolve(data);
-			})
-		})
-	})
-}
-
-function formatNpmData(npmData) {
-	var choices = [];
-
-	for (var npmPackageName in npmData) {
-		choices.push({
-			name: npmPackageName
-		})
-	}
-
-	return Promise.resolve(choices);
-}
-
-function setPromptOptionsData(npmModuleChoices) {
+function setPromptOptionsData() {
 	_promptOptions.push(getProjectTypePromptOptions());
 	_promptOptions.push(getProjectNamePromptOptions());
 	_promptOptions.push(getProjectAuthorPromptOptions())
 	_promptOptions.push(getProjectDescriptionPromptOptions());
-	_promptOptions.push(getSlateModulesPromptOptions(npmModuleChoices))
+	_promptOptions.push(getSlateModulesPromptOptions())
 	_promptOptions.push(getUserConfirmCopyPromptOptions())
-
-	console.log(chalk.bold('...Pre-setup complete, get ready fighters...'));
 
 	return Promise.resolve(_promptOptions);
 }
 
-function getSlateModulesPromptOptions(npmModuleChoices) {
+function getSlateModulesPromptOptions() {
 	return {
 		type: 'checkbox',
 		name: 'slateModules',
 		message: 'What modules would you like included?',
-		choices: npmModuleChoices
+		choices: DEFAULT_PLUGIN_OPTIONS
 	}
 }
 
