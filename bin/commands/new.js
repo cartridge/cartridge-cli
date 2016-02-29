@@ -63,7 +63,8 @@ module.exports = function(appDir) {
 	}
 
 	function initOnScreenPrompts() {
-		promptOptions.getNewCommandPromptOptions()
+		promptOptions
+			.getNewCommandPromptOptions()
 		 	.then(function(promptOptions) {
 		 		console.log('');
 		 		inquirer.prompt(promptOptions, promptCallback);
