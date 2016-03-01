@@ -23,7 +23,7 @@ var ZIP_DOWNLOAD_URL = 'https://github.com/code-computerlove/cartridge/archive/v
 var ZIP_FILENAME;
 var ZIP_FILEPATH;
 
-releaseServiceApi.downloadLatestRelease = function(logInstance) {
+releaseServiceApi.downloadLatestRelease = function() {
 	return preSetup()
 		.then(getReleaseZipFromGitHub)
 		.then(decompressZipFile)
