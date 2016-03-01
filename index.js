@@ -13,7 +13,7 @@ var paths = {
 	config: path.resolve('../../_config')
 };
 
-var slateCliApi = {};
+var cartridgeApi = {};
 
 // Checks if the project has been set up with slate
 function hasSlate() {
@@ -37,10 +37,15 @@ function modifyJsonFile(path, transform, callback) {
 	});
 }
 
-var modulePrototype = {};
+cartridgeApi.ensureCartridgeExists = function ensureCartridgeExists() {
+	if(!hasSlate()) {
+		console.error(chalk.red('Slate is not set up in this directory. Please set it up first before installing this module'));
+		process.exit(1);
+	}
+};
 
 // Adds the specified module to the .slaterc file
-slateCliApi.addToSlaterc = function addToSlaterc(module, callback) {
+cartridgeApi.addToRc = function addToRc(module, callback) {
 	modifyJsonFile(paths.project + CONFIG_FILE, function addModule(data) {
 		if(!data.hasOwnProperty('modules')) {
 			data.modules = [];
@@ -53,30 +58,23 @@ slateCliApi.addToSlaterc = function addToSlaterc(module, callback) {
 };
 
 // Removes the specified module from the .slaterc file
-slateCliApi.removeFromSlaterc = function removeFromSlaterc(module, callback) {
+cartridgeApi.removeFromRc = function removeFromRc(module, callback) {
 	// TODO: implement
 };
 
-slateCliApi.ensureSlateExists = function ensureSlateExists() {
-	if(!hasSlate()) {
-		console.error(chalk.red('Slate is not set up in this directory. Please set it up first before installing this module'));
-		process.exit(1);
-	}
-};
-
 // Modify the project configuration (project.json) with a transform function
-slateCliApi.modifyProjectConfig = function modifyProjectConfig(transform, callback) {
+cartridgeApi.modifyProjectConfig = function modifyProjectConfig(transform, callback) {
 	modifyJsonFile(paths.config + '/project.json', transform, callback);
 };
 
 // Add configuration files to the project _config directory for this module
-slateCliApi.addModuleConfig = function addModuleConfig(configPath, callback) {
+cartridgeApi.addModuleConfig = function addModuleConfig(configPath, callback) {
 	ncp(configPath, paths.config, callback);
 };
 
 // Remove configuration files from the project _config directory for this module
-slateCliApi.removeModuleConfig = function removeModuleConfig() {
+cartridgeApi.removeModuleConfig = function removeModuleConfig() {
 	// TODO: implement
 };
 
-module.exports = slateCliApi;
+module.exports = cartridgeApi;
