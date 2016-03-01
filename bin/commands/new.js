@@ -7,6 +7,7 @@ var path     = require('path');
 var extend   = require('extend');
 var npmInstallPackage = require('npm-install-package')
 var inArray = require('in-array');
+var releaseService = require('../releaseService');
 
 var utils = require('../utils');
 var fileTemplater = require('../fileTemplater')();
@@ -95,9 +96,11 @@ module.exports = function(appDir) {
 			_log.info('');
 			_log.info('Copying over files...');
 
-			fs.copy(appDir, process.cwd(), {
-				filter: fileCopyFilter
-			}, fileCopyComplete)
+			releaseService.downloadLatestRelease(function() {
+				fs.copy(appDir, process.cwd(), {
+					filter: fileCopyFilter
+				}, fileCopyComplete)
+			});
 
 		} else {
 			_log.info('User cancelled - no files copied')

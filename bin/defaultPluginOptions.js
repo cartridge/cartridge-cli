@@ -1,10 +1,5 @@
 module.exports = [{
-		name: "titlecase",
+		name: "cartridge-sass",
 		checked: true
-	}, {
-		name: "save",
-		checked: true
-	}, {
-		name: "express"
 	}
 ]
