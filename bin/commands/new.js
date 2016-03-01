@@ -96,11 +96,13 @@ module.exports = function(appDir) {
 			_log.info('');
 			_log.info('Copying over files...');
 
-			releaseService.downloadLatestRelease(function() {
-				fs.copy(appDir, process.cwd(), {
-					filter: fileCopyFilter
-				}, fileCopyComplete)
-			});
+			releaseService
+				.downloadLatestRelease()
+				.then(function() {
+					fs.copy(appDir, process.cwd(), {
+						filter: fileCopyFilter
+					}, fileCopyComplete)
+				})
 
 		} else {
 			_log.info('User cancelled - no files copied')
