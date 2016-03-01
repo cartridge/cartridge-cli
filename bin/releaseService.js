@@ -33,7 +33,7 @@ function decompressZipFile(zipLocation) {
 	fs.createReadStream(zipLocation)
 		.pipe(unzip.Extract({ path: path.join(os.tmpDir())}))
 		.on('close', function() {
-			_callback();
+			fs.unlink(zipLocation, _callback)
 		});
 }
 
