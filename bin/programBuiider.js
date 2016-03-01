@@ -2,7 +2,9 @@
 
 var program = require('commander');
 var path    = require('path');
-var appDir  = path.resolve(__dirname, '..', 'app');
+var os = require('os');
+// var appDir  = path.resolve(__dirname, '..', 'app');
+var appDir  = path.resolve(os.tmpDir(), 'cartridge-0.1.1-alpha');
 
 var newCommand = require('./commands/new')(appDir);
 var pkg        = require(path.resolve(__dirname, '..', 'package.json'));

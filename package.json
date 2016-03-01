@@ -17,15 +17,19 @@
     "chalk": "^1.1.1",
     "commander": "^2.9.0",
     "decompress": "^3.0.0",
+    "decompress-unzip": "^3.4.0",
     "extend": "^3.0.0",
     "fs-extra": "^0.26.5",
     "github": "^0.2.4",
+    "glob": "^7.0.0",
     "in-array": "^0.1.0",
     "inquirer": "^0.11.4",
     "lodash": "^4.0.1",
     "loglevel": "^1.4.0",
     "npm-install-package": "^1.0.2",
-    "titleize": "^1.0.0"
+    "request": "^2.69.0",
+    "titleize": "^1.0.0",
+    "unzip": "^0.1.11"
   },
   "devDependencies": {
     "chai": "^1.6.1",
