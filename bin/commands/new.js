@@ -170,7 +170,7 @@ module.exports = function(appDir) {
 
 		fileList.push(path.join('_config', 'creds.json'));
 		fileList.push('package.json')
-		fileList.push('.slaterc');
+		fileList.push('.cartridgerc');
 
 		return fileList;
 	}
