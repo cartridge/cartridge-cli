@@ -1,17 +1,19 @@
 'use strict';
 
-var fs    = require('fs-extra');
-var del   = require('del');
-var path  = require('path');
-var ncp   = require('ncp').ncp;
-var chalk = require('chalk');
-
 var CONFIG_FILE = '/.cartridgecli';
+
+var fs        = require('fs-extra');
+var del       = require('del');
+var path      = require('path');
+var ncp       = require('ncp').ncp;
+var chalk     = require('chalk');
+var templater = require('lib/readmeTemplater.js');
 
 var paths = {
 	project: path.resolve('../../'),
 	config: path.resolve('../../_config')
 };
+
 
 var cartridgeApi = {};
 
@@ -24,6 +26,10 @@ function hasSlate() {
 	}
 
 	return true;
+}
+
+function updateReadmeModules() {
+	templater.setPath(paths.project);
 }
 
 function modifyJsonFile(path, transform, callback) {
@@ -54,7 +60,10 @@ cartridgeApi.addToRc = function addToRc(module, callback) {
 		data.modules.push(module);
 
 		return data;
-	}, callback);
+	}, function(err) {
+		updateReadmeModules();
+		callback(err);
+	});
 };
 
 // Removes the specified module from the .slaterc file
