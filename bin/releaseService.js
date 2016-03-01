@@ -63,16 +63,4 @@ function deleteZipFile() {
 	})
 }
 
-// function getLatestCartridgeReleaseFromGitHub() {
-// 	github.releases.getRelease({
-// 		owner: 'code-computerlove',
-// 		repo: 'cartridge',
-// 		id: '2697137'
-// 	}, function(err, data) {
-// 		if(err) console.error(data);
-
-// 		downloadReleaseFromGitHub(data.tarball_url);
-// 	})
-// }
-
 module.exports = releaseServiceApi;
