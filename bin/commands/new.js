@@ -37,7 +37,7 @@ module.exports = function(appDir) {
 			if(getWorkingDirFilteredList(files).length) {
 				_log.warn('');
 				_log.warn(chalk.red('Warning: The directory you are currently in is not empty!'));
-				_log.warn(chalk.red('Going through the setup will perform a clean slate installation.'));
+				_log.warn(chalk.red('Going through the setup will perform a clean cartridge installation.'));
 				_log.warn(chalk.red('This will overwrite any user changes'));
 				_log.warn('');
 
@@ -82,9 +82,9 @@ module.exports = function(appDir) {
 		var date = new Date();
 
 		return {
-			projectNameFileName: _promptAnswers.projectName.toLowerCase().replace(/ /g,"-"),
+			projectNameFileName:  _promptAnswers.projectName.toLowerCase().replace(/ /g,"-"),
 			projectGeneratedDate: [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('/'),
-			slateCurrentVersion: pkg.version
+			currentVersion:       pkg.version
 		}
 	}
 
@@ -180,7 +180,7 @@ module.exports = function(appDir) {
 	}
 
 	function installNpmPackages() {
-		npmInstallPackage(_promptAnswers.slateModules, { saveDev: true}, function(err) {
+		npmInstallPackage(_promptAnswers.cartridgeModules, { saveDev: true}, function(err) {
 			if (err) throw err;
 
 			finishSetup();
@@ -190,7 +190,7 @@ module.exports = function(appDir) {
 	function finishSetup() {
 		_log.info('');
 		_log.info(chalk.green('Setup complete!'));
-		_log.info('Slate project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed!');
+		_log.info('Cartridge project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed!');
 		_log.info('');
 		_log.info('Final steps:');
 		_log.info(' · Run ' + chalk.yellow('gulp') + ' for initial setup of styles and scripts.');
