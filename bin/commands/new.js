@@ -94,7 +94,7 @@ module.exports = function(appDir) {
 		if(_promptAnswers.isOkToCopyFiles) {
 
 			_log.info('');
-			_log.info('Copying over files...');
+			_log.info('Inserting the cartridge...');
 
 			releaseService
 				.downloadLatestRelease()
@@ -152,7 +152,7 @@ module.exports = function(appDir) {
 
 	function templateCopiedFiles() {
 		_log.debug('');
-		_log.info('Templating files...');
+		_log.info('Booting up files...');
 
 		var templateData = extend({}, _promptAnswers, getTemplateData())
 

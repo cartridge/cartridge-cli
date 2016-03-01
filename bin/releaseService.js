@@ -14,13 +14,15 @@ var github = new GitHubApi({
 });
 
 var releaseServiceApi = {};
+var _log;
 
 var OS_TMP_DIR = os.tmpdir();
 var DATE;
 var ZIP_FILENAME;
 var ZIP_FILEPATH;
 
-releaseServiceApi.downloadLatestRelease = function() {
+releaseServiceApi.downloadLatestRelease = function(logInstance) {
+
 	return preSetup()
 		.then(getReleaseZipFromGitHub)
 		.then(decompressZipFile)
