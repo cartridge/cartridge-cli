@@ -3,6 +3,7 @@
 var fs    = require('fs-extra');
 var del   = require('del');
 var path  = require('path');
+var ncp   = require('ncp').ncp;
 var chalk = require('chalk');
 
 var paths = {
@@ -23,19 +24,38 @@ function hasSlate() {
 	return true;
 }
 
+function modifyJsonFile(path, transform, callback) {
+	fs.readJson(path, function (err, fileContents) {
+		if(!err) {
+			fileContents = transform(fileContents);
+			fs.writeJson(path, fileContents, callback);
+		} else {
+			callback(err);
+		}
+	});
+}
+
 var modulePrototype = {};
 
 // Adds the specified module to the .slaterc file
-Quarry.addToSlaterc = function addModule(module) {
-	// TODO: implement
+Quarry.addToSlaterc = function addToSlaterc(module, callback) {
+	modifyJsonFile(paths.project + '/.slaterc', function addModule(data) {
+		if(!data.hasOwnProperty('modules')) {
+			data.modules = [];
+		}
+
+		data.modules.push(module);
+
+		return data;
+	}, callback);
 };
 
 // Removes the specified module from the .slaterc file
-Quarry.removeFromSlaterc = function removeModule(module) {
+Quarry.removeFromSlaterc = function removeFromSlaterc(module, callback) {
 	// TODO: implement
 };
 
-Quarry.ensureSlateExists() {
+Quarry.ensureSlateExists = function ensureSlateExists() {
 	if(!hasSlate()) {
 		console.error(chalk.red('Slate is not set up in this directory. Please set it up first before installing this module'));
 		process.exit(1);
@@ -43,35 +63,17 @@ Quarry.ensureSlateExists() {
 };
 
 // Modify the project configuration (project.json) with a transform function
-Quarry.modifyProjectConfig = function modifyProjectConfig(transform) {
-	var config = require(CONFIG_PATH + 'project.json');
-	config = transform(config);
-
-	fs.writeFile(CONFIG_PATH + 'project.json', JSON.encode(config));
+Quarry.modifyProjectConfig = function modifyProjectConfig(transform, callback) {
+	modifyJsonFile(paths.config + '/project.json', transform, callback);
 };
 
 // Add configuration files to the project _config directory for this module
-Quarry.addModuleConfig = function addConfig(files, callback) {
-	var i;
-	var configCount = files.length;
-	var copyCount   = 0;
-
-	var copyComplete = function copyComplete(err) {
-		if (err) return console.error(err);
-
-		copyCount++;
-		if(copyCount >=configCount) {
-			callback();
-		}
-	};
-
-	for(i = 0; i < configCount; i++) {
-		fs.copy(files[i], CONFIG_PATH + path.basename(files[i]), copyComplete);
-	}
+Quarry.addModuleConfig = function addModuleConfig(configPath, callback) {
+	ncp(configPath, paths.config, callback);
 };
 
 // Remove configuration files from the project _config directory for this module
-Quarry.removeConfig = function removeConfig() {
+Quarry.removeModuleConfig = function removeModuleConfig() {
 	// TODO: implement
 };
 
