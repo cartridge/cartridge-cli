@@ -23,16 +23,16 @@ function setPromptOptionsData() {
 	_promptOptions.push(getProjectNamePromptOptions());
 	_promptOptions.push(getProjectAuthorPromptOptions())
 	_promptOptions.push(getProjectDescriptionPromptOptions());
-	_promptOptions.push(getSlateModulesPromptOptions())
+	_promptOptions.push(getCartridgeModulesPromptOptions())
 	_promptOptions.push(getUserConfirmCopyPromptOptions())
 
 	return Promise.resolve(_promptOptions);
 }
 
-function getSlateModulesPromptOptions() {
+function getCartridgeModulesPromptOptions() {
 	return {
 		type: 'checkbox',
-		name: 'slateModules',
+		name: 'cartridgeModules',
 		message: 'What modules would you like included?',
 		choices: DEFAULT_PLUGIN_OPTIONS
 	}
