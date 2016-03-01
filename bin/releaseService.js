@@ -23,7 +23,9 @@ var ZIP_DOWNLOAD_URL = 'https://github.com/code-computerlove/cartridge/archive/v
 var ZIP_FILENAME;
 var ZIP_FILEPATH;
 
-releaseServiceApi.downloadLatestRelease = function() {
+releaseServiceApi.downloadLatestRelease = function(logInstance) {
+	_log = logInstance;
+
 	return preSetup()
 		.then(getReleaseZipFromGitHub)
 		.then(decompressZipFile)
@@ -43,6 +45,9 @@ function getReleaseZipFromGitHub() {
 		request(ZIP_DOWNLOAD_URL)
 			.pipe(fs.createWriteStream(ZIP_FILEPATH))
 			.on('close', function() {
+				_log.debug('GitHub release zip downloaded from: ' + ZIP_DOWNLOAD_URL);
+				_log.debug('GitHub release zip stored in path: ' + ZIP_FILEPATH);
+
 				resolve();
 			});
 	})
@@ -53,6 +58,7 @@ function decompressZipFile() {
 		fs.createReadStream(ZIP_FILEPATH)
 			.pipe(unzip.Extract({ path: OS_TMP_DIR}))
 			.on('close', function() {
+				_log.debug('.zip file extracted');
 				resolve()
 			});
 	})
@@ -61,6 +67,7 @@ function decompressZipFile() {
 function deleteZipFile() {
 	return new Promise(function(resolve, reject) {
 		fs.unlink(ZIP_FILEPATH, function() {
+			_log.debug('.zip file deleted');
 			resolve()
 		})
 	})

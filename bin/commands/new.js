@@ -97,7 +97,7 @@ module.exports = function(appDir) {
 			_log.info('Inserting the cartridge...');
 
 			releaseService
-				.downloadLatestRelease()
+				.downloadLatestRelease(_log)
 				.then(function() {
 					fs.copy(appDir, process.cwd(), {
 						filter: fileCopyFilter
