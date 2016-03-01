@@ -15,43 +15,49 @@ var github = new GitHubApi({
 
 var releaseServiceApi = {};
 
+var OS_TMP_DIR = os.tmpdir();
+var DATE;
+var ZIP_FILENAME;
+var ZIP_FILE_LOCATION;
+
 releaseServiceApi.downloadLatestRelease = function() {
-	return getReleaseZipFromGitHub()
+	return preSetup()
+		.then(getReleaseZipFromGitHub)
 		.then(decompressZipFile)
-		.then(deleteZipFile)
+		.then(deleteZipFile);
+}
+
+function preSetup() {
+	date = new Date();
+	ZIP_FILENAME = [date.getMilliseconds(), date.getDate(), date.getMonth()+1, date.getFullYear(), '-cartridge-tmp.zip'].join('');
+	ZIP_FILE_LOCATION = path.join(OS_TMP_DIR, ZIP_FILENAME);
+
+	return Promise.resolve();
 }
 
 function getReleaseZipFromGitHub() {
-	var date = new Date();
-	var ZIP_FILENAME = [date.getMilliseconds(), date.getDate(), date.getMonth(), date.getFullYear(), '-cartridge-tmp.zip'].join('');
-	var ZIP_FILE_LOCATION = path.join(os.tmpDir(), ZIP_FILENAME );
-
 	return new Promise(function(resolve, reject) {
 		request('https://github.com/code-computerlove/cartridge/archive/v0.2.0-alpha.zip')
 			.pipe(fs.createWriteStream(ZIP_FILE_LOCATION))
 			.on('close', function() {
-				resolve(ZIP_FILE_LOCATION);
+				resolve();
 			});
 	})
-
-
 }
 
-function decompressZipFile(zipLocation) {
-
+function decompressZipFile() {
 	return new Promise(function(resolve, reject) {
-		fs.createReadStream(zipLocation)
-			.pipe(unzip.Extract({ path: path.join(os.tmpDir())}))
+		fs.createReadStream(ZIP_FILE_LOCATION)
+			.pipe(unzip.Extract({ path: OS_TMP_DIR}))
 			.on('close', function() {
-				resolve(zipLocation)
+				resolve()
 			});
 	})
-
 }
 
-function deleteZipFile(zipLocation) {
+function deleteZipFile() {
 	return new Promise(function(resolve, reject) {
-		fs.unlink(zipLocation, function() {
+		fs.unlink(ZIP_FILE_LOCATION, function() {
 			resolve()
 		})
 	})
