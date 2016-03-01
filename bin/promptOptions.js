@@ -82,7 +82,7 @@ function getUserConfirmCopyPromptOptions() {
 	return {
 		type: 'confirm',
 		name: 'isOkToCopyFiles',
-		message: 'Read to start setup! Press enter to confirm',
+		message: 'Ready to start setup! Press enter to confirm',
 		default: true
 	}
 }
