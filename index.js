@@ -6,6 +6,8 @@ var path  = require('path');
 var ncp   = require('ncp').ncp;
 var chalk = require('chalk');
 
+var CONFIG_FILE = '/.cartridgecli';
+
 var paths = {
 	project: path.resolve('../../'),
 	config: path.resolve('../../_config')
@@ -16,7 +18,7 @@ var slateCliApi = {};
 // Checks if the project has been set up with slate
 function hasSlate() {
 	try {
-		fs.accessSync(paths.project + '/.slaterc', fs.R_OK | fs.W_OK);
+		fs.accessSync(paths.project + CONFIG_FILE, fs.R_OK | fs.W_OK);
 	} catch(err) {
 		return false;
 	}
@@ -39,7 +41,7 @@ var modulePrototype = {};
 
 // Adds the specified module to the .slaterc file
 slateCliApi.addToSlaterc = function addToSlaterc(module, callback) {
-	modifyJsonFile(paths.project + '/.slaterc', function addModule(data) {
+	modifyJsonFile(paths.project + CONFIG_FILE, function addModule(data) {
 		if(!data.hasOwnProperty('modules')) {
 			data.modules = [];
 		}
