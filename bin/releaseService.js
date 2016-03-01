@@ -14,27 +14,47 @@ var github = new GitHubApi({
 });
 
 var releaseServiceApi = {};
-var _callback;
 
-releaseServiceApi.downloadLatestRelease = function(callback) {
-	_callback = callback || function() {};
+releaseServiceApi.downloadLatestRelease = function() {
+	return getReleaseZipFromGitHub()
+		.then(decompressZipFile)
+		.then(deleteZipFile)
+}
+
+function getReleaseZipFromGitHub() {
 	var date = new Date();
-	var ZIP_FILEANME = [date.getMilliseconds(), date.getDate(), date.getMonth(), date.getFullYear(), '-cartridge-tmp.zip'].join('');
-	var ZIP_FILE_LOCATION = path.join(os.tmpDir(), ZIP_FILEANME );
+	var ZIP_FILENAME = [date.getMilliseconds(), date.getDate(), date.getMonth(), date.getFullYear(), '-cartridge-tmp.zip'].join('');
+	var ZIP_FILE_LOCATION = path.join(os.tmpDir(), ZIP_FILENAME );
 
-	request('https://github.com/code-computerlove/cartridge/archive/v0.2.0-alpha.zip')
-		.pipe(fs.createWriteStream(ZIP_FILE_LOCATION))
-		.on('close', function() {
-			decompressZipFile(ZIP_FILE_LOCATION)
-		});
+	return new Promise(function(resolve, reject) {
+		request('https://github.com/code-computerlove/cartridge/archive/v0.2.0-alpha.zip')
+			.pipe(fs.createWriteStream(ZIP_FILE_LOCATION))
+			.on('close', function() {
+				resolve(ZIP_FILE_LOCATION);
+			});
+	})
+
+
 }
 
 function decompressZipFile(zipLocation) {
-	fs.createReadStream(zipLocation)
-		.pipe(unzip.Extract({ path: path.join(os.tmpDir())}))
-		.on('close', function() {
-			fs.unlink(zipLocation, _callback)
-		});
+
+	return new Promise(function(resolve, reject) {
+		fs.createReadStream(zipLocation)
+			.pipe(unzip.Extract({ path: path.join(os.tmpDir())}))
+			.on('close', function() {
+				resolve(zipLocation)
+			});
+	})
+
+}
+
+function deleteZipFile(zipLocation) {
+	return new Promise(function(resolve, reject) {
+		fs.unlink(zipLocation, function() {
+			resolve()
+		})
+	})
 }
 
 // function getLatestCartridgeReleaseFromGitHub() {
