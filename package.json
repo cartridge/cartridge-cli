@@ -28,7 +28,9 @@
     "loglevel": "^1.4.0",
     "ncp": "^2.0.0",
     "npm-install-package": "^1.0.2",
-    "titleize": "^1.0.0"
+    "request": "^2.69.0",
+    "titleize": "^1.0.0",
+    "unzip": "^0.1.11"
   },
   "devDependencies": {
     "chai": "^1.6.1",
