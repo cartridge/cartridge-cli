@@ -104,12 +104,6 @@ module.exports = function(appDir) {
 					}, fileCopyComplete)
 				})
 
-			// releaseService.downloadLatestRelease(function() {
-				// fs.copy(appDir, process.cwd(), {
-				// 	filter: fileCopyFilter
-				// }, fileCopyComplete)
-			// });
-
 		} else {
 			_log.info('User cancelled - no files copied')
 		}
