@@ -17,20 +17,26 @@ describe('As a user of the promptOptions module', function() {
 
         it('should be a function', function() {
             var test = promptOptionsModule.getNewCommandPromptOptions;
-            
+
             expect(test).to.be.a('function');
         })
 
-        it('should return an array', function() {
-            var test = promptOptionsModule.getNewCommandPromptOptions();
-            
-            expect(test instanceof Array).to.be.true;
+        it('should return an array', function(done) {
+            promptOptionsModule
+                .getNewCommandPromptOptions()
+                .then(function(promptOptions) {
+                    expect(promptOptions instanceof Array).to.be.true;
+                    done();
+                })
         })
 
-        it('should return an array that is not empty', function() {
-            var actual = promptOptionsModule.getNewCommandPromptOptions();
-            
-            expect(actual.length).to.be.above(1);
+        it('should return an array that is not empty', function(done) {
+            promptOptionsModule
+                .getNewCommandPromptOptions()
+                .then(function(promptOptions) {
+                    expect(promptOptions.length).to.be.above(1);
+                    done();
+                })
         })
 
     })

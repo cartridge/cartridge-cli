@@ -1,8 +1,8 @@
-[![Stories in Ready](https://badge.waffle.io/code-computerlove/Quarry.svg?label=ready&title=Ready)](http://waffle.io/code-computerlove/Quarry)
-[![devDependency Status](https://david-dm.org/code-computerlove/Quarry/dev-status.svg)](https://david-dm.org/code-computerlove/Quarry#info=devDependencies)
-[![Dependency Status](https://david-dm.org/code-computerlove/Quarry.svg)](https://david-dm.org/code-computerlove/Quarry)
+[![Stories in Ready](https://badge.waffle.io/code-computerlove/slate-cli.svg?label=ready&title=Ready)](http://waffle.io/code-computerlove/slate-cli)
+[![devDependency Status](https://david-dm.org/code-computerlove/slate-cli/dev-status.svg)](https://david-dm.org/code-computerlove/slate-cli#info=devDependencies)
+[![Dependency Status](https://david-dm.org/code-computerlove/slate-cli.svg)](https://david-dm.org/code-computerlove/slate-cli)
 
-# Quarry [![Build Status](https://travis-ci.org/code-computerlove/Quarry.svg?branch=master)](https://travis-ci.org/code-computerlove/Quarry)
+# slate-cli [![Build Status](https://travis-ci.org/code-computerlove/slate-cli.svg?branch=master)](https://travis-ci.org/code-computerlove/slate-cli)
 
 > Start with a clean slate and get yourself going with a ready made basic static website setup
 
@@ -12,14 +12,14 @@ Command line utility for [Slate](https://github.com/code-computerlove/slate)
 ## Installation
 
 ```bash
-> npm install -g quarry
+> npm install -g slate-cli
 ```
 
 
 ## Usage
 
 ```bash
-> quarry
+> slate
 ```
 
 ## Contributing

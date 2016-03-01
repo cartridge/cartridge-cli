@@ -11,7 +11,7 @@ var paths = {
 	config: path.resolve('../../_config')
 };
 
-var Quarry = {};
+var slateCliApi = {};
 
 // Checks if the project has been set up with slate
 function hasSlate() {
@@ -38,7 +38,7 @@ function modifyJsonFile(path, transform, callback) {
 var modulePrototype = {};
 
 // Adds the specified module to the .slaterc file
-Quarry.addToSlaterc = function addToSlaterc(module, callback) {
+slateCliApi.addToSlaterc = function addToSlaterc(module, callback) {
 	modifyJsonFile(paths.project + '/.slaterc', function addModule(data) {
 		if(!data.hasOwnProperty('modules')) {
 			data.modules = [];
@@ -51,11 +51,11 @@ Quarry.addToSlaterc = function addToSlaterc(module, callback) {
 };
 
 // Removes the specified module from the .slaterc file
-Quarry.removeFromSlaterc = function removeFromSlaterc(module, callback) {
+slateCliApi.removeFromSlaterc = function removeFromSlaterc(module, callback) {
 	// TODO: implement
 };
 
-Quarry.ensureSlateExists = function ensureSlateExists() {
+slateCliApi.ensureSlateExists = function ensureSlateExists() {
 	if(!hasSlate()) {
 		console.error(chalk.red('Slate is not set up in this directory. Please set it up first before installing this module'));
 		process.exit(1);
@@ -63,18 +63,18 @@ Quarry.ensureSlateExists = function ensureSlateExists() {
 };
 
 // Modify the project configuration (project.json) with a transform function
-Quarry.modifyProjectConfig = function modifyProjectConfig(transform, callback) {
+slateCliApi.modifyProjectConfig = function modifyProjectConfig(transform, callback) {
 	modifyJsonFile(paths.config + '/project.json', transform, callback);
 };
 
 // Add configuration files to the project _config directory for this module
-Quarry.addModuleConfig = function addModuleConfig(configPath, callback) {
+slateCliApi.addModuleConfig = function addModuleConfig(configPath, callback) {
 	ncp(configPath, paths.config, callback);
 };
 
 // Remove configuration files from the project _config directory for this module
-Quarry.removeModuleConfig = function removeModuleConfig() {
+slateCliApi.removeModuleConfig = function removeModuleConfig() {
 	// TODO: implement
 };
 
-module.exports = Quarry;
+module.exports = slateCliApi;

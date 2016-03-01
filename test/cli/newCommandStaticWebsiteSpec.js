@@ -45,7 +45,7 @@ function newCommandTearDown(done) {
     done();
 }
 
-describe('As a user of the CLI', function() {
+describe.skip('As a user of the CLI', function() {
 
     describe('When the new command is used for the project type: Static site', function() {
         before(newCommandStaticSiteSetup);

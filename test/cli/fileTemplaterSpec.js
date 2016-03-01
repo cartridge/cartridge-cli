@@ -16,7 +16,7 @@ function changeToOsTempDirAndCopyFixtures() {
     process.chdir(TEST_TEMP_DIR);
 }
 
-xdescribe('As a user of the file templater module', function() {
+describe('As a user of the file templater module', function() {
     before(changeToOsTempDirAndCopyFixtures);
 
     describe('When templating one file', function() {
