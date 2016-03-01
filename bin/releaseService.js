@@ -18,7 +18,7 @@ var releaseServiceApi = {};
 var OS_TMP_DIR = os.tmpdir();
 var DATE;
 var ZIP_FILENAME;
-var ZIP_FILE_LOCATION;
+var ZIP_FILEPATH;
 
 releaseServiceApi.downloadLatestRelease = function() {
 	return preSetup()
@@ -30,7 +30,7 @@ releaseServiceApi.downloadLatestRelease = function() {
 function preSetup() {
 	date = new Date();
 	ZIP_FILENAME = [date.getMilliseconds(), date.getDate(), date.getMonth()+1, date.getFullYear(), '-cartridge-tmp.zip'].join('');
-	ZIP_FILE_LOCATION = path.join(OS_TMP_DIR, ZIP_FILENAME);
+	ZIP_FILEPATH = path.join(OS_TMP_DIR, ZIP_FILENAME);
 
 	return Promise.resolve();
 }
@@ -38,7 +38,7 @@ function preSetup() {
 function getReleaseZipFromGitHub() {
 	return new Promise(function(resolve, reject) {
 		request('https://github.com/code-computerlove/cartridge/archive/v0.2.0-alpha.zip')
-			.pipe(fs.createWriteStream(ZIP_FILE_LOCATION))
+			.pipe(fs.createWriteStream(ZIP_FILEPATH))
 			.on('close', function() {
 				resolve();
 			});
@@ -47,7 +47,7 @@ function getReleaseZipFromGitHub() {
 
 function decompressZipFile() {
 	return new Promise(function(resolve, reject) {
-		fs.createReadStream(ZIP_FILE_LOCATION)
+		fs.createReadStream(ZIP_FILEPATH)
 			.pipe(unzip.Extract({ path: OS_TMP_DIR}))
 			.on('close', function() {
 				resolve()
@@ -57,7 +57,7 @@ function decompressZipFile() {
 
 function deleteZipFile() {
 	return new Promise(function(resolve, reject) {
-		fs.unlink(ZIP_FILE_LOCATION, function() {
+		fs.unlink(ZIP_FILEPATH, function() {
 			resolve()
 		})
 	})
