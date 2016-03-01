@@ -22,7 +22,7 @@ releaseServiceApi.downloadLatestRelease = function(callback) {
 	var ZIP_FILEANME = [date.getMilliseconds(), date.getDate(), date.getMonth(), date.getFullYear(), '-cartridge-tmp.zip'].join('');
 	var ZIP_FILE_LOCATION = path.join(os.tmpDir(), ZIP_FILEANME );
 
-	request('https://github.com/code-computerlove/cartridge/archive/v0.1.1-alpha.zip')
+	request('https://github.com/code-computerlove/cartridge/archive/v0.2.0-alpha.zip')
 		.pipe(fs.createWriteStream(ZIP_FILE_LOCATION))
 		.on('close', function() {
 			decompressZipFile(ZIP_FILE_LOCATION)
