@@ -14,59 +14,63 @@ var github = new GitHubApi({
 });
 
 var releaseServiceApi = {};
+var _log;
 
-releaseServiceApi.downloadLatestRelease = function() {
-	return getReleaseZipFromGitHub()
+var OS_TMP_DIR = os.tmpdir();
+var DATE;
+//temp - need to get this from the API
+var ZIP_DOWNLOAD_URL = 'https://github.com/code-computerlove/cartridge/archive/v0.3.0-alpha.zip';
+var ZIP_FILENAME;
+var ZIP_FILEPATH;
+
+releaseServiceApi.downloadLatestRelease = function(logInstance) {
+	_log = logInstance;
+
+	return preSetup()
+		.then(getReleaseZipFromGitHub)
 		.then(decompressZipFile)
-		.then(deleteZipFile)
+		.then(deleteZipFile);
+}
+
+function preSetup() {
+	date = new Date();
+	ZIP_FILENAME = [date.getMilliseconds(), date.getDate(), date.getMonth()+1, date.getFullYear(), '-cartridge-tmp.zip'].join('');
+	ZIP_FILEPATH = path.join(OS_TMP_DIR, ZIP_FILENAME);
+
+	return Promise.resolve();
 }
 
 function getReleaseZipFromGitHub() {
-	var date = new Date();
-	var ZIP_FILENAME = [date.getMilliseconds(), date.getDate(), date.getMonth(), date.getFullYear(), '-cartridge-tmp.zip'].join('');
-	var ZIP_FILE_LOCATION = path.join(os.tmpDir(), ZIP_FILENAME );
-
 	return new Promise(function(resolve, reject) {
-		request('https://github.com/code-computerlove/cartridge/archive/v0.3.0-alpha.zip')
-			.pipe(fs.createWriteStream(ZIP_FILE_LOCATION))
+		request(ZIP_DOWNLOAD_URL)
+			.pipe(fs.createWriteStream(ZIP_FILEPATH))
 			.on('close', function() {
-				resolve(ZIP_FILE_LOCATION);
+				_log.debug('GitHub release zip downloaded from: ' + ZIP_DOWNLOAD_URL);
+				_log.debug('GitHub release zip stored in path: ' + ZIP_FILEPATH);
+
+				resolve();
 			});
 	})
-
-
 }
 
-function decompressZipFile(zipLocation) {
-console.log(zipLocation);
+function decompressZipFile() {
 	return new Promise(function(resolve, reject) {
-		fs.createReadStream(zipLocation)
-			.pipe(unzip.Extract({ path: path.join(os.tmpDir())}))
+		fs.createReadStream(ZIP_FILEPATH)
+			.pipe(unzip.Extract({ path: OS_TMP_DIR}))
 			.on('close', function() {
-				resolve(zipLocation)
+				_log.debug('.zip file extracted');
+				resolve()
 			});
 	})
-
 }
 
-function deleteZipFile(zipLocation) {
+function deleteZipFile() {
 	return new Promise(function(resolve, reject) {
-		fs.unlink(zipLocation, function() {
+		fs.unlink(ZIP_FILEPATH, function() {
+			_log.debug('.zip file deleted');
 			resolve()
 		})
 	})
 }
-
-// function getLatestCartridgeReleaseFromGitHub() {
-// 	github.releases.getRelease({
-// 		owner: 'code-computerlove',
-// 		repo: 'cartridge',
-// 		id: '2697137'
-// 	}, function(err, data) {
-// 		if(err) console.error(data);
-
-// 		downloadReleaseFromGitHub(data.tarball_url);
-// 	})
-// }
 
 module.exports = releaseServiceApi;
