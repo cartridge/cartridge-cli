@@ -1,13 +1,13 @@
 'use strict';
 
-var CONFIG_FILE = '/.cartridgecli';
+var CONFIG_FILE = '/.cartridgerc';
 
 var fs        = require('fs-extra');
 var del       = require('del');
 var path      = require('path');
 var ncp       = require('ncp').ncp;
 var chalk     = require('chalk');
-var templater = require('lib/readmeTemplater.js');
+var templater = require('./lib/readmeTemplater.js');
 
 var paths = {
 	project: path.resolve('../../'),
@@ -29,7 +29,8 @@ function hasSlate() {
 }
 
 function updateReadmeModules() {
-	templater.setPath(paths.project);
+	// templater.setPath(paths.project);
+	// templater.updateModules();
 }
 
 function modifyJsonFile(path, transform, callback) {

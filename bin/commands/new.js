@@ -168,11 +168,33 @@ module.exports = function(appDir) {
 	}
 
 	function getTemplateFileList() {
-		var fileList = [];
+		var fileList      = [];
+		var templatesPath = path.join(process.cwd(), '_cartridge');
+		var destPath      = process.cwd();
 
-		fileList.push(path.join('_config', 'creds.json'));
-		fileList.push('package.json')
-		fileList.push('.cartridgerc');
+		// Creds file
+		fileList.push({
+			src:  path.join(templatesPath, 'creds.tpl'),
+			dest: path.join(destPath, '_config', 'creds.json')
+		});
+
+		// Project package file
+		fileList.push({
+			src:  path.join(templatesPath, 'package.tpl'),
+			dest: path.join(destPath, 'package.json')
+		});
+
+		// Project readme
+		fileList.push({
+			src:  path.join(templatesPath, 'readme.tpl'),
+			dest: path.join(destPath, 'readme.md')
+		});
+
+		// Cartridge config
+		fileList.push({
+			src:  path.join(templatesPath, 'rc.tpl'),
+			dest: path.join(destPath, '.cartridgerc')
+		});
 
 		return fileList;
 	}

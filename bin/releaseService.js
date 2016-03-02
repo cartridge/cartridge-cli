@@ -27,7 +27,7 @@ function getReleaseZipFromGitHub() {
 	var ZIP_FILE_LOCATION = path.join(os.tmpDir(), ZIP_FILENAME );
 
 	return new Promise(function(resolve, reject) {
-		request('https://github.com/code-computerlove/cartridge/archive/v0.2.0-alpha.zip')
+		request('https://github.com/code-computerlove/cartridge/archive/v0.3.0-alpha.zip')
 			.pipe(fs.createWriteStream(ZIP_FILE_LOCATION))
 			.on('close', function() {
 				resolve(ZIP_FILE_LOCATION);
@@ -38,7 +38,7 @@ function getReleaseZipFromGitHub() {
 }
 
 function decompressZipFile(zipLocation) {
-
+console.log(zipLocation);
 	return new Promise(function(resolve, reject) {
 		fs.createReadStream(zipLocation)
 			.pipe(unzip.Extract({ path: path.join(os.tmpDir())}))

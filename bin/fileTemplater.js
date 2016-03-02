@@ -28,21 +28,21 @@ module.exports = function() {
         });
     }
 
-    function templateFile(filePath) {
-        var filePath = path.join(_config.basePath, filePath);
+    function templateFile(filePaths) {
         var compiled;
         var output;
-
-        fs.readFile(filePath, 'utf8', function(err, fileContents) {
+console.log(filePaths);
+console.log(path.resolve(filePaths.src));
+        fs.readFile(filePaths.src, 'utf8', function(err, fileContents) {
             if (err) return console.error(err)
 
             compiled = template(fileContents);
             output = compiled(_config.data);
 
-            fs.writeFile(filePath, output, 'utf8', function(err) {
+            fs.writeFile(filePaths.dest, output, 'utf8', function(err) {
                 if (err) return console.error(err)
 
-                _config.onEachFile(filePath);
+                _config.onEachFile(filePaths.dest);
 
                 if(_fileNumber === _config.files.length) {
                     _config.onCompleted();
