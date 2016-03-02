@@ -1,5 +1,3 @@
-'use strict';
-
 var log = require('loglevel');
 
 var utilsApi = {};
