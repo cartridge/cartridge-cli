@@ -1,3 +1,5 @@
+"use strict";
+
 var os = require('os');
 var path = require('path');
 
@@ -33,8 +35,8 @@ releaseServiceApi.downloadLatestRelease = function(logInstance) {
 }
 
 function preSetup() {
-	date = new Date();
-	ZIP_FILENAME = [date.getMilliseconds(), date.getDate(), date.getMonth()+1, date.getFullYear(), '-cartridge-tmp.zip'].join('');
+	DATE = new Date();
+	ZIP_FILENAME = [DATE.getMilliseconds(), DATE.getDate(), DATE.getMonth()+1, DATE.getFullYear(), '-cartridge-tmp.zip'].join('');
 	ZIP_FILEPATH = path.join(OS_TMP_DIR, ZIP_FILENAME);
 
 	return Promise.resolve();
