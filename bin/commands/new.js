@@ -9,6 +9,7 @@ var npmInstallPackage = require('npm-install-package')
 var inArray = require('in-array');
 var releaseService = require('../releaseService');
 
+var errorHandler = require('../errorHandler');
 var utils = require('../utils');
 var fileTemplater = require('../fileTemplater')();
 var promptOptions = require('../promptOptions')();
@@ -34,7 +35,7 @@ module.exports = function(appDir) {
 
 	function checkIfWorkingDirIsEmpty() {
 		fs.readdir(process.cwd(), function(err, files) {
-			if (err) return console.error(err);
+			if (err) errorHandler(err);
 
 			if(getWorkingDirFilteredList(files).length) {
 				_log.warn('');
@@ -133,7 +134,7 @@ module.exports = function(appDir) {
 	}
 
 	function fileCopyComplete(err) {
-		if (err) return console.error(err);
+		if (err) errorHandler(err);
 
 		templateCopiedFiles();
 	}
@@ -206,7 +207,7 @@ module.exports = function(appDir) {
 
 	function installNpmPackages() {
 		npmInstallPackage(_promptAnswers.cartridgeModules, { saveDev: true}, function(err) {
-			if (err) throw err;
+			if (err) errorHandler(err);
 
 			postInstallCleanUp();
 		})
@@ -216,12 +217,12 @@ module.exports = function(appDir) {
 		_log.debug('Emptying templates file directory: ' + TEMPLATE_FILES_PATH);
 
 		fs.emptyDir(TEMPLATE_FILES_PATH, function (err) {
-  			if (err) console.error(err)
+  			if (err) errorHandler(err);
 
 			_log.debug('Deleting templates file directory: ' + TEMPLATE_FILES_PATH);
 
 			fs.rmdir(TEMPLATE_FILES_PATH, function(err){
-				if(err) console.error(err);
+				if (err) errorHandler(err);
 
 				finishSetup();
 			})
