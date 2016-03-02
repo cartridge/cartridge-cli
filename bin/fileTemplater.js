@@ -31,8 +31,7 @@ module.exports = function() {
     function templateFile(filePaths) {
         var compiled;
         var output;
-console.log(filePaths);
-console.log(path.resolve(filePaths.src));
+
         fs.readFile(filePaths.src, 'utf8', function(err, fileContents) {
             if (err) return console.error(err)
 
