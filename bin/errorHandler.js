@@ -1,6 +1,16 @@
 var PrettyError = require('pretty-error');
 var pe = new PrettyError();
 
+function errorHandler(error) {
+
+	var prettyError = pe.render(new Error(error));
+
+	console.error('');
+	console.error(prettyError);
+
+	process.exit(1);
+}
+
 function setPrettyErrrorTheme() {
 	pe.appendStyle({
 		'pretty-error > header > title > kind': {
@@ -48,14 +58,6 @@ function setPrettyErrrorTheme() {
 			marginLeft: 4
 		}
 	});
-}
-
-function errorHandler(error) {
-
-	var prettyError = pe.render(new Error(error));
-	console.error(prettyError);
-
-	process.exit(1);
 }
 
 setPrettyErrrorTheme();
