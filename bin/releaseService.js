@@ -30,7 +30,7 @@ releaseServiceApi.downloadLatestRelease = function(logInstance) {
 
 	return preSetup()
 		.then(getReleaseZipFromGitHub)
-		.then(decompressZipFile)
+		.then(extractZipFile)
 		.then(deleteZipFile);
 }
 
@@ -55,7 +55,7 @@ function getReleaseZipFromGitHub() {
 	})
 }
 
-function decompressZipFile() {
+function extractZipFile() {
 	return new Promise(function(resolve, reject) {
 		fs.createReadStream(ZIP_FILEPATH)
 			.pipe(unzip.Extract({ path: OS_TMP_DIR}))
