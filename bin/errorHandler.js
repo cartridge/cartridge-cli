@@ -60,6 +60,11 @@ function setPrettyErrrorTheme() {
 	});
 }
 
+function setPrettyErrorConfig() {
+	pe.skipNodeFiles();
+}
+
 setPrettyErrrorTheme();
+setPrettyErrorConfig();
 
 module.exports = errorHandler
