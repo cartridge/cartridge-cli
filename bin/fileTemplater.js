@@ -5,6 +5,8 @@ var path = require('path');
 var extend = require('extend');
 var template = require('lodash/template');
 
+var errorHandler = require('./errorHandler');
+
 var _fileNumber = 1;
 var _config = {
     onEachFile: function() {},
@@ -33,13 +35,13 @@ module.exports = function() {
         var output;
 
         fs.readFile(filePaths.src, 'utf8', function(err, fileContents) {
-            if (err) return console.error(err)
+            if (err) errorHandler(err);
 
             compiled = template(fileContents);
             output = compiled(_config.data);
 
             fs.writeFile(filePaths.dest, output, 'utf8', function(err) {
-                if (err) return console.error(err)
+                if (err) errorHandler(err);
 
                 _config.onEachFile(filePaths.dest);
 
