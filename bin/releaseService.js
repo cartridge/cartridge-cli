@@ -19,7 +19,7 @@ var _log;
 var OS_TMP_DIR = os.tmpdir();
 var DATE;
 //temp - need to get this from the API
-var ZIP_DOWNLOAD_URL = 'https://github.com/code-computerlove/cartridge/archive/v0.3.0-alpha.zip';
+var ZIP_DOWNLOAD_URL = 'https://github.com/code-computerlove/cartridge/archive/v0.3.2-alpha.zip';
 var ZIP_FILENAME;
 var ZIP_FILEPATH;
 

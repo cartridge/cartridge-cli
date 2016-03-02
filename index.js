@@ -1,17 +1,20 @@
 'use strict';
 
 var CONFIG_FILE = '/.cartridgerc';
+var MATCH_REGEX = /(\[\/\/\]: <> \(Modules start\)\s)([^[]*)(\[\/\/\]: <> \(Modules end\)\s)/g;
 
 var fs        = require('fs-extra');
 var del       = require('del');
 var path      = require('path');
 var ncp       = require('ncp').ncp;
 var chalk     = require('chalk');
-var templater = require('./lib/readmeTemplater.js');
+var template = require('lodash/template');
 
 var paths = {
-	project: path.resolve('../../'),
-	config: path.resolve('../../_config')
+	project:   path.resolve('../../'),
+	config:    path.resolve('../../', '_config'),
+	readme:    path.resolve('../../', 'readme.md'),
+	cartridge: path.resolve('../../_cartridge')
 };
 
 
@@ -28,16 +31,39 @@ function hasSlate() {
 	return true;
 }
 
-function updateReadmeModules() {
-	// templater.setPath(paths.project);
-	// templater.updateModules();
+function insertModulesInToReadme(readmeContents, moduleContent) {
+	return readmeContents.replace(MATCH_REGEX, moduleContent);
+}
+
+function updateReadme(moduleContent) {
+	fs.readFile(paths.readme, 'utf8', function(err, readmeContents) {
+		if (err) return console.error(err);
+
+		fs.writeFile(paths.readme, insertModulesInToReadme(readmeContents, moduleContent), 'utf8', function(err) {
+			if (err) return console.error(err);
+			console.log('Readme updated');
+		});
+	});
+}
+
+function updateReadmeModules(data) {
+	var compiledTemplate;
+
+	fs.readFile(path.join(paths.cartridge, 'modules.tpl'), 'utf8', function(err, moduleTemplate) {
+		if (err) return console.error(err);
+
+		compiledTemplate = template(moduleTemplate);
+		updateReadme(compiledTemplate(data));
+	});
 }
 
 function modifyJsonFile(path, transform, callback) {
 	fs.readJson(path, function (err, fileContents) {
 		if(!err) {
 			fileContents = transform(fileContents);
-			fs.writeJson(path, fileContents, callback);
+			fs.writeJson(path, fileContents, function(err) {
+				callback(err, fileContents);
+			});
 		} else {
 			callback(err);
 		}
@@ -61,8 +87,8 @@ cartridgeApi.addToRc = function addToRc(module, callback) {
 		data.modules.push(module);
 
 		return data;
-	}, function(err) {
-		updateReadmeModules();
+	}, function(err, jsonContent) {
+		updateReadmeModules(jsonContent);
 		callback(err);
 	});
 };
