@@ -34,7 +34,7 @@ function setPrettyErrrorTheme() {
 		'pretty-error > trace > item': {
 			marginLeft: 2,
 			marginBottom: 0,
-			bullet: '"<grey>-</grey>"'
+			bullet: '"<grey>· </grey>"'
 		},
 
 		'pretty-error > trace > item > header > pointer > file': {
