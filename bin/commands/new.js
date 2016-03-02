@@ -18,6 +18,8 @@ var _log;
 var _promptAnswers;
 var _options;
 
+var TEMPLATE_FILES_PATH = path.join(process.cwd(), '_cartridge');
+
 module.exports = function(appDir) {
 
 	return {
@@ -169,30 +171,29 @@ module.exports = function(appDir) {
 
 	function getTemplateFileList() {
 		var fileList      = [];
-		var templatesPath = path.join(process.cwd(), '_cartridge');
 		var destPath      = process.cwd();
 
 		// Creds file
 		fileList.push({
-			src:  path.join(templatesPath, 'creds.tpl'),
+			src:  path.join(TEMPLATE_FILES_PATH, 'creds.tpl'),
 			dest: path.join(destPath, '_config', 'creds.json')
 		});
 
 		// Project package file
 		fileList.push({
-			src:  path.join(templatesPath, 'package.tpl'),
+			src:  path.join(TEMPLATE_FILES_PATH, 'package.tpl'),
 			dest: path.join(destPath, 'package.json')
 		});
 
 		// Project readme
 		fileList.push({
-			src:  path.join(templatesPath, 'readme.tpl'),
+			src:  path.join(TEMPLATE_FILES_PATH, 'readme.tpl'),
 			dest: path.join(destPath, 'readme.md')
 		});
 
 		// Cartridge config
 		fileList.push({
-			src:  path.join(templatesPath, 'rc.tpl'),
+			src:  path.join(TEMPLATE_FILES_PATH, 'rc.tpl'),
 			dest: path.join(destPath, '.cartridgerc')
 		});
 
@@ -207,7 +208,23 @@ module.exports = function(appDir) {
 		npmInstallPackage(_promptAnswers.cartridgeModules, { saveDev: true}, function(err) {
 			if (err) throw err;
 
-			finishSetup();
+			postInstallCleanUp();
+		})
+	}
+
+	function postInstallCleanUp() {
+		_log.debug('Emptying templates file directory: ' + TEMPLATE_FILES_PATH);
+
+		fs.emptyDir(TEMPLATE_FILES_PATH, function (err) {
+  			if (err) console.error(err)
+
+			_log.debug('Deleting templates file directory: ' + TEMPLATE_FILES_PATH);
+
+			fs.rmdir(TEMPLATE_FILES_PATH, function(err){
+				if(err) console.error(err);
+
+				finishSetup();
+			})
 		})
 	}
 
