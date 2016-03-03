@@ -1,3 +1,5 @@
+"use strict";
+
 var os = require('os');
 var path = require('path');
 
@@ -28,13 +30,13 @@ releaseServiceApi.downloadLatestRelease = function(logInstance) {
 
 	return preSetup()
 		.then(getReleaseZipFromGitHub)
-		.then(decompressZipFile)
+		.then(extractZipFile)
 		.then(deleteZipFile);
 }
 
 function preSetup() {
-	date = new Date();
-	ZIP_FILENAME = [date.getMilliseconds(), date.getDate(), date.getMonth()+1, date.getFullYear(), '-cartridge-tmp.zip'].join('');
+	DATE = new Date();
+	ZIP_FILENAME = [DATE.getMilliseconds(), DATE.getDate(), DATE.getMonth()+1, DATE.getFullYear(), '-cartridge-tmp.zip'].join('');
 	ZIP_FILEPATH = path.join(OS_TMP_DIR, ZIP_FILENAME);
 
 	return Promise.resolve();
@@ -53,7 +55,7 @@ function getReleaseZipFromGitHub() {
 	})
 }
 
-function decompressZipFile() {
+function extractZipFile() {
 	return new Promise(function(resolve, reject) {
 		fs.createReadStream(ZIP_FILEPATH)
 			.pipe(unzip.Extract({ path: OS_TMP_DIR}))
