@@ -11,7 +11,7 @@ var inArray = require('in-array');
 var releaseService = require('../releaseService');
 var errorHandler = require('../errorHandler');
 var utils = require('../utils');
-var fileTemplater = require('../fileTemplater')();
+var fileTemplater = require('../fileTemplater');
 var promptOptions = require('../promptOptions')();
 var pkg           = require(path.resolve(__dirname, '..', '..' ,'package.json'));
 
