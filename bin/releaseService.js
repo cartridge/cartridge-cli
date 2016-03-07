@@ -60,6 +60,7 @@ function getCartridgeFolderPath(args) {
 
 function downloadGitHubZipFile(downloadUrl) {
 	_log.debug('Downloading release from URL ' + downloadUrl);
+	_log.debug('');
 
 	return gotZip(downloadUrl, {
 		dest:    OS_TMP_DIR,
