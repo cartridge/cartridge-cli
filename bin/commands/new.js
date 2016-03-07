@@ -188,15 +188,24 @@ module.exports = function(appDir) {
 	}
 
 	function installNpmPackages() {
-		npmInstallPackage(_promptAnswers.cartridgeModules, { saveDev: true}, function(err) {
-			if (err) errorHandler(err);
+		if(_promptAnswers.cartridgeModules.length > 0) {
+			console.log('');
+			_log.info('Installing expansion packs...');
 
+			npmInstallPackage(_promptAnswers.cartridgeModules, { saveDev: true}, function(err) {
+				if (err) errorHandler(err);
+
+				postInstallCleanUp();
+			})
+		} else {
 			postInstallCleanUp();
-		})
+		}
 	}
 
 	function postInstallCleanUp() {
+		console.log('');
 		_log.debug('Running post install cleanup');
+
 		releaseService.deleteReleaseTmpDirectory();
 
 		_log.debug('Deleting templates file directory: ' + TEMPLATE_FILES_PATH);
