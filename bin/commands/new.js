@@ -6,7 +6,6 @@ var fs       = require('fs-extra');
 var path     = require('path');
 
 var npmInstallPackage = require('npm-install-package')
-var inArray = require('in-array');
 
 var releaseService = require('../releaseService');
 var fileTemplater = require('../fileTemplater');
@@ -42,7 +41,7 @@ module.exports = function(appDir) {
 			fs.readdir(process.cwd(), function(err, files) {
 				if (err) reject(err);
 
-				if(getWorkingDirFilteredList(files).length > 0) {
+				if(utils.filterDirectoryContents(files).length > 0) {
 					_log.warn('');
 					_log.warn(chalk.red('Warning: The directory you are currently in is not empty!'));
 					_log.warn(chalk.red('Going through the setup will perform a clean cartridge installation.'));
@@ -62,20 +61,6 @@ module.exports = function(appDir) {
 				resolve();
 			})
 		})
-	}
-
-	function getWorkingDirFilteredList(unfilteredFileList) {
-		var filesToExclude = ['.DS_Store'];
-		var filteredDirContents = [];
-
-		for (var i = 0; i < unfilteredFileList.length; i++) {
-			//if the file / folder IS NOT part of the exclude list, then add it to the filtered dir content list
-			if(!inArray(filesToExclude, unfilteredFileList[i])) {
-				filteredDirContents.push(unfilteredFileList[i]);
-			}
-		}
-
-		return filteredDirContents;
 	}
 
 	function setupOnScreenPrompts() {
