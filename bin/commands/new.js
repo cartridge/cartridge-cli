@@ -30,7 +30,17 @@ module.exports = function(appDir) {
 	function init(options) {
 		_options = options;
 		_log = utils.getLogInstance(_options);
-		checkIfWorkingDirIsEmpty();
+		// checkIfWorkingDirIsEmpty();
+
+		releaseService
+			.downloadLatestRelease(_log)
+			.then(function(args) {
+				console.log('args are', args);
+
+				// fs.copy(appDir, process.cwd(), {
+				// 	filter: fileCopyFilter
+				// }, fileCopyComplete)
+			})
 	}
 
 	function checkIfWorkingDirIsEmpty() {
@@ -100,11 +110,13 @@ module.exports = function(appDir) {
 			_log.info('Inserting the cartridge...');
 
 			releaseService
-				.downloadLatestRelease(_log, appDir)
-				.then(function() {
-					fs.copy(appDir, process.cwd(), {
-						filter: fileCopyFilter
-					}, fileCopyComplete)
+				.downloadLatestRelease(_log)
+				.then(function(args) {
+					console.log('args are', args);
+
+					// fs.copy(appDir, process.cwd(), {
+					// 	filter: fileCopyFilter
+					// }, fileCopyComplete)
 				})
 
 		} else {
