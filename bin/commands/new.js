@@ -31,17 +31,6 @@ module.exports = function(appDir) {
 		_options = options;
 		_log = utils.getLogInstance(_options);
 		checkIfWorkingDirIsEmpty();
-
-		// releaseService
-		// 	.downloadLatestRelease(_log)
-		// 	.then(function(copyPath) {
-
-		// 		console.log('hits something ->', copyPath);
-
-		// 		fs.copy(appDir, process.cwd(), {
-		// 			filter: fileCopyFilter
-		// 		}, fileCopyComplete)
-		// 	})
 	}
 
 	function checkIfWorkingDirIsEmpty() {
@@ -113,9 +102,6 @@ module.exports = function(appDir) {
 			releaseService
 				.downloadLatestRelease(_log)
 				.then(function(copyPath) {
-
-					console.log('hits something ->', copyPath);
-
 					fs.copy(copyPath, process.cwd(), {
 						filter: fileCopyFilter
 					}, fileCopyComplete)
@@ -241,6 +227,8 @@ module.exports = function(appDir) {
 				finishSetup();
 			})
 		})
+
+		releaseService.deleteReleaseTmpDirectory();
 	}
 
 	function finishSetup() {
