@@ -5,7 +5,7 @@ var path = require('path');
 var extend = require('extend');
 var pkg = require(path.resolve(__dirname, '..' ,'package.json'));
 
-var _templateData;
+var _templateData = {};
 var _promptAnswers;
 
 var templateDataApi = {};
