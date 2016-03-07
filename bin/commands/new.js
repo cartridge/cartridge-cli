@@ -4,16 +4,16 @@ var chalk    = require('chalk');
 var inquirer = require('inquirer');
 var fs       = require('fs-extra');
 var path     = require('path');
-var extend   = require('extend');
+
 var npmInstallPackage = require('npm-install-package')
 var inArray = require('in-array');
 
 var releaseService = require('../releaseService');
-var errorHandler = require('../errorHandler');
-var utils = require('../utils');
 var fileTemplater = require('../fileTemplater');
 var promptOptions = require('../promptOptions');
-var pkg           = require(path.resolve(__dirname, '..', '..' ,'package.json'));
+var templateDataManager = require('../templateDataManager');
+var errorHandler = require('../errorHandler');
+var utils = require('../utils');
 
 var _log;
 var _promptAnswers;
@@ -82,18 +82,9 @@ module.exports = function(appDir) {
 	 		})
 	}
 
-	function getTemplateData() {
-		var date = new Date();
-
-		return {
-			projectNameFileName:  _promptAnswers.projectName.toLowerCase().replace(/ /g,"-"),
-			projectGeneratedDate: [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('/'),
-			currentVersion:       pkg.version
-		}
-	}
-
 	function promptCallback(answers) {
 		_promptAnswers = answers;
+		templateDataManager.setData(answers);
 
 		if(_promptAnswers.isOkToCopyFiles) {
 
@@ -158,10 +149,8 @@ module.exports = function(appDir) {
 		_log.debug('');
 		_log.info('Booting up files...');
 
-		var templateData = extend({}, _promptAnswers, getTemplateData())
-
 		fileTemplater.setConfig({
-			data: templateData,
+			data: templateDataManager.getData(),
 			basePath: process.cwd(),
 			files: getTemplateFileList(),
 			onEachFile: singleFileCallback,

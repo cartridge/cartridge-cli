@@ -15,10 +15,10 @@ promptOptionsApi.getNewCommandPromptOptions = function() {
 function setPromptOptionsData() {
 	_promptOptions.push(getProjectTypePromptOptions());
 	_promptOptions.push(getProjectNamePromptOptions());
-	_promptOptions.push(getProjectAuthorPromptOptions())
+	_promptOptions.push(getProjectAuthorPromptOptions());
 	_promptOptions.push(getProjectDescriptionPromptOptions());
-	_promptOptions.push(getCartridgeModulesPromptOptions())
-	_promptOptions.push(getUserConfirmCopyPromptOptions())
+	_promptOptions.push(getCartridgeModulesPromptOptions());
+	_promptOptions.push(getUserConfirmCopyPromptOptions());
 
 	return Promise.resolve(_promptOptions);
 }
