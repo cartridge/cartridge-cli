@@ -6,16 +6,10 @@ var DEFAULT_PLUGIN_OPTIONS = require('./defaultPluginOptions');
 
 var _promptOptions = [];
 
-module.exports = function() {
+var promptOptionsApi = {};
 
-	return {
-		getNewCommandPromptOptions: getNewCommandPromptOptions
-	}
-
-}
-
-function getNewCommandPromptOptions() {
-	 return setPromptOptionsData();
+promptOptionsApi.getNewCommandPromptOptions = function() {
+	return setPromptOptionsData();
 }
 
 function setPromptOptionsData() {
@@ -92,3 +86,5 @@ function inputNotEmpty(value, fieldName) {
 
 	return (isValid) ? true : fieldName + ' cannot be empty' ;
 }
+
+module.exports = promptOptionsApi;
