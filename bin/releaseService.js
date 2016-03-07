@@ -6,7 +6,6 @@ var path = require('path');
 var fs        = require('fs-extra');
 var gotZip    = require('got-zip');
 var GitHubApi = require('github');
-
 var github = new GitHubApi({
 	version: '3.0.0',
 	protocol: 'https',
@@ -14,6 +13,8 @@ var github = new GitHubApi({
 		'user-agent': 'cartridge-cli-app'
 	}
 });
+
+var errorHandler = require('./errorHandler');
 
 var releaseServiceApi = {};
 var _log;
@@ -29,7 +30,7 @@ releaseServiceApi.downloadLatestRelease = function(logInstance) {
 		.then(downloadGitHubZipFile)
 		.then(getCartridgeFolderPath)
 		.catch(function(err) {
-			return console.err(err);
+			errorHandler(err)
 		})
 }
 
@@ -43,6 +44,8 @@ function getCartridgeFolderPath(args) {
 
 	return new Promise(function(resolve, reject) {
 		fs.readdir(args.dest, function(err, files) {
+
+			if(err) reject(err);
 
 			for (var i = 0; i < files.length; i++) {
 
