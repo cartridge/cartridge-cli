@@ -22,6 +22,12 @@ utilsApi.getLogInstance = function(options) {
 	return log;
 }
 
+/**
+ * Take the contents of a directory and returns a new list of contents
+ * excluding specific files e.g. .DS_Store
+ * @param  {Array} unfilteredFileList Unfiltered directory contents
+ * @return {Array}                    Filter directory contents
+ */
 utilsApi.filterDirectoryContents = function(unfilteredFileList) {
 	var filesToExclude = ['.DS_Store'];
 	var filteredDirContents = [];

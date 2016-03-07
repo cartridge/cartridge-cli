@@ -6,24 +6,36 @@ var extend = require('extend');
 var pkg = require(path.resolve(__dirname, '..' ,'package.json'));
 
 var _templateData = {};
-var _promptAnswers;
+var _baseData;
 
 var templateDataApi = {};
 
-templateDataApi.setData = function(promptAnswers) {
-	_promptAnswers = promptAnswers;
-	_templateData = extend({}, _promptAnswers, getTemplateMetaData())
+/**
+ * Set internal template data
+ * @param {Object} baseData Base template data object
+ */
+templateDataApi.setData = function(baseData) {
+	_baseData = baseData;
+	_templateData = extend({}, _baseData, getTemplateMetaData())
 }
 
+/**
+ * Get the template data
+ * @return {Object} Template data
+ */
 templateDataApi.getData = function() {
 	return _templateData;
 }
 
+/**
+ * Generate extra meta data using the base data
+ * @return {Object} Meta data object
+ */
 function getTemplateMetaData() {
 	var date = new Date();
 
 	return {
-		projectNameFileName:  _promptAnswers.projectName.toLowerCase().replace(/ /g,"-"),
+		projectNameFileName:  _baseData.projectName.toLowerCase().replace(/ /g,"-"),
 		projectGeneratedDate: [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('/'),
 		currentVersion:       pkg.version
 	}
