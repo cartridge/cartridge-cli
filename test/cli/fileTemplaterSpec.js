@@ -3,7 +3,7 @@ var os = require('os');
 var fs = require('fs-extra');
 var path = require('path');
 
-var fileTemplater =  require('../../bin/fileTemplater')();
+var fileTemplater =  require('../../bin/fileTemplater');
 
 chai.use(require('chai-fs'));
 chai.should();
