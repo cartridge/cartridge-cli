@@ -19,26 +19,54 @@ var releaseServiceApi = {};
 var _log;
 
 var OS_TMP_DIR       = os.tmpdir();
+var CARTRIDGE_TMP_DIR = path.join(OS_TMP_DIR, 'cartridge');
 
 releaseServiceApi.downloadLatestRelease = function(logInstance) {
 	_log = logInstance;
 
 	_log.debug('Getting latest release URL from GitHub');
 
-	return getLatestGitHubRelease()
-		.then(handleGithubResponse)
+	return getCartridgeFolderPath({dest: OS_TMP_DIR});
+
+	// return ensureTempDirExists()
+	// 	.then(getLatestGitHubRelease)
+	// 	.then(downloadGitHubZipFile)
+	// 	.then(getCartridgeFolderPath)
 }
 
-function handleGithubResponse(downloadUrl) {
+function ensureTempDirExists() {
+	return new Promise(function(resolve, reject) {
+		fs.ensureDir(CARTRIDGE_TMP_DIR, function (err) {
+			resolve();
+		})
+	});
+}
+
+function getCartridgeFolderPath(args) {
+	var CARTRIDGE_FOLDER = /^cartridge-cartridge/;
+
+	return new Promise(function(resolve, reject) {
+		fs.readdir(args.dest, function(err, files) {
+
+			for (var i = 0; i < files.length; i++) {
+
+				if(CARTRIDGE_FOLDER.test(files[i])) {
+					resolve(path.join(args.dest, files[i]));
+				}
+			}
+
+			resolve(path.join(args.dest, files[0], '/'));
+		})
+	});
+}
+
+function downloadGitHubZipFile(downloadUrl) {
 	return gotZip(downloadUrl, {
 		dest:    OS_TMP_DIR,
 		extract: true,
 		cleanup: true,
 		strip:   0
 	})
-		// .catch(function (err) {
-		// 	// manage error
-		// });
 }
 
 function getLatestGitHubRelease() {

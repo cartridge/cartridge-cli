@@ -30,17 +30,18 @@ module.exports = function(appDir) {
 	function init(options) {
 		_options = options;
 		_log = utils.getLogInstance(_options);
-		// checkIfWorkingDirIsEmpty();
+		checkIfWorkingDirIsEmpty();
 
-		releaseService
-			.downloadLatestRelease(_log)
-			.then(function(args) {
-				console.log('args are', args);
+		// releaseService
+		// 	.downloadLatestRelease(_log)
+		// 	.then(function(copyPath) {
 
-				// fs.copy(appDir, process.cwd(), {
-				// 	filter: fileCopyFilter
-				// }, fileCopyComplete)
-			})
+		// 		console.log('hits something ->', copyPath);
+
+		// 		fs.copy(appDir, process.cwd(), {
+		// 			filter: fileCopyFilter
+		// 		}, fileCopyComplete)
+		// 	})
 	}
 
 	function checkIfWorkingDirIsEmpty() {
@@ -111,12 +112,13 @@ module.exports = function(appDir) {
 
 			releaseService
 				.downloadLatestRelease(_log)
-				.then(function(args) {
-					console.log('args are', args);
+				.then(function(copyPath) {
 
-					// fs.copy(appDir, process.cwd(), {
-					// 	filter: fileCopyFilter
-					// }, fileCopyComplete)
+					console.log('hits something ->', copyPath);
+
+					fs.copy(copyPath, process.cwd(), {
+						filter: fileCopyFilter
+					}, fileCopyComplete)
 				})
 
 		} else {
