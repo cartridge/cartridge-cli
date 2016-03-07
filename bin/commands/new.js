@@ -83,15 +83,17 @@ module.exports = function(appDir) {
 
 			releaseService
 				.downloadLatestRelease(_log)
-				.then(function(copyPath) {
-					fs.copy(copyPath, process.cwd(), {
-						filter: fileCopyFilter
-					}, fileCopyComplete)
-				})
+				.then(copyCartridgeSourceFilesToCwd)
 
 		} else {
 			_log.info('User cancelled - no files copied')
 		}
+	}
+
+	function copyCartridgeSourceFilesToCwd(copyPath) {
+		fs.copy(copyPath, process.cwd(), {
+			filter: fileCopyFilter
+		}, fileCopyComplete)
 	}
 
 	function fileCopyFilter(path) {
@@ -194,9 +196,7 @@ module.exports = function(appDir) {
 	}
 
 	function postInstallCleanUp() {
-
 		_log.debug('Running post install cleanup');
-
 		releaseService.deleteReleaseTmpDirectory();
 
 		_log.debug('Deleting templates file directory: ' + TEMPLATE_FILES_PATH);
