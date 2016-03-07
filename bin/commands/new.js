@@ -214,21 +214,15 @@ module.exports = function(appDir) {
 	}
 
 	function postInstallCleanUp() {
-		_log.debug('Emptying templates file directory: ' + TEMPLATE_FILES_PATH);
 
-		fs.emptyDir(TEMPLATE_FILES_PATH, function (err) {
-  			if (err) errorHandler(err);
-
-			_log.debug('Deleting templates file directory: ' + TEMPLATE_FILES_PATH);
-
-			fs.rmdir(TEMPLATE_FILES_PATH, function(err){
-				if (err) errorHandler(err);
-
-				finishSetup();
-			})
-		})
+		_log.debug('Running post install cleanup');
 
 		releaseService.deleteReleaseTmpDirectory();
+
+		_log.debug('Deleting templates file directory: ' + TEMPLATE_FILES_PATH);
+		fs.removeSync(TEMPLATE_FILES_PATH)
+
+		finishSetup();
 	}
 
 	function finishSetup() {

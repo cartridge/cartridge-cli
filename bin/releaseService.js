@@ -34,7 +34,7 @@ releaseServiceApi.downloadLatestRelease = function(logInstance) {
 }
 
 releaseServiceApi.deleteReleaseTmpDirectory = function() {
-	_log.debug('Deleting `' + CARTRIDGE_FOLDER_PATH + '` in ' + OS_TMP_DIR);
+	_log.debug('Deleting cartridge temp directory in ' + OS_TMP_DIR);
 
 	fs.removeSync(CARTRIDGE_FOLDER_PATH)
 }
