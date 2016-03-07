@@ -73,6 +73,12 @@ describe('As a user of the template data manager module', function() {
 			templateData = templateDataManagerModule.getData();
 		})
 
+		it('should contain the data that was passed in', function() {
+			var actual = templateData.projectName;
+
+			expect(actual).to.exist;
+		})
+
 		it('should have a projectNameFileName key', function() {
 			var actual = templateData.projectNameFileName;
 
