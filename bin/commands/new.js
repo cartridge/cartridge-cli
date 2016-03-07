@@ -31,31 +31,36 @@ module.exports = function(appDir) {
 		_options = options;
 		_log = utils.getLogInstance(_options);
 
-		checkIfWorkingDirIsEmpty();
+		checkIfWorkingDirIsEmpty()
+			.then(setupOnScreenPrompts)
+			.catch(errorHandler)
 	}
 
 	function checkIfWorkingDirIsEmpty() {
-		fs.readdir(process.cwd(), function(err, files) {
-			if (err) errorHandler(err);
 
-			if(getWorkingDirFilteredList(files).length) {
-				_log.warn('');
-				_log.warn(chalk.red('Warning: The directory you are currently in is not empty!'));
-				_log.warn(chalk.red('Going through the setup will perform a clean cartridge installation.'));
-				_log.warn(chalk.red('This will overwrite any user changes'));
+		return new Promise(function(resolve, reject) {
+			fs.readdir(process.cwd(), function(err, files) {
+				if (err) reject(err);
+
+				if(getWorkingDirFilteredList(files).length) {
+					_log.warn('');
+					_log.warn(chalk.red('Warning: The directory you are currently in is not empty!'));
+					_log.warn(chalk.red('Going through the setup will perform a clean cartridge installation.'));
+					_log.warn(chalk.red('This will overwrite any user changes'));
+					_log.warn('');
+
+				} else {
+					_log.warn('');
+					_log.warn(chalk.bold('Running through setup for a new project.'));
+					_log.warn(chalk.bold('This can be exited out by pressing [Ctrl+C]'));
+					_log.warn('');
+				}
+
+				_log.warn(chalk.bold('Make sure you are running this command in the folder you want all files copied to'));
 				_log.warn('');
 
-			} else {
-				_log.warn('');
-				_log.warn(chalk.bold('Running through setup for a new project.'));
-				_log.warn(chalk.bold('This can be exited out by pressing [Ctrl+C]'));
-				_log.warn('');
-			}
-
-			_log.warn(chalk.bold('Make sure you are running this command in the folder you want all files copied to'));
-			_log.warn('');
-
-			initOnScreenPrompts();
+				resolve();
+			})
 		})
 	}
 
@@ -73,7 +78,7 @@ module.exports = function(appDir) {
 		return filteredDirContents;
 	}
 
-	function initOnScreenPrompts() {
+	function setupOnScreenPrompts() {
 		promptOptions
 			.getNewCommandPromptOptions()
 		 	.then(function(promptOptions) {
