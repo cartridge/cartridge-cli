@@ -30,6 +30,7 @@ module.exports = function(appDir) {
 	function init(options) {
 		_options = options;
 		_log = utils.getLogInstance(_options);
+
 		checkIfWorkingDirIsEmpty();
 	}
 
