@@ -42,7 +42,7 @@ module.exports = function(appDir) {
 			fs.readdir(process.cwd(), function(err, files) {
 				if (err) reject(err);
 
-				if(getWorkingDirFilteredList(files).length) {
+				if(getWorkingDirFilteredList(files).length > 0) {
 					_log.warn('');
 					_log.warn(chalk.red('Warning: The directory you are currently in is not empty!'));
 					_log.warn(chalk.red('Going through the setup will perform a clean cartridge installation.'));
