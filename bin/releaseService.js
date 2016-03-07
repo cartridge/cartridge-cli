@@ -61,45 +61,4 @@ function getLatestGitHubRelease() {
 	});
 }
 
-// function preSetup() {
-// 	DATE = new Date();
-// 	ZIP_FILENAME = [DATE.getMilliseconds(), DATE.getDate(), DATE.getMonth()+1, DATE.getFullYear(), '-cartridge-tmp.zip'].join('');
-// 	ZIP_FILEPATH = path.join(OS_TMP_DIR, ZIP_FILENAME);
-
-// 	return Promise.resolve();
-// }
-
-// function getReleaseZipFromGitHub() {
-// 	return new Promise(function(resolve, reject) {
-// 		got(ZIP_DOWNLOAD_URL)
-// 			.pipe(fs.createWriteStream(ZIP_FILEPATH))
-// 			.on('close', function() {
-// 				_log.debug('GitHub release zip downloaded from: ' + ZIP_DOWNLOAD_URL);
-// 				_log.debug('GitHub release zip stored in path: ' + ZIP_FILEPATH);
-
-// 				resolve();
-// 			});
-// 	})
-// }
-
-// function extractZipFile() {
-// 	return new Promise(function(resolve, reject) {
-// 		fs.createReadStream(ZIP_FILEPATH)
-// 			.pipe(unzip.Extract({ path: OS_TMP_DIR}))
-// 			.on('close', function() {
-// 				_log.debug('.zip file extracted');
-// 				resolve()
-// 			});
-// 	})
-// }
-
-// function deleteZipFile() {
-// 	return new Promise(function(resolve, reject) {
-// 		fs.unlink(ZIP_FILEPATH, function() {
-// 			_log.debug('.zip file deleted');
-// 			resolve()
-// 		})
-// 	})
-// }
-
 module.exports = releaseServiceApi;
