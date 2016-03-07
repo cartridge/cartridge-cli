@@ -100,7 +100,7 @@ module.exports = function(appDir) {
 			_log.info('Inserting the cartridge...');
 
 			releaseService
-				.downloadLatestRelease(_log)
+				.downloadLatestRelease(_log, appDir)
 				.then(function() {
 					fs.copy(appDir, process.cwd(), {
 						filter: fileCopyFilter
