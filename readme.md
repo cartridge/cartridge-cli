@@ -1,6 +1,6 @@
 [![Stories in Ready](https://badge.waffle.io/code-computerlove/cartridge-cli.svg?label=ready&title=Ready)](http://waffle.io/code-computerlove/cartridge-cli)
-[![devDependency Status](https://david-dm.org/code-computerlove/cartridge-cli/dev-status.svg)](https://david-dm.org/code-computerlove/cartridge-cli#info=devDependencies)
-[![Dependency Status](https://david-dm.org/code-computerlove/cartridge-cli.svg)](https://david-dm.org/code-computerlove/cartridge-cli)
+[![devDependency Status](https://david-dm.org/cartridge/cartridge-cli/dev-status.svg)](https://david-dm.org/code-computerlove/cartridge-cli#info=devDependencies)
+[![Dependency Status](https://david-dm.org/cartridge/cartridge-cli.svg)](https://david-dm.org/code-computerlove/cartridge-cli)
 
 # Cartridge cli [![Build Status](https://travis-ci.org/cartridge/cartridge-cli.svg?branch=develop)](https://travis-ci.org/cartridge/cartridge-cli)
 
