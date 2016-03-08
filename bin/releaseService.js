@@ -14,6 +14,8 @@ var github = new GitHubApi({
 	}
 });
 
+var utils = require('./utils');
+
 var errorHandler = require('./errorHandler');
 
 var releaseServiceApi = {};
@@ -27,8 +29,8 @@ var CARTRIDGE_FOLDER_PATH;
  * Download the latest cartridge release from github
  * @param  {Object} logInstance Log module instance used for internal logging
  */
-releaseServiceApi.downloadLatestRelease = function(logInstance) {
-	_log = logInstance;
+releaseServiceApi.downloadLatestRelease = function(options) {
+	_log = utils.getLogInstance(options);
 
 	return getLatestGitHubRelease()
 		.then(downloadGitHubZipFile)

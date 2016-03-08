@@ -82,7 +82,7 @@ module.exports = function(appDir) {
 			_log.info('Inserting the cartridge...');
 
 			releaseService
-				.downloadLatestRelease(_log)
+				.downloadLatestRelease(_options)
 				.then(copyCartridgeSourceFilesToCwd)
 
 		} else {
