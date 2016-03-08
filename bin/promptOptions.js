@@ -33,6 +33,11 @@ function getCartridgeTaskModulesFromNpm() {
 
 }
 
+/**
+ * Go through all modules and combine the name and description into one key.
+ * @param  {Array} moduleData Module data from npm registry
+ * @return {Array}            Formatted module data
+ */
 function formatModuleData(moduleData) {
 	return moduleData.map(function(module) {
 	   var formattedModule = {};
