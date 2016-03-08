@@ -1,6 +1,11 @@
 var PrettyError = require('pretty-error');
 var pe = new PrettyError();
 
+/**
+ * Main error handler function.
+ * Outputs error on screen and exits program
+ * @param  {Object} error Error object
+ */
 function errorHandler(error) {
 
 	var prettyError = pe.render(new Error(error));
@@ -11,6 +16,9 @@ function errorHandler(error) {
 	process.exit(1);
 }
 
+/**
+ * Set the on-screen theme for the PrettyError output
+ */
 function setPrettyErrrorTheme() {
 	pe.appendStyle({
 		'pretty-error > header > title > kind': {
@@ -60,6 +68,9 @@ function setPrettyErrrorTheme() {
 	});
 }
 
+/**
+ * Set PrettyError config
+ */
 function setPrettyErrorConfig() {
 	pe.skipNodeFiles();
 }
