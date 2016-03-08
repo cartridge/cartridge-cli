@@ -15,16 +15,27 @@ var _config = {
 
 var fileTemplaterApi = {};
 
+/**
+ * Run file templating
+ */
 fileTemplaterApi.run = function() {
     _config.files.forEach(function(element, index, array) {
         templateFile(element);
     });
 }
 
+/**
+ * Sets internal config object
+ */
 fileTemplaterApi.setConfig = function(config) {
     _config = extend(_config, config);
 }
 
+/**
+ * Template a single file.
+ * Get the contents of a file, template it and re-write to the same file
+ * @param  {Object} filePaths File paths data, containing file src and dest
+ */
 function templateFile(filePaths) {
     var compiled;
     var output;
