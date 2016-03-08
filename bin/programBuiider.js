@@ -8,12 +8,18 @@ var appDir  = path.resolve(os.tmpDir(), 'cartridge');
 var newCommand = require('./commands/new')(appDir);
 var pkg        = require(path.resolve(__dirname, '..', 'package.json'));
 
+/**
+ * Get the ball-rolling for the whole program
+ */
 module.exports = function() {
 	setProgramBaseSettings();
 	setNewCommand();
 	initProgram();
 }
 
+/**
+ * Setup the 'new' command
+ */
 function setNewCommand() {
 	program
 		.command('new')
@@ -23,6 +29,9 @@ function setNewCommand() {
 		});
 }
 
+/**
+ * Initialise program
+ */
 function initProgram() {
 	program.parse(process.argv);
 
@@ -31,6 +40,9 @@ function initProgram() {
 	}
 }
 
+/**
+ * Get program option flags
+ */
 function getProgramOptions() {
 	return {
 		silent: program.silent,
@@ -38,6 +50,9 @@ function getProgramOptions() {
 	}
 }
 
+/**
+ * Set program base settings: version, option flags
+ */
 function setProgramBaseSettings() {
 	program
 		.version(pkg.version)
