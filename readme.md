@@ -6,7 +6,7 @@
 
 > Start with a clean cartridge and get yourself going with a ready made basic static website setup
 
-Command line utility for [Cartridge](https://github.com/code-computerlove/cartridge)
+Command line utility for [Cartridge](https://github.com/cartridge/cartridge)
 
 
 ## Installation
