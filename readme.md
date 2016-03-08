@@ -1,12 +1,12 @@
 [![Stories in Ready](https://badge.waffle.io/code-computerlove/cartridge-cli.svg?label=ready&title=Ready)](http://waffle.io/code-computerlove/cartridge-cli)
-[![devDependency Status](https://david-dm.org/code-computerlove/cartridge-cli/dev-status.svg)](https://david-dm.org/code-computerlove/cartridge-cli#info=devDependencies)
-[![Dependency Status](https://david-dm.org/code-computerlove/cartridge-cli.svg)](https://david-dm.org/code-computerlove/cartridge-cli)
+[![devDependency Status](https://david-dm.org/cartridge/cartridge-cli/dev-status.svg)](https://david-dm.org/code-computerlove/cartridge-cli#info=devDependencies)
+[![Dependency Status](https://david-dm.org/cartridge/cartridge-cli.svg)](https://david-dm.org/code-computerlove/cartridge-cli)
 
-# Cartridge cli [![Build Status](https://travis-ci.org/code-computerlove/cartridge-cli.svg?branch=master)](https://travis-ci.org/code-computerlove/cartridge-cli)
+# Cartridge cli [![Build Status](https://travis-ci.org/cartridge/cartridge-cli.svg?branch=develop)](https://travis-ci.org/cartridge/cartridge-cli)
 
 > Start with a clean cartridge and get yourself going with a ready made basic static website setup
 
-Command line utility for [Cartridge](https://github.com/code-computerlove/cartridge)
+Command line utility for [Cartridge](https://github.com/cartridge/cartridge)
 
 
 ## Installation
