@@ -98,7 +98,7 @@ module.exports = function(appDir) {
 
 	function fileCopyFilter(path) {
 		var needToCopyFile = true;
-		var filesDirsToExclude = getExcludeList();
+		var filesDirsToExclude = getCopyExcludeList();
 
 		for (var i = 0; i < filesDirsToExclude.length; i++) {
 			//Check if needToCopyFile is still true and
@@ -123,7 +123,7 @@ module.exports = function(appDir) {
 		templateCopiedFiles();
 	}
 
-	function getExcludeList() {
+	function getCopyExcludeList() {
 		//Default exclude folders / files
 		var excludeList = [
 			'node_modules'
