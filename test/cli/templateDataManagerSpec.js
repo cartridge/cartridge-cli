@@ -1,3 +1,4 @@
+var timekeeper = require('timekeeper');
 var chai = require('chai');
 var expect = chai.expect;
 
@@ -11,6 +12,9 @@ describe('As a user of the template data manager module', function() {
 
 	beforeEach(function() {
 		templateDataManagerModule = require('../../bin/templateDataManager');
+
+		//freeze the date to allow easy testing
+		timekeeper.freeze(new Date(2016, 3, 5));
 	})
 
 	describe('When no data has been set', function() {
@@ -100,7 +104,7 @@ describe('As a user of the template data manager module', function() {
 		it('should have the correct projectGeneratedDate value', function() {
 			var date = new Date();
 			var actual = templateData.projectGeneratedDate;
-			var expected = [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('/');
+			var expected = '05/04/2016';
 
 			actual.should.equal(expected);
 		})
