@@ -2,7 +2,7 @@
 [![devDependency Status](https://david-dm.org/code-computerlove/cartridge-cli/dev-status.svg)](https://david-dm.org/code-computerlove/cartridge-cli#info=devDependencies)
 [![Dependency Status](https://david-dm.org/code-computerlove/cartridge-cli.svg)](https://david-dm.org/code-computerlove/cartridge-cli)
 
-# Cartridge cli [![Build Status](https://travis-ci.org/code-computerlove/cartridge-cli.svg?branch=master)](https://travis-ci.org/code-computerlove/cartridge-cli)
+# Cartridge cli [![Build Status](https://travis-ci.org/cartridge/cartridge-cli.svg?branch=develop)](https://travis-ci.org/cartridge/cartridge-cli)
 
 > Start with a clean cartridge and get yourself going with a ready made basic static website setup
 
