@@ -23,6 +23,10 @@ var OS_TMP_DIR       = os.tmpdir();
 var CARTRIDGE_FOLDER_REGEX = /^cartridge-cartridge/;
 var CARTRIDGE_FOLDER_PATH;
 
+/**
+ * Download the latest cartridge release from github
+ * @param  {Object} logInstance Log module instance used for internal logging
+ */
 releaseServiceApi.downloadLatestRelease = function(logInstance) {
 	_log = logInstance;
 
@@ -34,12 +38,19 @@ releaseServiceApi.downloadLatestRelease = function(logInstance) {
 		})
 }
 
+/**
+ * Delete the temp release directory
+ */
 releaseServiceApi.deleteReleaseTmpDirectory = function() {
 	_log.debug('Deleting cartridge temp directory in ' + OS_TMP_DIR);
 
 	fs.removeSync(CARTRIDGE_FOLDER_PATH)
 }
 
+/**
+ * Get the full cartridge temp directory path
+ * @param  {Object} args gotZip argument object
+ */
 function getCartridgeFolderPath(args) {
 
 	return new Promise(function(resolve, reject) {
@@ -58,6 +69,10 @@ function getCartridgeFolderPath(args) {
 	});
 }
 
+/**
+ * Download the latest github release zip, store in OS temp directory
+ * @param  {String} downloadUrl Download URL
+ */
 function downloadGitHubZipFile(downloadUrl) {
 	_log.debug('Downloading release from URL ' + downloadUrl);
 	_log.debug('');
@@ -70,6 +85,9 @@ function downloadGitHubZipFile(downloadUrl) {
 	})
 }
 
+/**
+ * Get the latest github release data
+ */
 function getLatestGitHubRelease() {
 	_log.debug('Getting latest release URL from GitHub');
 
