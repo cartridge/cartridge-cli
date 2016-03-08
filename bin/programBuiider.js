@@ -23,7 +23,7 @@ module.exports = function() {
 function setNewCommand() {
 	program
 		.command('new')
-		.description('Create a new project')
+		.description('Create a new project (on-screen wizard)')
 		.action(function() {
 			newCommand.init(getProgramOptions());
 		});
