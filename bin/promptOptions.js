@@ -2,50 +2,36 @@
 
 var titleize = require('titleize');
 var chalk = require('chalk');
-var DEFAULT_PLUGIN_OPTIONS = require('./defaultPluginOptions');
+var Registry = require('npm-registry');
+var npm = new Registry({ retries: 4 });
+
+var NPM_CARTRIDGE_TASK_KEYWORD = 'cartridge-task';
+var CARTRIDGE_TASK_MODULES;
 
 var _promptOptions = [];
 
 var promptOptionsApi = {};
 
-// >> START >> NONE OF THE PACKAGES AT THE MOMENT HAVE ANY KEYWORDS, SO THIS CODE WON'T DO ANYTHING AT THE MOMENT
-//npm install --save npm-registry
-
-// var Registry = require('npm-registry');
-// var npm = new Registry({ retries: 4 });
-// var CARTRIDGE_MODULE_KEYWORDS = 'karma-reporter'
-// var DEFAULT_PLUGIN_OPTIONS;
-
-
-// promptOptionsApi.getNewCommandPromptOptions = function() {
-// 	return getNpmKeywordPackages()
-// 		.then(setPromptOptionsData);
-// }
-
-// >> END >>
-
 promptOptionsApi.getNewCommandPromptOptions = function() {
-	return setPromptOptionsData();
+	return getCartridgeTaskModulesFromNpm()
+		.then(setPromptOptionsData);
 }
 
-// >> START >> NONE OF THE PACKAGES AT THE MOMENT HAVE ANY KEYWORDS, SO THIS CODE WON'T DO ANYTHING AT THE MOMENT
+function getCartridgeTaskModulesFromNpm() {
 
-// function getNpmKeywordPackages() {
+	return new Promise(function(resolve, reject) {
 
-// 	return new Promise(function(resolve, reject) {
+		npm.packages.keyword(NPM_CARTRIDGE_TASK_KEYWORD, function(err, data) {
+			if(err) return console.error(err);
 
-// 		npm.packages.keyword(CARTRIDGE_MODULE_KEYWORDS, function(err, data) {
-// 			if(err) return console.error(err);
+			CARTRIDGE_TASK_MODULES = data;
 
-// 			DEFAULT_PLUGIN_OPTIONS = data;
-// 			resolve();
-// 		});
+			resolve();
+		});
 
-// 	})
+	})
 
-// }
-
-// >> END >>
+}
 
 function setPromptOptionsData() {
 	_promptOptions.push(getProjectTypePromptOptions());
@@ -63,7 +49,7 @@ function getCartridgeModulesPromptOptions() {
 		type: 'checkbox',
 		name: 'cartridgeModules',
 		message: 'What modules would you like included?',
-		choices: DEFAULT_PLUGIN_OPTIONS
+		choices: CARTRIDGE_TASK_MODULES
 	}
 }
 
