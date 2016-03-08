@@ -220,8 +220,9 @@ module.exports = function(appDir) {
 		_log.info('Cartridge project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed!');
 		_log.info('');
 		_log.info('Final steps:');
+		_log.info(' · Run ' + chalk.yellow('npm install') + ' to download all project dependencies. (If this fails you may need to run ' + chalk.yellow('sudo npm install') + ')');
 		_log.info(' · Run ' + chalk.yellow('gulp') + ' for initial setup of styles and scripts.');
-		_log.info(' · Run ' + chalk.yellow('gulp watch') + ' to setup watching of files');
+		_log.info(' · Run ' + chalk.yellow('gulp watch') + ' to setup watching of files.');
 		_log.info('');
 	}
 }
