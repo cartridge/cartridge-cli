@@ -24,13 +24,21 @@ function getCartridgeTaskModulesFromNpm() {
 		npm.packages.keyword(NPM_CARTRIDGE_TASK_KEYWORD, function(err, data) {
 			if(err) return console.error(err);
 
-			CARTRIDGE_TASK_MODULES = data;
+			CARTRIDGE_TASK_MODULES = formatModuleData(data);
 
 			resolve();
 		});
 
 	})
 
+}
+
+function formatModuleData(moduleData) {
+	return moduleData.map(function(module) {
+	   var formattedModule = {};
+	   formattedModule.name = ' ' + chalk.underline(module.name) + ' => ' + module.description;
+	   return formattedModule;
+	})
 }
 
 function setPromptOptionsData() {
