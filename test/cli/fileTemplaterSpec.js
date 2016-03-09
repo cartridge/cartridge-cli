@@ -22,6 +22,13 @@ function tearDown() {
 	fs.removeSync(TEST_TEMP_DIR);
 }
 
+function getTemplateData() {
+	return {
+		answer: "La Li Lu Le Lo",
+		modelName: "Metal Gear Ray"
+	}
+}
+
 describe('As a user of the file templater module', function() {
     before(changeToOsTempDirAndCopyFixtures);
     after(tearDown)
@@ -31,9 +38,7 @@ describe('As a user of the file templater module', function() {
     	var onCompletedSpy = sinon.spy();
     	var onEachFileSpy = sinon.spy();
 
-    	var templateData = {
-    		answer: "La Li Lu Le Lo"
-    	};
+    	var templateData = getTemplateData();
 
     	var fileList = [];
 
@@ -78,6 +83,50 @@ describe('As a user of the file templater module', function() {
 
         it('shoudl have called the onEachFile callback once', function() {
         	onEachFileSpy.calledOnce.should.be.true;
+        })
+
+    })
+
+    describe('When templating multiple files', function() {
+    	var onCompletedSpy = sinon.spy();
+    	var onEachFileSpy = sinon.spy();
+
+    	var templateData = getTemplateData();
+
+    	var fileList = [];
+
+    	before(function(done) {
+
+    		fileList.push({
+    			src: path.join(TEST_TEMP_DIR, 'creds.tpl'),
+    			dest: path.join(TEST_TEMP_DIR, 'creds-templated.json')
+    		})
+
+    		fileList.push({
+    			src: path.join(TEST_TEMP_DIR, 'creds-again.tpl'),
+    			dest: path.join(TEST_TEMP_DIR, 'creds-again-templated.json')
+    		})
+
+			fileTemplater.setConfig({
+				data: templateData,
+				basePath: process.cwd(),
+				files: fileList,
+				onEachFile: onEachFileSpy,
+				onCompleted: function() {
+					done();
+					onCompletedSpy();
+				}
+			})
+
+			fileTemplater.run();
+    	})
+
+        it('should have called the onCompleted callback once', function() {
+        	onCompletedSpy.calledOnce.should.be.true;
+        })
+
+        it('should have called the onEachFile callback twice', function() {
+        	onEachFileSpy.calledTwice.should.be.true;
         })
 
     })
