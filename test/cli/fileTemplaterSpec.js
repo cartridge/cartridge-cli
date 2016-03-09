@@ -69,7 +69,7 @@ describe('As a user of the file templater module', function() {
         	templatedFilePath.should.be.a.file();
         })
 
-        it('should be correctly template the contents with provided data', function() {
+        it('should correctly template the contents with template data', function() {
         	var templatedFilePath = path.join(TEST_TEMP_DIR, 'creds-templated.json');
         	var templateFileContents = fs.readFileSync(templatedFilePath, 'utf8');
         	var templateFileJson = JSON.parse(templateFileContents);
