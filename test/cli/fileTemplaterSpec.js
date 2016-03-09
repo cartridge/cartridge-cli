@@ -1,3 +1,4 @@
+var sinon = require('sinon');
 var chai = require('chai');
 var os = require('os');
 var fs = require('fs-extra');
@@ -27,6 +28,9 @@ describe('As a user of the file templater module', function() {
 
     describe('When templating one file', function() {
 
+    	var onCompletedSpy = sinon.spy();
+    	var onEachFileSpy = sinon.spy();
+
     	var templateData = {
     		answer: "La Li Lu Le Lo"
     	};
@@ -44,7 +48,11 @@ describe('As a user of the file templater module', function() {
 				data: templateData,
 				basePath: process.cwd(),
 				files: fileList,
-				onCompleted: done
+				onEachFile: onEachFileSpy,
+				onCompleted: function() {
+					done();
+					onCompletedSpy();
+				}
 			})
 
 			fileTemplater.run();
@@ -62,6 +70,14 @@ describe('As a user of the file templater module', function() {
         	var templateFileJson = JSON.parse(templateFileContents);
 
         	templateFileJson.answer.should.equal(templateData.answer)
+        })
+
+        it('should have called the onCompleted callback once', function() {
+        	onCompletedSpy.calledOnce.should.be.true;
+        })
+
+        it('shoudl have called the onEachFile callback once', function() {
+        	onEachFileSpy.calledOnce.should.be.true;
         })
 
     })
