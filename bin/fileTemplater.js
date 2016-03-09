@@ -8,10 +8,12 @@ var template = require('lodash/template');
 var errorHandler = require('./errorHandler');
 
 var _fileNumber = 1;
-var _config = {
+var _defaultConfig = {
     onEachFile: function() {},
     onCompleted: function() {}
-};
+}
+
+var _config;
 
 var fileTemplaterApi = {};
 
@@ -28,7 +30,7 @@ fileTemplaterApi.run = function() {
  * Sets internal config object
  */
 fileTemplaterApi.setConfig = function(config) {
-    _config = extend(_config, config);
+    _config = extend(_defaultConfig, config);
 }
 
 /**
@@ -52,6 +54,7 @@ function templateFile(filePaths) {
             _config.onEachFile(filePaths.dest);
 
             if(_fileNumber === _config.files.length) {
+                _config = _defaultConfig;
                 _config.onCompleted();
             }
 
