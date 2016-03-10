@@ -209,7 +209,6 @@ module.exports = function(appDir) {
 		releaseService.deleteReleaseTmpDirectory();
 
 		_log.debug('Deleting templates file directory: ' + TEMPLATE_FILES_PATH);
-		fs.removeSync(TEMPLATE_FILES_PATH)
 
 		finishSetup();
 	}
