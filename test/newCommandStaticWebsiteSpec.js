@@ -5,7 +5,7 @@ var proxyquire = require('proxyquire');
 var chai = require('chai');
 
 var StaticSiteAnswersFixture = require('./fixtures/StaticNoDescription');
-var newCommandStaticSite = proxyquire('../../bin/commands/new', {
+var newCommandStaticSite = proxyquire('../bin/commands/new', {
     inquirer: {
         prompt: function(questions, callback) {
             return callback(StaticSiteAnswersFixture)

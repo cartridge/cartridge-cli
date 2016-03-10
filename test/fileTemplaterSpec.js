@@ -4,7 +4,7 @@ var os = require('os');
 var fs = require('fs-extra');
 var path = require('path');
 
-var fileTemplater =  require('../../bin/fileTemplater');
+var fileTemplater =  require('../bin/fileTemplater');
 
 chai.use(require('chai-fs'));
 chai.should();
@@ -14,7 +14,7 @@ var TEST_TEMP_DIR = path.join(os.tmpdir(), 'file-templater');
 
 function changeToOsTempDirAndCopyFixtures() {
     fs.ensureDirSync(TEST_TEMP_DIR);
-    fs.copySync(path.resolve('./', 'test', 'cli', 'fixtures', 'templateFiles'), TEST_TEMP_DIR);
+    fs.copySync(path.resolve('./', 'test', 'fixtures', 'templateFiles'), TEST_TEMP_DIR);
     process.chdir(TEST_TEMP_DIR);
 }
 

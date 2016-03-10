@@ -5,13 +5,13 @@ var expect = chai.expect;
 chai.should();
 
 var path = require('path');
-var pkg = require(path.resolve(__dirname, '..', '..', 'package.json'));
+var pkg = require(path.resolve(__dirname, '..', 'package.json'));
 
 describe('As a user of the template data manager module', function() {
 	var templateDataManagerModule;
 
 	beforeEach(function() {
-		templateDataManagerModule = require('../../bin/templateDataManager');
+		templateDataManagerModule = require('../bin/templateDataManager');
 
 		//freeze the date to allow easy testing
 		timekeeper.freeze(new Date(2016, 3, 5));

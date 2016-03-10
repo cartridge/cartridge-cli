@@ -5,7 +5,7 @@ var proxyquire = require('proxyquire');
 var chai = require('chai');
 
 var DotNetAnswersFixture = require('./fixtures/DotNetNoDescription');
-var newCommandDotNet = proxyquire('../../bin/commands/new', {
+var newCommandDotNet = proxyquire('../bin/commands/new', {
     inquirer: {
         prompt: function(questions, callback) {
             return callback(DotNetAnswersFixture)

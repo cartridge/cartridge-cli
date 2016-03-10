@@ -1,7 +1,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 
-var promptOptionsModule = require('../../bin/promptOptions');
+var promptOptionsModule = require('../bin/promptOptions');
 
 chai.should();
 
