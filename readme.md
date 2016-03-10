@@ -21,6 +21,23 @@ Command line utility for [Cartridge](https://github.com/cartridge/cartridge)
 > cartridge
 ```
 
+```bash
+
+  Usage: cartridge [options] [command]
+
+
+  Commands:
+
+    new   Create a new project (on-screen wizard)
+
+  Options:
+
+    -h, --help     output usage information
+    -V, --version  output the version number
+    -s, --silent   Surpress all on-screen messages
+    -v, --verbose  Show all on-screen messages
+
+```
 ## Developing
 
 To work on the project locally clone the repo then from within the checked out directory run:
