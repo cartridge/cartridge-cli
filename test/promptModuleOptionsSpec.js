@@ -9,13 +9,15 @@ describe('As a user of the prompt module options module', function() {
 
 	var moduleOptionsData;
 
+	this.timeout(5000);
+
 	before(function() {
 		promptModuleOptionsModule.setup({
 			silent: true
 		});
 	})
 
-	describe('When getting prompt options data', function() {
+	describe('When getting module data', function() {
 
 		beforeEach(function(done) {
 
@@ -29,6 +31,12 @@ describe('As a user of the prompt module options module', function() {
 
 		it('should return an array', function() {
 			expect(moduleOptionsData).to.be.a('array');
+		})
+
+		it('should return a collection (array of objects)', function() {
+			moduleOptionsData.forEach(function(singleModule) {
+				expect(singleModule).to.be.a('object');
+			})
 		})
 
 	})
