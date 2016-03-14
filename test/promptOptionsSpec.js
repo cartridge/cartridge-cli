@@ -15,6 +15,12 @@ describe('As a user of the promptOptions module', function() {
 
     describe('When using getNewCommandPromptOptions()', function() {
 
+        before(function() {
+            promptOptionsModule.setup({
+                silent: true
+            })
+        })
+
         it('should be a function', function() {
             var test = promptOptionsModule.getNewCommandPromptOptions;
 
