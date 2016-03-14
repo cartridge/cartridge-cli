@@ -31,8 +31,6 @@ promptOptionsApi.getNewCommandPromptOptions = function() {
 }
 
 function setPromptOptionsData(moduleList) {
-	_log.debug('Setting prompt options data');
-
 	_promptOptions.push(getProjectTypePromptOptions());
 	_promptOptions.push(getProjectNamePromptOptions());
 	_promptOptions.push(getProjectAuthorPromptOptions());

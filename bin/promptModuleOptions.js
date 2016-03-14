@@ -19,6 +19,9 @@ promptModuleOptionsApi.setup = function(options) {
 }
 
 promptModuleOptionsApi.getOptions = function() {
+
+	_log.debug('Getting prompt module data');
+
 	return Promise.all([getCartridgeTaskModulesFromNpm(), getCartridgeDefaultModulesFromNpm()])
 		.then(parseDefaultModuleData)
 		.then(formatModuleData)
@@ -30,8 +33,6 @@ promptModuleOptionsApi.getOptions = function() {
 function getCartridgeTaskModulesFromNpm() {
 
 	return new Promise(function(resolve, reject) {
-
-		_log.debug('Getting cartridge task modules from npm registry');
 
 		npm.packages.keyword(NPM_CARTRIDGE_TASK_KEYWORD, function(err, data) {
 			if(err) errorHandler(err);
@@ -45,8 +46,6 @@ function getCartridgeTaskModulesFromNpm() {
 function getCartridgeDefaultModulesFromNpm() {
 
 	return new Promise(function(resolve, reject) {
-
-		_log.debug('Getting cartridge task modules from npm registry');
 
 		npm.packages.keyword(NPM_CARTRIDGE_DEFAULT_KEYWORD, function(err, data) {
 			if(err) errorHandler(err);
