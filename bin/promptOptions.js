@@ -4,13 +4,16 @@ var titleize = require('titleize');
 var chalk = require('chalk');
 var Registry = require('npm-registry');
 var npm = new Registry({ retries: 4 });
+
 var utils = require('./utils');
+var errorHandler = require('./errorHandler');
 
 var NPM_CARTRIDGE_TASK_KEYWORD = 'cartridge-task';
-var CARTRIDGE_TASK_MODULES;
 
+var _cartridgeTaskModules;
 var _promptOptions = [];
 var _log;
+
 var promptOptionsApi = {};
 
 promptOptionsApi.setup = function(options) {
@@ -32,9 +35,9 @@ function getCartridgeTaskModulesFromNpm() {
 		_log.debug('Getting cartridge task modules from npm registry');
 
 		npm.packages.keyword(NPM_CARTRIDGE_TASK_KEYWORD, function(err, data) {
-			if(err) return console.error(err);
+			if(err) errorHandler(err);
 
-			CARTRIDGE_TASK_MODULES = formatModuleData(data);
+			_cartridgeTaskModules = formatModuleData(data);
 
 			resolve();
 		});
@@ -73,7 +76,7 @@ function getCartridgeModulesPromptOptions() {
 		type: 'checkbox',
 		name: 'cartridgeModules',
 		message: 'What modules would you like included?',
-		choices: CARTRIDGE_TASK_MODULES,
+		choices: _cartridgeTaskModules,
 		filter: function(values) {
 
 			var returnValue = [];
