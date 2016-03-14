@@ -31,37 +31,17 @@ module.exports = function(appDir) {
 		_options = options;
 		_log = utils.getLogInstance(_options);
 
-		checkIfWorkingDirIsEmpty()
-			.then(setupOnScreenPrompts)
-			.catch(errorHandler)
+		preSetup();
+		setupOnScreenPrompts();
 	}
 
-	function checkIfWorkingDirIsEmpty() {
+	function preSetup() {
+		_log.warn('');
+		_log.warn(chalk.bold('Running through setup for a new project.'));
+		_log.warn(chalk.bold('This can be exited out by pressing [Ctrl+C]'));
+		_log.warn('');
 
-		return new Promise(function(resolve, reject) {
-			fs.readdir(CURRENT_WORKING_DIR, function(err, files) {
-				if (err) reject(err);
-
-				if(utils.filterDirectoryContents(files).length > 0) {
-					_log.warn('');
-					_log.warn(chalk.red('Warning: The directory you are currently in is not empty!'));
-					_log.warn(chalk.red('Going through the setup will perform a clean cartridge installation.'));
-					_log.warn(chalk.red('This will overwrite any user changes'));
-					_log.warn('');
-
-				} else {
-					_log.warn('');
-					_log.warn(chalk.bold('Running through setup for a new project.'));
-					_log.warn(chalk.bold('This can be exited out by pressing [Ctrl+C]'));
-					_log.warn('');
-				}
-
-				_log.warn(chalk.bold('Make sure you are running this command in the folder you want all files copied to'));
-				_log.warn('');
-
-				resolve();
-			})
-		})
+		_log.warn(chalk.bold('Make sure you are running this command in the folder you want all files copied to'));
 	}
 
 	function setupOnScreenPrompts() {
