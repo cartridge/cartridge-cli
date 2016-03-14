@@ -185,7 +185,7 @@ module.exports = function(appDir) {
 	}
 
 	function postInstallCleanUp() {
-		console.log('');
+		_log.debug('');
 		_log.debug('Running post install cleanup');
 
 		releaseService.deleteReleaseTmpDirectory();
