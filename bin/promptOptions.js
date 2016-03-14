@@ -24,8 +24,11 @@ promptOptionsApi.getNewCommandPromptOptions = function() {
 	_log.debug('');
 	_log.debug('Getting prompt options data');
 
-	return getCartridgeTaskModulesFromNpm()
+	return Promise.all([getCartridgeTaskModulesFromNpm(), getCartridgeDefaultModulesFromNpm()])
 		.then(setPromptOptionsData);
+
+	// return getCartridgeTaskModulesFromNpm()
+	// 	.then(setPromptOptionsData);
 }
 
 function getCartridgeTaskModulesFromNpm() {
@@ -39,7 +42,24 @@ function getCartridgeTaskModulesFromNpm() {
 
 			_cartridgeTaskModules = formatModuleData(data);
 
-			resolve();
+			resolve(data);
+		});
+
+	})
+}
+
+function getCartridgeDefaultModulesFromNpm() {
+
+	return new Promise(function(resolve, reject) {
+
+		_log.debug('Getting cartridge task modules from npm registry');
+
+		npm.packages.keyword('cartridge-module', function(err, data) {
+			if(err) errorHandler(err);
+
+			_cartridgeTaskModules = formatModuleData(data);
+
+			resolve(data);
 		});
 
 	})
@@ -58,7 +78,26 @@ function formatModuleData(moduleData) {
 	})
 }
 
-function setPromptOptionsData() {
+function setPromptOptionsData(data) {
+	console.log('data[0]', data[0]);
+	console.log('data[1]', data[1]);
+
+	var moduleList = data[0];
+	var defaultModuleList = data[1];
+
+	moduleList.forEach(function(element, index, array) {
+		con
+	})
+
+	//module data ['module-1', 'module-2']
+	//loop through the module data 'module-1'
+
+	//default module data ['module-4', 'module-1']
+	//loop through default module data 'module-1'
+
+	// if module name is in both then it is a default module!
+	// if not, then it isn't (duh!)
+
 	_log.debug('Setting prompt options data');
 
 	_promptOptions.push(getProjectTypePromptOptions());
