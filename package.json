@@ -1,45 +1,43 @@
 {
-  "name": "cartridge-cli",
-  "version": "0.0.3",
-  "description": "Start with a clean slate and get yourself going with a ready made basic website setup",
-  "license": "ISC",
-  "main": "index.js",
-  "bin": {
-    "cartridge": "./bin/cli.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/code-computerlove/cartridge-cli"
-  },
-  "scripts": {
-    "test": "mocha"
-  },
-  "dependencies": {
-    "bluebird": "^3.3.1",
-    "chalk": "^1.1.1",
-    "commander": "^2.9.0",
-    "del": "^2.1.0",
-    "extend": "^3.0.0",
-    "fs-extra": "^0.26.5",
-    "github": "^0.2.4",
-    "got-zip": "^0.2.6",
-    "in-array": "^0.1.0",
-    "inquirer": "^0.11.4",
-    "lodash": "^4.0.1",
-    "loglevel": "^1.4.0",
-    "ncp": "^2.0.0",
-    "npm-install-package": "^1.0.2",
-    "npm-registry": "^0.1.13",
-    "pretty-error": "^2.0.0",
-    "titleize": "^1.0.0",
-    "unzip": "^0.1.11"
-  },
-  "devDependencies": {
-    "chai": "^1.6.1",
-    "chai-fs": "^0.1.0",
-    "proxyquire": "^1.7.3",
-    "sinon": "^1.17.3",
-    "timekeeper": "0.0.5"
-  },
-  "preferGlobal": true
+	"name": "cartridge-cli",
+	"version": "0.0.4",
+	"description": "Start with a clean slate and get yourself going with a ready made basic website setup",
+	"license": "ISC",
+	"bin": {
+		"cartridge": "./bin/cli.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/code-computerlove/cartridge-cli"
+	},
+	"scripts": {
+		"test": "mocha"
+	},
+	"dependencies": {
+		"bluebird": "^3.3.1",
+		"chalk": "^1.1.1",
+		"commander": "^2.9.0",
+		"del": "^2.1.0",
+		"extend": "^3.0.0",
+		"fs-extra": "^0.26.5",
+		"github": "^0.2.4",
+		"got-zip": "^0.2.6",
+		"in-array": "^0.1.0",
+		"inquirer": "^0.11.4",
+		"lodash": "^4.0.1",
+		"loglevel": "^1.4.0",
+		"npm-install-package": "^1.0.2",
+		"npm-registry": "^0.1.13",
+		"pretty-error": "^2.0.0",
+		"titleize": "^1.0.0",
+		"unzip": "^0.1.11"
+	},
+	"devDependencies": {
+		"chai": "^1.6.1",
+		"chai-fs": "^0.1.0",
+		"proxyquire": "^1.7.3",
+		"sinon": "^1.17.3",
+		"timekeeper": "0.0.5"
+	},
+	"preferGlobal": true
 }
