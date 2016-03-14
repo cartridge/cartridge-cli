@@ -6,6 +6,7 @@ var Registry = require('npm-registry');
 var npm = new Registry({ retries: 4 });
 
 var utils = require('./utils');
+var inArray = require('in-array');
 var errorHandler = require('./errorHandler');
 
 var NPM_CARTRIDGE_TASK_KEYWORD = 'cartridge-task';
@@ -25,10 +26,11 @@ promptOptionsApi.getNewCommandPromptOptions = function() {
 	_log.debug('Getting prompt options data');
 
 	return Promise.all([getCartridgeTaskModulesFromNpm(), getCartridgeDefaultModulesFromNpm()])
-		.then(setPromptOptionsData);
-
-	// return getCartridgeTaskModulesFromNpm()
-	// 	.then(setPromptOptionsData);
+		.then(formatDefaultModules)
+		.then(setPromptOptionsData)
+		.catch(function(err) {
+			errorHandler(err)
+		})
 }
 
 function getCartridgeTaskModulesFromNpm() {
@@ -78,25 +80,57 @@ function formatModuleData(moduleData) {
 	})
 }
 
-function setPromptOptionsData(data) {
-	console.log('data[0]', data[0]);
-	console.log('data[1]', data[1]);
+function formatDefaultModules(data) {
+	return new Promise(function(resolve, reject) {
 
-	var moduleList = data[0];
-	var defaultModuleList = data[1];
+		var moduleList = data[0];
+		var defaultModuleList = data[1];
+		var moduleAlreadyChecked = [];
 
-	moduleList.forEach(function(element, index, array) {
-		con
+		moduleList.push({
+			name: 'module-1'
+		})
+
+		moduleList.push({
+			name: 'module-2'
+		})
+
+		moduleList.push({
+			name: 'module-3'
+		})
+
+		moduleList.push({
+			name: 'module-4'
+		})
+
+		//---------------------------------
+
+		defaultModuleList.push({
+			name: 'module-2'
+		})
+
+		defaultModuleList.push({
+			name: 'module-4'
+		})
+
+		for (var i = 0; i < defaultModuleList.length; i++) {
+		    for (var j = 0; j < moduleList.length; j++) {
+		    	var defaultModuleName = defaultModuleList[i].name;
+		    	var moduleName = moduleList[j].name;
+		    	var isDefault = defaultModuleName === moduleName;
+
+		    	if(!inArray(moduleAlreadyChecked, moduleName) && defaultModuleName === moduleName) {
+		        	moduleList[j].checked = true;
+		        	moduleAlreadyChecked.push(moduleName);
+		    	}
+		    }
+		}
+
+		resolve(moduleList);
 	})
+}
 
-	//module data ['module-1', 'module-2']
-	//loop through the module data 'module-1'
-
-	//default module data ['module-4', 'module-1']
-	//loop through default module data 'module-1'
-
-	// if module name is in both then it is a default module!
-	// if not, then it isn't (duh!)
+function setPromptOptionsData(moduleList) {
 
 	_log.debug('Setting prompt options data');
 
@@ -104,18 +138,19 @@ function setPromptOptionsData(data) {
 	_promptOptions.push(getProjectNamePromptOptions());
 	_promptOptions.push(getProjectAuthorPromptOptions());
 	_promptOptions.push(getProjectDescriptionPromptOptions());
-	_promptOptions.push(getCartridgeModulesPromptOptions());
+	_promptOptions.push(getCartridgeModulesPromptOptions(moduleList));
 	_promptOptions.push(getUserConfirmCopyPromptOptions());
 
 	return Promise.resolve(_promptOptions);
 }
 
-function getCartridgeModulesPromptOptions() {
+function getCartridgeModulesPromptOptions(moduleData) {
 	return {
 		type: 'checkbox',
 		name: 'cartridgeModules',
 		message: 'What modules would you like included?',
-		choices: _cartridgeTaskModules,
+		choices: moduleData,
+		// choices: _cartridgeTaskModules,
 		filter: extractModuleNames
 	}
 }
