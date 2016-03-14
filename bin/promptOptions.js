@@ -5,7 +5,7 @@ var chalk = require('chalk');
 
 var utils = require('./utils');
 var errorHandler = require('./errorHandler');
-var moduleOptions = require('./promptModuleOptions');
+var modulePromptsOptions = require('./promptModuleOptions');
 
 var _promptOptions = [];
 var _log;
@@ -15,14 +15,14 @@ var promptOptionsApi = {};
 promptOptionsApi.setup = function(options) {
 	_log = utils.getLogInstance(options);
 
-	moduleOptions.setup(options);
+	modulePromptsOptions.setup(options);
 }
 
 promptOptionsApi.getNewCommandPromptOptions = function() {
 	_log.debug('');
 	_log.debug('Getting prompt options data');
 
-	return moduleOptions
+	return modulePromptsOptions
 		.getOptions()
 		.then(setPromptOptionsData)
 		.catch(function(err) {
