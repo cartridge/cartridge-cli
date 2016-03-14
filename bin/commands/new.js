@@ -13,6 +13,7 @@ var promptOptions = require('../promptOptions');
 var templateDataManager = require('../templateDataManager');
 var errorHandler = require('../errorHandler');
 var utils = require('../utils');
+var Spinner = require('cli-spinner').Spinner;
 
 var _log;
 var _promptAnswers;
@@ -166,12 +167,23 @@ function singleFileCallback(templateFilePath) {
 }
 
 function installNpmPackages() {
+	var spinner = new Spinner('Installing expansion packs... %s');
+	spinner.setSpinnerString('|/-\\');
+
 	if(_promptAnswers.cartridgeModules.length > 0) {
 		console.log('');
-		_log.info('Installing expansion packs...');
+		// _log.info('Installing expansion packs...');
+
+		if(_log.getLevel() <= 2) {
+			spinner.start();
+		}
 
 		npmInstallPackage(_promptAnswers.cartridgeModules, { saveDev: true}, function(err) {
 			if (err) errorHandler(err);
+
+			if(_log.getLevel() <= 2) {
+				spinner.stop(true);
+			}
 
 			postInstallCleanUp();
 		})
