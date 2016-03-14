@@ -95,32 +95,6 @@ function parseDefaultModuleData(data) {
 		var defaultModuleList = data[1];
 		var moduleAlreadyChecked = [];
 
-		moduleList.push({
-			name: 'module-1'
-		})
-
-		moduleList.push({
-			name: 'module-2'
-		})
-
-		moduleList.push({
-			name: 'module-3'
-		})
-
-		moduleList.push({
-			name: 'module-4'
-		})
-
-		//---------------------------------
-
-		defaultModuleList.push({
-			name: 'module-2'
-		})
-
-		defaultModuleList.push({
-			name: 'module-4'
-		})
-
 		for (var i = 0; i < defaultModuleList.length; i++) {
 		    for (var j = 0; j < moduleList.length; j++) {
 		    	var defaultModuleName = defaultModuleList[i].name;
@@ -139,7 +113,6 @@ function parseDefaultModuleData(data) {
 }
 
 function setPromptOptionsData(moduleList) {
-
 	_log.debug('Setting prompt options data');
 
 	_promptOptions.push(getProjectTypePromptOptions());
