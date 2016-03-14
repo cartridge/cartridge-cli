@@ -18,7 +18,8 @@ var _log;
 var _promptAnswers;
 var _options;
 
-var TEMPLATE_FILES_PATH = path.join(process.cwd(), '_cartridge');
+var CURRENT_WORKING_DIR = process.cwd();
+var TEMPLATE_FILES_PATH = path.join(CURRENT_WORKING_DIR, '_cartridge');
 
 module.exports = function(appDir) {
 
@@ -38,7 +39,7 @@ module.exports = function(appDir) {
 	function checkIfWorkingDirIsEmpty() {
 
 		return new Promise(function(resolve, reject) {
-			fs.readdir(process.cwd(), function(err, files) {
+			fs.readdir(CURRENT_WORKING_DIR, function(err, files) {
 				if (err) reject(err);
 
 				if(utils.filterDirectoryContents(files).length > 0) {
@@ -91,7 +92,7 @@ module.exports = function(appDir) {
 	}
 
 	function copyCartridgeSourceFilesToCwd(copyPath) {
-		fs.copy(copyPath, process.cwd(), {
+		fs.copy(copyPath, CURRENT_WORKING_DIR, {
 			filter: fileCopyFilter
 		}, fileCopyComplete)
 	}
@@ -143,7 +144,7 @@ module.exports = function(appDir) {
 
 		fileTemplater.setConfig({
 			data: templateDataManager.getData(),
-			basePath: process.cwd(),
+			basePath: CURRENT_WORKING_DIR,
 			files: getTemplateFileList(),
 			onEachFile: singleFileCallback,
 			onCompleted: installNpmPackages
@@ -154,30 +155,29 @@ module.exports = function(appDir) {
 
 	function getTemplateFileList() {
 		var fileList      = [];
-		var destPath      = process.cwd();
 
 		// Creds file
 		fileList.push({
 			src:  path.join(TEMPLATE_FILES_PATH, 'creds.tpl'),
-			dest: path.join(destPath, '_config', 'creds.json')
+			dest: path.join(CURRENT_WORKING_DIR, '_config', 'creds.json')
 		});
 
 		// Project package file
 		fileList.push({
 			src:  path.join(TEMPLATE_FILES_PATH, 'package.tpl'),
-			dest: path.join(destPath, 'package.json')
+			dest: path.join(CURRENT_WORKING_DIR, 'package.json')
 		});
 
 		// Project readme
 		fileList.push({
 			src:  path.join(TEMPLATE_FILES_PATH, 'readme.tpl'),
-			dest: path.join(destPath, 'readme.md')
+			dest: path.join(CURRENT_WORKING_DIR, 'readme.md')
 		});
 
 		// Cartridge config
 		fileList.push({
 			src:  path.join(TEMPLATE_FILES_PATH, 'rc.tpl'),
-			dest: path.join(destPath, '.cartridgerc')
+			dest: path.join(CURRENT_WORKING_DIR, '.cartridgerc')
 		});
 
 		return fileList;
