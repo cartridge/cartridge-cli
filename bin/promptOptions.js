@@ -10,6 +10,7 @@ var inArray = require('in-array');
 var errorHandler = require('./errorHandler');
 
 var NPM_CARTRIDGE_TASK_KEYWORD = 'cartridge-task';
+var NPM_CARTRIDGE_DEFAULT_KEYWORD = 'cartridge-module';
 
 var _cartridgeTaskModules;
 var _promptOptions = [];
@@ -26,7 +27,8 @@ promptOptionsApi.getNewCommandPromptOptions = function() {
 	_log.debug('Getting prompt options data');
 
 	return Promise.all([getCartridgeTaskModulesFromNpm(), getCartridgeDefaultModulesFromNpm()])
-		.then(formatDefaultModules)
+		.then(parseDefaultModuleData)
+		.then(formatModuleData)
 		.then(setPromptOptionsData)
 		.catch(function(err) {
 			errorHandler(err)
@@ -56,7 +58,7 @@ function getCartridgeDefaultModulesFromNpm() {
 
 		_log.debug('Getting cartridge task modules from npm registry');
 
-		npm.packages.keyword('cartridge-module', function(err, data) {
+		npm.packages.keyword(NPM_CARTRIDGE_DEFAULT_KEYWORD, function(err, data) {
 			if(err) errorHandler(err);
 
 			_cartridgeTaskModules = formatModuleData(data);
@@ -73,14 +75,20 @@ function getCartridgeDefaultModulesFromNpm() {
  * @return {Array}            Formatted module data
  */
 function formatModuleData(moduleData) {
-	return moduleData.map(function(module) {
+
+	var formattedData = moduleData.map(function(module) {
 	   var formattedModule = {};
-	   formattedModule.name = ' ' + module.name + ' - ' + module.description;
+
+	   formattedModule.name = ' ' + module.name + ((module.description) ? ' - ' + module.description : '') ;
+	   formattedModule.checked = module.checked || false;
+
 	   return formattedModule;
 	})
+
+	return Promise.resolve(formattedData)
 }
 
-function formatDefaultModules(data) {
+function parseDefaultModuleData(data) {
 	return new Promise(function(resolve, reject) {
 
 		var moduleList = data[0];
@@ -150,7 +158,6 @@ function getCartridgeModulesPromptOptions(moduleData) {
 		name: 'cartridgeModules',
 		message: 'What modules would you like included?',
 		choices: moduleData,
-		// choices: _cartridgeTaskModules,
 		filter: extractModuleNames
 	}
 }
