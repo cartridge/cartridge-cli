@@ -167,12 +167,12 @@ function singleFileCallback(templateFilePath) {
 }
 
 function installNpmPackages() {
-	var spinner = new Spinner('Installing expansion packs... %s');
+	var spinner = new Spinner('%s');
 	spinner.setSpinnerString('|/-\\');
 
 	if(_promptAnswers.cartridgeModules.length > 0) {
 		console.log('');
-		// _log.info('Installing expansion packs...');
+		_log.info('Installing expansion packs...');
 
 		if(_log.getLevel() <= 2) {
 			spinner.start();
