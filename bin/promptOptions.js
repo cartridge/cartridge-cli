@@ -77,19 +77,20 @@ function getCartridgeModulesPromptOptions() {
 		name: 'cartridgeModules',
 		message: 'What modules would you like included?',
 		choices: _cartridgeTaskModules,
-		filter: function(values) {
-
-			var returnValue = [];
-
-			values.forEach(function (value) {
-				var regex = /\s([^\s]+)\s.*/g;
-				var matches = regex.exec(value);
-				returnValue.push(matches[1]);
-			});
-
-			return returnValue;
-		}
+		filter: extractModuleNames
 	}
+}
+
+function extractModuleNames(values) {
+	var moduleNames = [];
+
+	values.forEach(function (value) {
+		var regex = /\s([^\s]+)\s.*/g;
+		var matches = regex.exec(value);
+		moduleNames.push(matches[1]);
+	});
+
+	return moduleNames;
 }
 
 function getProjectTypePromptOptions() {
