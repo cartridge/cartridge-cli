@@ -36,6 +36,8 @@ module.exports = function(appDir) {
 	}
 
 	function preSetup() {
+		promptOptions.setup(_options);
+
 		_log.warn('');
 		_log.warn(chalk.bold('Running through setup for a new project.'));
 		_log.warn(chalk.bold('This can be exited out by pressing [Ctrl+C]'));

@@ -4,15 +4,23 @@ var titleize = require('titleize');
 var chalk = require('chalk');
 var Registry = require('npm-registry');
 var npm = new Registry({ retries: 4 });
+var utils = require('./utils');
 
 var NPM_CARTRIDGE_TASK_KEYWORD = 'cartridge-task';
 var CARTRIDGE_TASK_MODULES;
 
 var _promptOptions = [];
-
+var _log;
 var promptOptionsApi = {};
 
+promptOptionsApi.setup = function(options) {
+	_log = utils.getLogInstance(options);
+}
+
 promptOptionsApi.getNewCommandPromptOptions = function() {
+	_log.debug('');
+	_log.debug('Getting prompt options data');
+
 	return getCartridgeTaskModulesFromNpm()
 		.then(setPromptOptionsData);
 }
@@ -20,6 +28,8 @@ promptOptionsApi.getNewCommandPromptOptions = function() {
 function getCartridgeTaskModulesFromNpm() {
 
 	return new Promise(function(resolve, reject) {
+
+		_log.debug('Getting cartridge task modules from npm registry');
 
 		npm.packages.keyword(NPM_CARTRIDGE_TASK_KEYWORD, function(err, data) {
 			if(err) return console.error(err);
@@ -30,7 +40,6 @@ function getCartridgeTaskModulesFromNpm() {
 		});
 
 	})
-
 }
 
 /**
@@ -47,6 +56,8 @@ function formatModuleData(moduleData) {
 }
 
 function setPromptOptionsData() {
+	_log.debug('Setting prompt options data');
+
 	_promptOptions.push(getProjectTypePromptOptions());
 	_promptOptions.push(getProjectNamePromptOptions());
 	_promptOptions.push(getProjectAuthorPromptOptions());
