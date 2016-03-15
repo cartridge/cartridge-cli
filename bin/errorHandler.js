@@ -1,3 +1,5 @@
+"use strict"
+
 var PrettyError = require('pretty-error');
 var pe = new PrettyError();
 

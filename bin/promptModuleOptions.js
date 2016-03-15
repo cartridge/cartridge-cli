@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var Registry = require('npm-registry');
 var npm = new Registry({ retries: 4 });
