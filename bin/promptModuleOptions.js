@@ -14,10 +14,18 @@ var _log;
 
 var promptModuleOptionsApi = {};
 
+/**
+ * Setup function. Assigns internal log instance
+ * @param  {Object} options Command line options (silent, verbose)
+ */
 promptModuleOptionsApi.setup = function(options) {
 	_log = utils.getLogInstance(options);
 }
 
+/**
+ * Get cartridge module data, formatted for inquirer
+ * @return {Promise}
+ */
 promptModuleOptionsApi.getOptions = function() {
 
 	_log.debug('Getting prompt module data');
@@ -30,6 +38,9 @@ promptModuleOptionsApi.getOptions = function() {
 		})
 }
 
+/**
+ * Get name, description of all cartridge modules with the task keyword
+ */
 function getCartridgeTaskModulesFromNpm() {
 
 	return new Promise(function(resolve, reject) {
@@ -43,6 +54,9 @@ function getCartridgeTaskModulesFromNpm() {
 	})
 }
 
+/**
+ * Get name, description of all cartridge modules using the default keyword
+ */
 function getCartridgeDefaultModulesFromNpm() {
 
 	return new Promise(function(resolve, reject) {
@@ -56,6 +70,11 @@ function getCartridgeDefaultModulesFromNpm() {
 	})
 }
 
+/**
+ * Compare task and default modules
+ * Set `checked` as true if a module is in both sets of data
+ * @param  {Array} data Data for both module keyword sets
+ */
 function parseDefaultModuleData(data) {
 	return new Promise(function(resolve, reject) {
 
@@ -82,6 +101,7 @@ function parseDefaultModuleData(data) {
 
 /**
  * Go through all modules and combine the name and description into one key.
+ * Map `checked` value
  * @param  {Array} moduleData Module data from npm registry
  * @return {Array}            Formatted module data
  */
