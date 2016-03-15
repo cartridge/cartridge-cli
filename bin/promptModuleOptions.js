@@ -8,7 +8,7 @@ var utils = require('./utils');
 var errorHandler = require('./errorHandler');
 
 var NPM_CARTRIDGE_TASK_KEYWORD = 'cartridge-task';
-var NPM_CARTRIDGE_DEFAULT_KEYWORD = 'cartridge-module';
+var NPM_CARTRIDGE_DEFAULT_KEYWORD = 'cartridge-module-default';
 
 var _log;
 
