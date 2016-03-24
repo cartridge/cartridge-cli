@@ -1,14 +1,8 @@
 sudo: false
 language: node_js
 node_js:
-    - stable
-    - '0.12'
-install:
-    - npm install
-    - npm install -g mocha
-    - npm install -g gulp
+	- stable
+	- "0.12"
 cache:
   directories:
-    - node_modules
-git:
-  depth: 1
+	- node_modules
