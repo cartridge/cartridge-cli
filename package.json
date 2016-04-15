@@ -37,14 +37,37 @@
     "chai": "^1.6.1",
     "chai-fs": "^0.1.0",
     "cz-conventional-changelog": "^1.1.5",
+    "ghooks": "^1.2.1",
     "proxyquire": "^1.7.3",
     "sinon": "^1.17.3",
-    "timekeeper": "0.0.5"
+    "timekeeper": "0.0.5",
+    "validate-commit-msg": "^2.6.0"
   },
   "preferGlobal": true,
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
+    },
+    "ghooks": {
+      "commit-msg": "validate-commit-msg"
+    },
+    "validate-commit-msg": {
+      "types": [
+        "feat",
+        "fix",
+        "docs",
+        "style",
+        "refactor",
+        "perf",
+        "test",
+        "chore",
+        "revert"
+      ],
+      "warnOnFail": false,
+      "maxSubjectLength": 100,
+      "subjectPattern": ".+",
+      "subjectPatternErrorMsg": "subject does not match subject pattern!",
+      "helpMessage": ""
     }
   }
 }
