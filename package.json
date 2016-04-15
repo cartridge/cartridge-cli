@@ -36,9 +36,15 @@
   "devDependencies": {
     "chai": "^1.6.1",
     "chai-fs": "^0.1.0",
+    "cz-conventional-changelog": "^1.1.5",
     "proxyquire": "^1.7.3",
     "sinon": "^1.17.3",
     "timekeeper": "0.0.5"
   },
-  "preferGlobal": true
+  "preferGlobal": true,
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
