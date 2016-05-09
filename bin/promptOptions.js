@@ -70,7 +70,6 @@ function getProjectTypePromptOptions() {
 		name: 'projectType',
 		message: 'What is the project type?',
 		choices: [
-			projectTypes.dotnet,
 			projectTypes.static,
 			projectTypes.nodejs
 		]

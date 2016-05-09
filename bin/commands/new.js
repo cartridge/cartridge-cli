@@ -110,11 +110,6 @@ function getCopyExcludeList() {
 		'node_modules'
 	];
 
-	if(_promptAnswers.projectType === projectTypes.dotnet) {
-		excludeList.push('views');
-		excludeList.push('release.js');
-	}
-
 	return excludeList;
 }
 
