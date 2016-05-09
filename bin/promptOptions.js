@@ -6,6 +6,7 @@ var chalk = require('chalk');
 var utils = require('./utils');
 var errorHandler = require('./errorHandler');
 var modulePromptsOptions = require('./promptModuleOptions');
+var projectTypes = require('./projectTypeConfig');
 
 var _promptOptions = [];
 var _log;
@@ -69,8 +70,9 @@ function getProjectTypePromptOptions() {
 		name: 'projectType',
 		message: 'What is the project type?',
 		choices: [
-			'Dot NET',
-			'Static Website'
+			projectTypes.dotnet,
+			projectTypes.static,
+			projectTypes.nodejs
 		]
 	}
 }
