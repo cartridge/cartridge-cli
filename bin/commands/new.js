@@ -14,6 +14,7 @@ var templateDataManager = require('../templateDataManager');
 var errorHandler = require('../errorHandler');
 var utils = require('../utils');
 var Spinner = require('cli-spinner').Spinner;
+var projectTypes = require('../projectTypeConfig');
 
 var _log;
 var _promptAnswers;
@@ -109,7 +110,7 @@ function getCopyExcludeList() {
 		'node_modules'
 	];
 
-	if(_promptAnswers.projectType === "Dot NET") {
+	if(_promptAnswers.projectType === projectTypes.dotnet) {
 		excludeList.push('views');
 		excludeList.push('release.js');
 	}
@@ -170,6 +171,12 @@ function installNpmPackages() {
 	var spinner = new Spinner('%s');
 	spinner.setSpinnerString('|/-\\');
 
+	var projectModulesArr = _promptAnswers.cartridgeModules;
+
+	if(_promptAnswers.projectType === projectTypes.nodejs) {
+		projectModulesArr.push('cartridge-node-server');
+	}
+
 	if(_promptAnswers.cartridgeModules.length > 0) {
 		console.log('');
 		_log.info('Installing expansion packs...');
@@ -178,7 +185,7 @@ function installNpmPackages() {
 			spinner.start();
 		}
 
-		npmInstallPackage(_promptAnswers.cartridgeModules, { saveDev: true}, function(err) {
+		npmInstallPackage(_promptAnswers.cartridgeModules, { saveDev: true }, function(err) {
 			if (err) errorHandler(err);
 
 			if(_log.getLevel() <= 2) {
