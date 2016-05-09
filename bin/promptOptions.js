@@ -35,7 +35,7 @@ function setPromptOptionsData(moduleList) {
 	_promptOptions.push(getProjectNamePromptOptions());
 	_promptOptions.push(getProjectAuthorPromptOptions());
 	_promptOptions.push(getProjectDescriptionPromptOptions());
-	_promptOptions.push(getProjectTypePromptOptions());
+	_promptOptions.push(getIfProjectIsNodejsSite());
 	_promptOptions.push(getCartridgeModulesPromptOptions(moduleList));
 	_promptOptions.push(getUserConfirmCopyPromptOptions());
 
@@ -64,7 +64,7 @@ function extractModuleNames(values) {
 	return moduleNames;
 }
 
-function getProjectTypePromptOptions() {
+function getIfProjectIsNodejsSite() {
 	return {
 		type: 'confirm',
 		name: 'isNodejsSite',
