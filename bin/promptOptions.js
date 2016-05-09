@@ -32,10 +32,10 @@ promptOptionsApi.getNewCommandPromptOptions = function() {
 }
 
 function setPromptOptionsData(moduleList) {
-	_promptOptions.push(getProjectTypePromptOptions());
 	_promptOptions.push(getProjectNamePromptOptions());
 	_promptOptions.push(getProjectAuthorPromptOptions());
 	_promptOptions.push(getProjectDescriptionPromptOptions());
+	_promptOptions.push(getProjectTypePromptOptions());
 	_promptOptions.push(getCartridgeModulesPromptOptions(moduleList));
 	_promptOptions.push(getUserConfirmCopyPromptOptions());
 
@@ -66,13 +66,10 @@ function extractModuleNames(values) {
 
 function getProjectTypePromptOptions() {
 	return {
-		type: 'list',
-		name: 'projectType',
-		message: 'What is the project type?',
-		choices: [
-			projectTypes.static,
-			projectTypes.nodejs
-		]
+		type: 'confirm',
+		name: 'isNodejsSite',
+		message: 'Is the project using Node.js server-side? (This will install a blank Node.js server setup)',
+		default: false
 	}
 }
 

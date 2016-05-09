@@ -168,7 +168,7 @@ function installNpmPackages() {
 
 	var projectModulesArr = _promptAnswers.cartridgeModules;
 
-	if(_promptAnswers.projectType === projectTypes.nodejs) {
+	if(_promptAnswers.isNodejsSite) {
 		projectModulesArr.push('cartridge-node-server');
 	}
 
