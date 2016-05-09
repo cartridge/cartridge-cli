@@ -14,7 +14,6 @@ var templateDataManager = require('../templateDataManager');
 var errorHandler = require('../errorHandler');
 var utils = require('../utils');
 var Spinner = require('cli-spinner').Spinner;
-var projectTypes = require('../projectTypeConfig');
 
 var _log;
 var _promptAnswers;
