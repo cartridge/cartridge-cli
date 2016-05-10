@@ -14,7 +14,6 @@ var templateDataManager = require('../templateDataManager');
 var errorHandler = require('../errorHandler');
 var utils = require('../utils');
 var Spinner = require('cli-spinner').Spinner;
-var projectTypes = require('../projectTypeConfig');
 
 var _log;
 var _promptAnswers;
@@ -110,11 +109,6 @@ function getCopyExcludeList() {
 		'node_modules'
 	];
 
-	if(_promptAnswers.projectType === projectTypes.dotnet) {
-		excludeList.push('views');
-		excludeList.push('release.js');
-	}
-
 	return excludeList;
 }
 
@@ -173,7 +167,7 @@ function installNpmPackages() {
 
 	var projectModulesArr = _promptAnswers.cartridgeModules;
 
-	if(_promptAnswers.projectType === projectTypes.nodejs) {
+	if(_promptAnswers.isNodejsSite) {
 		projectModulesArr.push('cartridge-node-server');
 	}
 

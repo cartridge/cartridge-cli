@@ -6,7 +6,6 @@ var chalk = require('chalk');
 var utils = require('./utils');
 var errorHandler = require('./errorHandler');
 var modulePromptsOptions = require('./promptModuleOptions');
-var projectTypes = require('./projectTypeConfig');
 
 var _promptOptions = [];
 var _log;
@@ -32,10 +31,10 @@ promptOptionsApi.getNewCommandPromptOptions = function() {
 }
 
 function setPromptOptionsData(moduleList) {
-	_promptOptions.push(getProjectTypePromptOptions());
 	_promptOptions.push(getProjectNamePromptOptions());
 	_promptOptions.push(getProjectAuthorPromptOptions());
 	_promptOptions.push(getProjectDescriptionPromptOptions());
+	_promptOptions.push(getIfProjectIsNodejsSite());
 	_promptOptions.push(getCartridgeModulesPromptOptions(moduleList));
 	_promptOptions.push(getUserConfirmCopyPromptOptions());
 
@@ -64,16 +63,12 @@ function extractModuleNames(values) {
 	return moduleNames;
 }
 
-function getProjectTypePromptOptions() {
+function getIfProjectIsNodejsSite() {
 	return {
-		type: 'list',
-		name: 'projectType',
-		message: 'What is the project type?',
-		choices: [
-			projectTypes.dotnet,
-			projectTypes.static,
-			projectTypes.nodejs
-		]
+		type: 'confirm',
+		name: 'isNodejsSite',
+		message: 'Is the project using Node.js server-side? (This will install a blank Node.js server setup)',
+		default: false
 	}
 }
 
