@@ -100,7 +100,10 @@ function getLatestGitHubRelease() {
 			page:     1,
 			per_page: 1
 		}, function(err, data) {
-			if(err) reject(err);
+			if(err) {
+				reject(err);
+				return;
+			}
 
 			_log.debug('Release ' + data[0].name + ' is latest');
 
