@@ -1,53 +1,56 @@
-[![Stories in Ready](https://badge.waffle.io/code-computerlove/cartridge-cli.svg?label=ready&title=Ready)](http://waffle.io/code-computerlove/cartridge-cli)
-[![devDependency Status](https://david-dm.org/cartridge/cartridge-cli/dev-status.svg)](https://david-dm.org/code-computerlove/cartridge-cli#info=devDependencies)
-[![Dependency Status](https://david-dm.org/cartridge/cartridge-cli.svg)](https://david-dm.org/code-computerlove/cartridge-cli)
+# Cartridge cli  [![Build Status][travis-image]][travis-url]
 
-# Cartridge cli [![Build Status](https://travis-ci.org/cartridge/cartridge-cli.svg?branch=develop)](https://travis-ci.org/cartridge/cartridge-cli)
+[![devDependency Status][dev-dependency-image]][dev-dependency-url]
+[![dependency Status][dependency-image]][dependency-url]
 
-> Start with a clean cartridge and get yourself going with a ready made basic static website setup
 
-Command line utility for [Cartridge](https://github.com/cartridge/cartridge)
-
+> Command line utility for [Cartridge](https://github.com/cartridge/cartridge)
 
 ## Installation
-
-```bash
-> npm install -g cartridge-cli
+```sh
+npm install -g cartridge-cli
 ```
 
 ## Usage
-
-```bash
-> cartridge
+```sh
+cartridge
 ```
 
-```bash
+```sh
+Usage: cartridge [options] [command]
 
-  Usage: cartridge [options] [command]
+Commands:
 
+  new   Create a new project (on-screen wizard)
 
-  Commands:
+Options:
 
-    new   Create a new project (on-screen wizard)
-
-  Options:
-
-    -h, --help     output usage information
-    -V, --version  output the version number
-    -s, --silent   Surpress all on-screen messages
-    -v, --verbose  Show all on-screen messages
-
+  -h, --help     output usage information
+  -V, --version  output the version number
+  -s, --silent   Surpress all on-screen messages
+  -v, --verbose  Show all on-screen messages
 ```
-## Developing
 
+## Development
 To work on the project locally clone the repo then from within the checked out directory run:
 
-```bash
-> npm link
+```sh
+npm link
 ```
 This will allow you to make changes to the project and have them reflected immediately within the command line tool.
 
 ## Contributing
-
 * [Workflow](docs/contributing/workflow.md)
 * [Testing](docs/contributing/testing.md)
+
+
+
+
+[travis-url]: http://travis-ci.org/cartridge/cartridge-cli
+[travis-image]: https://secure.travis-ci.org/cartridge/cartridge-cli.svg?branch=develop
+
+[dev-dependency-url]: https://david-dm.org/cartridge-cli#info=devDependencies
+[dev-dependency-image]: https://david-dm.org/cartridge/cartridge-cli/dev-status.svg
+
+[dependency-url]: https://david-dm.org/code-computerlove/cartridge-cli
+[dependency-image]: https://david-dm.org/cartridge/cartridge-cli.svg
