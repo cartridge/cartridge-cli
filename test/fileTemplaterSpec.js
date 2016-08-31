@@ -77,6 +77,12 @@ describe('As a user of the file templater module', function() {
 			templateFileJson.answer.should.equal(templateData.answer)
 		})
 
+    it('should have not deleted source files when `deleteSrcFile` is not provided', function() {
+      var srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds.tpl');
+
+      srcTemplateFile.should.be.a.path();
+    })
+
 		it('should have called the onCompleted callback once', function() {
 			onCompletedSpy.calledOnce.should.be.true;
 		})
@@ -104,8 +110,15 @@ describe('As a user of the file templater module', function() {
 
 			fileList.push({
 				src: path.join(TEST_TEMP_DIR, 'creds-again.tpl'),
-				dest: path.join(TEST_TEMP_DIR, 'creds-again-templated.json')
+				dest: path.join(TEST_TEMP_DIR, 'creds-again-templated.json'),
+        deleteSrcFile: false
 			})
+
+      fileList.push({
+        src: path.join(TEST_TEMP_DIR, 'fileToBeDeleted.tpl'),
+        dest: path.join(TEST_TEMP_DIR, 'fileToBeDeleted-templated.json'),
+        deleteSrcFile: true
+      })
 
 			fileTemplater.setConfig({
 				data: templateData,
@@ -126,8 +139,26 @@ describe('As a user of the file templater module', function() {
 		})
 
 		it('should have called the onEachFile callback twice', function() {
-			onEachFileSpy.calledTwice.should.be.true;
+			onEachFileSpy.calledThrice.should.be.true;
 		})
+
+    it('should have not deleted source files when `deleteSrcFile` is not provided', function() {
+      var srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds.tpl');
+
+      srcTemplateFile.should.be.a.path();
+    })
+
+    it('should have not deleted source files when `deleteSrcFile` is set to false', function() {
+      var srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds-again.tpl');
+
+      srcTemplateFile.should.be.a.path();
+    })
+
+    it('should have deleted `fileToBeDeleted.tpl` when `deleteSrcFile` is set to true', function() {
+      var srcTemplateFile = path.join(TEST_TEMP_DIR, 'fileToBeDeleted.tpl');
+
+      srcTemplateFile.should.not.be.a.path();
+    })
 
 	})
 })
