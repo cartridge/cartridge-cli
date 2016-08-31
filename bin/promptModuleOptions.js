@@ -1,7 +1,10 @@
 "use strict";
 
 var Registry = require('npm-registry');
-var npm = new Registry({ retries: 4 });
+var npm = new Registry({
+	registry: 'http://registry.npmjs.org',
+	retries: 4
+});
 var inArray = require('in-array');
 
 var utils = require('./utils');
