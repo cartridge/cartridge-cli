@@ -42,31 +42,39 @@ function templateFile(templateFileConfig) {
     var compiled;
     var output;
 
-    fs.readFile(templateFileConfig.src, 'utf8', function(err, fileContents) {
+    fs.readFile(templateFileConfig.src, 'utf8', function readFileCallback(err, fileContents) {
         if (err) errorHandler(err);
 
         compiled = template(fileContents);
         output = compiled(_config.data);
 
-        fs.writeFile(templateFileConfig.dest, output, 'utf8', function(err) {
-            if (err) errorHandler(err);
-
-            _config.onEachFile(templateFileConfig.dest);
-
-            if(templateFileConfig.deleteSrcFile) {
-              fs.unlinkSync(templateFileConfig.src);
-            }
-
-            if(_fileNumber === _config.files.length) {
-                _config = _defaultConfig;
-                _config.onCompleted();
-            }
-
-            _fileNumber++;
-
-        });
-
+        writeTemplatedContents(templateFileConfig, output);
     });
+}
+
+/**
+ * Write compiled result to destination file
+ * @param  {Object} fileConfig     Individual file config object
+ * @param  {String} compiledOutput The compiled output from the template file
+ */
+function writeTemplatedContents(fileConfig, compiledOutput) {
+  fs.writeFile(fileConfig.dest, compiledOutput, 'utf8', function writeFileCallback(err) {
+      if (err) errorHandler(err);
+
+      _config.onEachFile(fileConfig.dest);
+
+      if(fileConfig.deleteSrcFile) {
+        fs.unlinkSync(fileConfig.src);
+      }
+
+      if(_fileNumber === _config.files.length) {
+          _config = _defaultConfig;
+          _config.onCompleted();
+      }
+
+      _fileNumber++;
+
+  });
 }
 
 module.exports = fileTemplaterApi;
