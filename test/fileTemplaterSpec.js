@@ -77,7 +77,7 @@ describe('As a user of the file templater module', function() {
 			templateFileJson.answer.should.equal(templateData.answer)
 		})
 
-    it('should have not deleted source files when `deleteSrcFile` is not provided', function() {
+    it('should not delete source file when `deleteSrcFile` is not provided', function() {
       var srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds.tpl');
 
       srcTemplateFile.should.be.a.path();
@@ -142,19 +142,19 @@ describe('As a user of the file templater module', function() {
 			onEachFileSpy.calledThrice.should.be.true;
 		})
 
-    it('should have not deleted source files when `deleteSrcFile` is not provided', function() {
+    it('should not deleted source file when `deleteSrcFile` is not provided', function() {
       var srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds.tpl');
 
       srcTemplateFile.should.be.a.path();
     })
 
-    it('should have not deleted source files when `deleteSrcFile` is set to false', function() {
+    it('should not delete source file when `deleteSrcFile` is set to false', function() {
       var srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds-again.tpl');
 
       srcTemplateFile.should.be.a.path();
     })
 
-    it('should have deleted `fileToBeDeleted.tpl` when `deleteSrcFile` is set to true', function() {
+    it('should delete `fileToBeDeleted.tpl` when `deleteSrcFile` is set to true', function() {
       var srcTemplateFile = path.join(TEST_TEMP_DIR, 'fileToBeDeleted.tpl');
 
       srcTemplateFile.should.not.be.a.path();
