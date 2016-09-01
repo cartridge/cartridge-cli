@@ -1,6 +1,6 @@
 {
   "name": "cartridge-cli",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Start with a clean cartridge and get yourself going with a ready made basic website setup",
   "license": "ISC",
   "bin": {
