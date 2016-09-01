@@ -36,33 +36,45 @@ fileTemplaterApi.setConfig = function(config) {
 /**
  * Template a single file.
  * Get the contents of a file, template it and re-write to the same file
- * @param  {Object} filePaths File paths data, containing file src and dest
+ * @param  {Object} templateFileConfig Config data, containing template file config
  */
-function templateFile(filePaths) {
+function templateFile(templateFileConfig) {
     var compiled;
     var output;
 
-    fs.readFile(filePaths.src, 'utf8', function(err, fileContents) {
+    fs.readFile(templateFileConfig.src, 'utf8', function readFileCallback(err, fileContents) {
         if (err) errorHandler(err);
 
         compiled = template(fileContents);
         output = compiled(_config.data);
 
-        fs.writeFile(filePaths.dest, output, 'utf8', function(err) {
-            if (err) errorHandler(err);
-
-            _config.onEachFile(filePaths.dest);
-
-            if(_fileNumber === _config.files.length) {
-                _config = _defaultConfig;
-                _config.onCompleted();
-            }
-
-            _fileNumber++;
-
-        });
-
+        writeTemplatedContents(templateFileConfig, output);
     });
+}
+
+/**
+ * Write compiled result to destination file
+ * @param  {Object} fileConfig     Individual file config object
+ * @param  {String} compiledOutput The compiled output from the template file
+ */
+function writeTemplatedContents(fileConfig, compiledOutput) {
+  fs.writeFile(fileConfig.dest, compiledOutput, 'utf8', function writeFileCallback(err) {
+      if (err) errorHandler(err);
+
+      _config.onEachFile(fileConfig.dest);
+
+      if(fileConfig.deleteSrcFile) {
+        fs.unlinkSync(fileConfig.src);
+      }
+
+      if(_fileNumber === _config.files.length) {
+          _config = _defaultConfig;
+          _config.onCompleted();
+      }
+
+      _fileNumber++;
+
+  });
 }
 
 module.exports = fileTemplaterApi;

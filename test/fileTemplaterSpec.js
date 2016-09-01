@@ -4,7 +4,7 @@ var os = require('os');
 var fs = require('fs-extra');
 var path = require('path');
 
-var fileTemplater =  require('../bin/fileTemplater');
+var fileTemplater = require('../bin/fileTemplater');
 
 chai.use(require('chai-fs'));
 chai.should();
@@ -13,9 +13,9 @@ var TEST_TEMP_DIR = path.join(os.tmpdir(), 'file-templater');
 
 
 function changeToOsTempDirAndCopyFixtures() {
-    fs.ensureDirSync(TEST_TEMP_DIR);
-    fs.copySync(path.resolve('./', 'test', 'fixtures', 'templateFiles'), TEST_TEMP_DIR);
-    process.chdir(TEST_TEMP_DIR);
+	fs.ensureDirSync(TEST_TEMP_DIR);
+	fs.copySync(path.resolve('./', 'test', 'fixtures', 'templateFiles'), TEST_TEMP_DIR);
+	process.chdir(TEST_TEMP_DIR);
 }
 
 function tearDown() {
@@ -30,24 +30,24 @@ function getTemplateData() {
 }
 
 describe('As a user of the file templater module', function() {
-    before(changeToOsTempDirAndCopyFixtures);
-    after(tearDown)
+	before(changeToOsTempDirAndCopyFixtures);
+	after(tearDown)
 
-    describe('When templating one file', function() {
+	describe('When templating one file', function() {
 
-    	var onCompletedSpy = sinon.spy();
-    	var onEachFileSpy = sinon.spy();
+		var onCompletedSpy = sinon.spy();
+		var onEachFileSpy = sinon.spy();
 
-    	var templateData = getTemplateData();
+		var templateData = getTemplateData();
 
-    	var fileList = [];
+		var fileList = [];
 
-    	before(function(done) {
+		before(function(done) {
 
-    		fileList.push({
-    			src: path.join(TEST_TEMP_DIR, 'creds.tpl'),
-    			dest: path.join(TEST_TEMP_DIR, 'creds-templated.json')
-    		})
+			fileList.push({
+				src: path.join(TEST_TEMP_DIR, 'creds.tpl'),
+				dest: path.join(TEST_TEMP_DIR, 'creds-templated.json')
+			})
 
 			fileTemplater.setConfig({
 				data: templateData,
@@ -61,51 +61,64 @@ describe('As a user of the file templater module', function() {
 			})
 
 			fileTemplater.run();
-    	})
+		})
 
-        it('should correctly create the templated file', function() {
-        	var templatedFilePath = path.join(TEST_TEMP_DIR, 'creds-templated.json');
+		it('should correctly create the templated file', function() {
+			var templatedFilePath = path.join(TEST_TEMP_DIR, 'creds-templated.json');
 
-        	templatedFilePath.should.be.a.file();
-        })
+			templatedFilePath.should.be.a.file();
+		})
 
-        it('should correctly template the contents with template data', function() {
-        	var templatedFilePath = path.join(TEST_TEMP_DIR, 'creds-templated.json');
-        	var templateFileContents = fs.readFileSync(templatedFilePath, 'utf8');
-        	var templateFileJson = JSON.parse(templateFileContents);
+		it('should correctly template the contents with template data', function() {
+			var templatedFilePath = path.join(TEST_TEMP_DIR, 'creds-templated.json');
+			var templateFileContents = fs.readFileSync(templatedFilePath, 'utf8');
+			var templateFileJson = JSON.parse(templateFileContents);
 
-        	templateFileJson.answer.should.equal(templateData.answer)
-        })
+			templateFileJson.answer.should.equal(templateData.answer)
+		})
 
-        it('should have called the onCompleted callback once', function() {
-        	onCompletedSpy.calledOnce.should.be.true;
-        })
+    it('should not delete source file when `deleteSrcFile` is not provided', function() {
+      var srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds.tpl');
 
-        it('shoudl have called the onEachFile callback once', function() {
-        	onEachFileSpy.calledOnce.should.be.true;
-        })
-
+      srcTemplateFile.should.be.a.path();
     })
 
-    describe('When templating multiple files', function() {
-    	var onCompletedSpy = sinon.spy();
-    	var onEachFileSpy = sinon.spy();
+		it('should have called the onCompleted callback once', function() {
+			onCompletedSpy.calledOnce.should.be.true;
+		})
 
-    	var templateData = getTemplateData();
+		it('should have called the onEachFile callback once', function() {
+			onEachFileSpy.calledOnce.should.be.true;
+		})
 
-    	var fileList = [];
+	})
 
-    	before(function(done) {
+	describe('When templating multiple files', function() {
+		var onCompletedSpy = sinon.spy();
+		var onEachFileSpy = sinon.spy();
 
-    		fileList.push({
-    			src: path.join(TEST_TEMP_DIR, 'creds.tpl'),
-    			dest: path.join(TEST_TEMP_DIR, 'creds-templated.json')
-    		})
+		var templateData = getTemplateData();
 
-    		fileList.push({
-    			src: path.join(TEST_TEMP_DIR, 'creds-again.tpl'),
-    			dest: path.join(TEST_TEMP_DIR, 'creds-again-templated.json')
-    		})
+		var fileList = [];
+
+		before(function(done) {
+
+			fileList.push({
+				src: path.join(TEST_TEMP_DIR, 'creds.tpl'),
+				dest: path.join(TEST_TEMP_DIR, 'creds-templated.json')
+			})
+
+			fileList.push({
+				src: path.join(TEST_TEMP_DIR, 'creds-again.tpl'),
+				dest: path.join(TEST_TEMP_DIR, 'creds-again-templated.json'),
+        deleteSrcFile: false
+			})
+
+      fileList.push({
+        src: path.join(TEST_TEMP_DIR, 'fileToBeDeleted.tpl'),
+        dest: path.join(TEST_TEMP_DIR, 'fileToBeDeleted-templated.json'),
+        deleteSrcFile: true
+      })
 
 			fileTemplater.setConfig({
 				data: templateData,
@@ -119,15 +132,33 @@ describe('As a user of the file templater module', function() {
 			})
 
 			fileTemplater.run();
-    	})
+		})
 
-        it('should have called the onCompleted callback once', function() {
-        	onCompletedSpy.calledOnce.should.be.true;
-        })
+		it('should have called the onCompleted callback once', function() {
+			onCompletedSpy.calledOnce.should.be.true;
+		})
 
-        it('should have called the onEachFile callback twice', function() {
-        	onEachFileSpy.calledTwice.should.be.true;
-        })
+		it('should have called the onEachFile callback twice', function() {
+			onEachFileSpy.calledThrice.should.be.true;
+		})
 
+    it('should not deleted source file when `deleteSrcFile` is not provided', function() {
+      var srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds.tpl');
+
+      srcTemplateFile.should.be.a.path();
     })
+
+    it('should not delete source file when `deleteSrcFile` is set to false', function() {
+      var srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds-again.tpl');
+
+      srcTemplateFile.should.be.a.path();
+    })
+
+    it('should delete `fileToBeDeleted.tpl` when `deleteSrcFile` is set to true', function() {
+      var srcTemplateFile = path.join(TEST_TEMP_DIR, 'fileToBeDeleted.tpl');
+
+      srcTemplateFile.should.not.be.a.path();
+    })
+
+	})
 })

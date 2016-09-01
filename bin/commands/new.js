@@ -133,13 +133,15 @@ function getTemplateFileList() {
 	// Creds file
 	fileList.push({
 		src:  path.join(TEMPLATE_FILES_PATH, 'creds.tpl'),
-		dest: path.join(CURRENT_WORKING_DIR, '_config', 'creds.json')
+		dest: path.join(CURRENT_WORKING_DIR, '_config', 'creds.json'),
+		deleteSrcFile: true
 	});
 
 	// Project package file
 	fileList.push({
 		src:  path.join(TEMPLATE_FILES_PATH, 'package.tpl'),
-		dest: path.join(CURRENT_WORKING_DIR, 'package.json')
+		dest: path.join(CURRENT_WORKING_DIR, 'package.json'),
+		deleteSrcFile: true
 	});
 
 	// Project readme
