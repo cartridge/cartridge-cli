@@ -18,6 +18,7 @@ var Spinner = require('cli-spinner').Spinner;
 var _log;
 var _promptAnswers;
 var _options;
+var _isBaseInstall;
 
 var CURRENT_WORKING_DIR = process.cwd();
 var TEMPLATE_FILES_PATH = path.join(CURRENT_WORKING_DIR, '_cartridge');
@@ -26,7 +27,7 @@ var newCommandApi = {};
 
 newCommandApi.init = function(options, baseInstall) {
 	_options = options;
-	_options.baseInstall = baseInstall;
+	_isBaseInstall = baseInstall;
 
 	_log = utils.getLogInstance(_options);
 
@@ -46,12 +47,17 @@ function preSetup() {
 }
 
 function setupOnScreenPrompts() {
-	promptOptions
-		.getNewCommandPromptOptions()
-	 	.then(function(promptOptions) {
-	 		console.log('');
-	 		inquirer.prompt(promptOptions, promptCallback);
- 		})
+
+	if(_isBaseInstall) {
+		//@TODO - base install specific code here
+	} else {
+		promptOptions
+			.getNewCommandPromptOptions()
+			.then(function(promptOptions) {
+				console.log('');
+				inquirer.prompt(promptOptions, promptCallback);
+			})
+	}
 }
 
 function promptCallback(answers) {
