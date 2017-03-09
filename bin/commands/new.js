@@ -179,14 +179,14 @@ function installNpmPackages(packages) {
 		console.log('');
 		_log.info('Installing expansion packs...');
 
-		if(_log.getLevel() <= 2) {
+		if(_log.getLevel() <= _log.levels.INFO) {
 			spinner.start();
 		}
 
 		npmInstallPackage(packages, { saveDev: true }, function(err) {
 			if (err) errorHandler(err);
 
-			if(_log.getLevel() <= 2) {
+			if(_log.getLevel() <= _log.levels.INFO) {
 				spinner.stop(true);
 			}
 
