@@ -21,13 +21,11 @@ module.exports = function() {
  */
 function setNewCommand() {
 	program
-		.command('new [env]')
+		.command('new [baseInstall]')
 		.description('Create a new project (on-screen wizard)')
 		.option("-B, --base", "Use the base install pre-set")
 		.action(function(env, options) {
-			//console.log('Base install mode: ', options.base)
-
-			newCommand.init(getProgramOptions());
+			newCommand.init(getProgramOptions(), options.base);
 		});
 }
 

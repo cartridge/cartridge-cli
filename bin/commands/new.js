@@ -24,8 +24,10 @@ var TEMPLATE_FILES_PATH = path.join(CURRENT_WORKING_DIR, '_cartridge');
 
 var newCommandApi = {};
 
-newCommandApi.init = function(options) {
+newCommandApi.init = function(options, baseInstall) {
 	_options = options;
+	_options.baseInstall = baseInstall;
+
 	_log = utils.getLogInstance(_options);
 
 	preSetup();
@@ -128,7 +130,7 @@ function templateCopiedFiles() {
 }
 
 function getTemplateFileList() {
-	var fileList      = [];
+	var fileList = [];
 
 	// Creds file
 	fileList.push({
