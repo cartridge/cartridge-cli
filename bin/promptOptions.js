@@ -30,6 +30,10 @@ promptOptionsApi.getNewCommandPromptOptions = function() {
 		})
 }
 
+promptOptionsApi.getConfirmationPrompt = function() {
+	return [getUserConfirmCopyPromptOptions()];
+}
+
 function setPromptOptionsData(moduleList) {
 	_promptOptions.push(getProjectNamePromptOptions());
 	_promptOptions.push(getProjectAuthorPromptOptions());

@@ -49,7 +49,20 @@ function preSetup() {
 function setupOnScreenPrompts() {
 
 	if(_isBaseInstall) {
-		//@TODO - base install specific code here
+		_log.warn('');
+
+		_log.warn(chalk.bold('Running through a base install. This will create a cartridge project that has:'));
+		_log.info(' · Sass setup');
+		_log.info(' · JavaScript setup');
+		_log.info(' · A local server');
+		_log.info(' · Ability to copy static assets');
+		_log.warn('');
+
+		inquirer.prompt(promptOptions.getConfirmationPrompt(), function(answers) {
+			console.log('@TODO - DO THE BASE INSTALL');
+		});
+
+		//can reuse promptOptions.getUserConfirmCopyPromptOptions
 	} else {
 		promptOptions
 			.getNewCommandPromptOptions()
