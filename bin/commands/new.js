@@ -59,10 +59,11 @@ function setupOnScreenPrompts() {
 		_log.warn('');
 
 		inquirer.prompt(promptOptions.getConfirmationPrompt(), function(answers) {
-			console.log('@TODO - DO THE BASE INSTALL');
+			if(answers.userHasConfirmed) {
+				console.log('@TODO - DO THE BASE INSTALL');
+			}
 		});
-
-		//can reuse promptOptions.getUserConfirmCopyPromptOptions
+		
 	} else {
 		promptOptions
 			.getNewCommandPromptOptions()
@@ -77,7 +78,7 @@ function promptCallback(answers) {
 	_promptAnswers = answers;
 	templateDataManager.setData(answers);
 
-	if(_promptAnswers.isOkToCopyFiles) {
+	if(_promptAnswers.userHasConfirmed) {
 
 		_log.info('');
 		_log.info('Inserting the cartridge...');

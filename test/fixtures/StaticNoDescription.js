@@ -3,5 +3,5 @@ module.exports = {
     projectName: 'dfdsfds',
     projectAuthor: 'Dsfsdf',
     projectDescription: '',
-    isOkToCopyFiles: true
+    userHasConfirmed: true
 }

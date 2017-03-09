@@ -107,7 +107,7 @@ function getProjectDescriptionPromptOptions() {
 function getUserConfirmCopyPromptOptions() {
 	return {
 		type: 'confirm',
-		name: 'isOkToCopyFiles',
+		name: 'userHasConfirmed',
 		message: 'Ready to start setup! Press enter to confirm',
 		default: true
 	}
