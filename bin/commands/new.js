@@ -123,7 +123,9 @@ function templateCopiedFiles() {
 		basePath: CURRENT_WORKING_DIR,
 		files: getTemplateFileList(),
 		onEachFile: singleFileCallback,
-		onCompleted: installNpmPackages
+		onCompleted: function() {
+			installNpmPackages(_promptAnswers.cartridgeModules)
+		}
 	})
 
 	fileTemplater.run();
@@ -165,17 +167,15 @@ function singleFileCallback(templateFilePath) {
 	_log.debug('Templating file -', templateFilePath);
 }
 
-function installNpmPackages() {
+function installNpmPackages(packages) {
 	var spinner = new Spinner('%s');
 	spinner.setSpinnerString('|/-\\');
 
-	var projectModulesArr = _promptAnswers.cartridgeModules;
-
 	if(_promptAnswers.isNodejsSite) {
-		projectModulesArr.push('cartridge-node-server');
+		packages.push('cartridge-node-server');
 	}
 
-	if(_promptAnswers.cartridgeModules.length > 0) {
+	if(packages.length > 0) {
 		console.log('');
 		_log.info('Installing expansion packs...');
 
@@ -183,7 +183,7 @@ function installNpmPackages() {
 			spinner.start();
 		}
 
-		npmInstallPackage(_promptAnswers.cartridgeModules, { saveDev: true }, function(err) {
+		npmInstallPackage(packages, { saveDev: true }, function(err) {
 			if (err) errorHandler(err);
 
 			if(_log.getLevel() <= 2) {
