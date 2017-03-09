@@ -51,7 +51,7 @@ function setupOnScreenPrompts() {
 	if(_isBaseInstall) {
 		_log.warn('');
 
-		_log.warn(chalk.bold('Running through a base install. This will create a cartridge project that has:'));
+		_log.warn(chalk.bold('This will create a cartridge project that has:'));
 		_log.info(' · Sass setup');
 		_log.info(' · JavaScript setup');
 		_log.info(' · A local server');
