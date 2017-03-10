@@ -6,6 +6,7 @@ var fs       = require('fs-extra');
 var path     = require('path');
 
 var npmInstallPackage = require('npm-install-package')
+var emoji = require('node-emoji');
 
 var releaseService = require('../releaseService');
 var fileTemplater = require('../fileTemplater');
@@ -101,7 +102,7 @@ function promptCallback(answers) {
 	if(_promptAnswers.userHasConfirmed === true) {
 
 		_log.info('');
-		_log.info('Inserting the cartridge...');
+		_log.info(emoji.get('joystick') + '  Inserting the cartridge...');
 
 		//@TODO - THIS MAY NEED TO BE EXTRACTED IN OWN METHOD
 		releaseService
@@ -109,7 +110,7 @@ function promptCallback(answers) {
 			.then(copyCartridgeSourceFilesToCwd)
 
 	} else {
-		_log.info('User cancelled - no files copied')
+		_log.info(emoji.get('x') + '  User cancelled - no files copied')
 	}
 }
 
@@ -157,7 +158,7 @@ function getCopyExcludeList() {
 
 function templateCopiedFiles() {
 	_log.debug('');
-	_log.info('Booting up files...');
+	_log.info(emoji.get('floppy_disk') +'  Booting up files...');
 
 	//@TODO - LOOK AT MAKING FILE TEMPLATER PROMISE BASED
 	fileTemplater.setConfig({
@@ -255,7 +256,7 @@ function finishSetup() {
 	_log.info(chalk.green('Setup complete!'));
 	_log.info('Cartridge project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed!');
 	_log.info('');
-	_log.info('Final steps:');
+	_log.info(emoji.get('bulb') + '  Final steps:');
 	_log.info(' · Run ' + chalk.yellow('npm install') + ' to download all project dependencies. (If this fails you may need to run ' + chalk.yellow('sudo npm install') + ')');
 	_log.info(' · Run ' + chalk.yellow('gulp') + ' for initial setup of styles and scripts.');
 	_log.info(' · Run ' + chalk.yellow('gulp watch') + ' to setup watching of files.');
