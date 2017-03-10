@@ -67,20 +67,21 @@ function runBaseInstall() {
 	promptOptions
 		.getBaseInstallPromptData()
 		.then(function(promptOptions) {
-			inquirer.prompt(promptOptions, function(answers) {
-
-				answers.cartridgeModules = ['cartridge-sass', 'cartridge-javascript','cartridge-copy-assets'];
-
-				if(answers.isNodejsSite === true) {
-					answers.cartridgeModules.push('cartridge-node-server')
-				} else {
-					answers.cartridgeModules.push('cartridge-static-html');
-					answers.cartridgeModules.push('cartridge-local-server');
-				}
-
-				promptCallback(answers);
-			});
+			inquirer.prompt(promptOptions, handleBaseInstallPromptData);
 		})
+}
+
+function handleBaseInstallPromptData(answers) {
+	answers.cartridgeModules = ['cartridge-sass', 'cartridge-javascript','cartridge-copy-assets'];
+
+	if(answers.isNodejsSite === true) {
+		answers.cartridgeModules.push('cartridge-node-server')
+	} else {
+		answers.cartridgeModules.push('cartridge-static-html');
+		answers.cartridgeModules.push('cartridge-local-server');
+	}
+
+	promptCallback(answers);
 }
 
 function runCompleteInstall() {
