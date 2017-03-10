@@ -5,34 +5,6 @@ var template = require('lodash/template');
 
 var errorHandler = require('./errorHandler');
 
-// TWO PUBLIC METHODS
-// - .setConfig()
-//    - sets the template data
-//    - base path
-//    - files to template
-//    - on each file (this will have to be done here, due to promises)
-//    - on completed will be the .then() of the promise, not needed!!!
-//
-//  - .run()
-//    - this sets the templating in motion, using the provided config\
-//
-//  WONDER IF THE .setConfig() can be integrated into the run() call
-//  e.g.
-//
-//  .run(configOptions)
-//  .then(function() {
-//     console.log('finished templating')
-//  })
-//
-//  have to new up an instance? etc
-//  var Templater = require('templater');
-//  var templater = Templater.create();
-//
-//  templater
-//    .run(options)
-//    .then(function() {
-//    })
-
 function fileTemplater() {
 
   var config = {};
