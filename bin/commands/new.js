@@ -83,8 +83,6 @@ function runCompleteInstall() {
 function promptCallback(answers) {
 	_promptAnswers = answers;
 
-	// console.log(answers);
-
 	templateDataManager.setData(answers);
 
 	if(_promptAnswers.userHasConfirmed) {
@@ -92,7 +90,7 @@ function promptCallback(answers) {
 		_log.info('');
 		_log.info('Inserting the cartridge...');
 
-		//@TODO - THIS WILL NEED TO BE EXTRACTED IN OWN METHOD
+		//@TODO - THIS MAY NEED TO BE EXTRACTED IN OWN METHOD
 		releaseService
 			.downloadLatestRelease(_options)
 			.then(copyCartridgeSourceFilesToCwd)
@@ -148,6 +146,7 @@ function templateCopiedFiles() {
 	_log.debug('');
 	_log.info('Booting up files...');
 
+	//@TODO - LOOK AT MAKING FILE TEMPLATER PROMISE BASED
 	fileTemplater.setConfig({
 		data: templateDataManager.getData(),
 		basePath: CURRENT_WORKING_DIR,

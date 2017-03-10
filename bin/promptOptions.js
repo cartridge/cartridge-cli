@@ -7,7 +7,6 @@ var utils = require('./utils');
 var errorHandler = require('./errorHandler');
 var modulePromptsOptions = require('./promptModuleOptions');
 
-var _promptOptions = [];
 var _log;
 
 var promptOptionsApi = {};
@@ -40,14 +39,14 @@ promptOptionsApi.getBaseInstallPrompt = function() {
 }
 
 function setPromptOptionsData(moduleList) {
-	_promptOptions.push(getProjectNamePromptOptions());
-	_promptOptions.push(getProjectAuthorPromptOptions());
-	_promptOptions.push(getProjectDescriptionPromptOptions());
-	_promptOptions.push(getIfProjectIsNodejsSite());
-	_promptOptions.push(getCartridgeModulesPromptOptions(moduleList));
-	_promptOptions.push(getUserConfirmCopyPromptOptions());
-
-	return Promise.resolve(_promptOptions);
+	return Promise.resolve([
+		getProjectNamePromptOptions()),
+		getProjectAuthorPromptOptions()),
+		getProjectDescriptionPromptOptions()),
+		getIfProjectIsNodejsSite()),
+		getCartridgeModulesPromptOptions(moduleList)),
+		getUserConfirmCopyPromptOptions())
+	]);
 }
 
 function getCartridgeModulesPromptOptions(moduleData) {
