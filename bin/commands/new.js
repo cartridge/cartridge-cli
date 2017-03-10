@@ -64,10 +64,10 @@ function runBaseInstall() {
 	_log.info(' · Ability to copy static assets');
 	_log.warn('');
 
-	inquirer.prompt(promptOptions.getConfirmationPrompt(), function(answers) {
-		if(answers.userHasConfirmed) {
-			console.log('@TODO - DO THE BASE INSTALL');
-		}
+	inquirer.prompt(promptOptions.getBaseInstallPrompt(), function(answers) {
+		answers.cartridgeModules = ['cartridge-sass', 'cartridge-javascript', 'cartridge-local-server', 'cartridge-copy-assets'];
+
+		promptCallback(answers);
 	});
 }
 
@@ -82,6 +82,9 @@ function runCompleteInstall() {
 
 function promptCallback(answers) {
 	_promptAnswers = answers;
+
+	// console.log(answers);
+
 	templateDataManager.setData(answers);
 
 	if(_promptAnswers.userHasConfirmed) {
