@@ -29,25 +29,39 @@ promptOptionsApi.getNewCommandPromptOptions = function() {
 		})
 }
 
-promptOptionsApi.getBaseInstallPrompt = function() {
-	return [
+promptOptionsApi.getBaseInstallPromptData = function() {
+	_log.debug('');
+	_log.debug('Getting base install prompt options data');
+
+	return Promise.resolve([
 		getProjectNamePromptOptions(),
 		getProjectAuthorPromptOptions(),
 		getProjectDescriptionPromptOptions(),
+		getIfProjectIsNodejsSite(),
 		getUserConfirmCopyPromptOptions()
-	];
+	]);
 }
 
 function setPromptOptionsData(moduleList) {
 	return Promise.resolve([
-		getProjectNamePromptOptions()),
-		getProjectAuthorPromptOptions()),
-		getProjectDescriptionPromptOptions()),
-		getIfProjectIsNodejsSite()),
-		getCartridgeModulesPromptOptions(moduleList)),
-		getUserConfirmCopyPromptOptions())
+		getProjectNamePromptOptions(),
+		getProjectAuthorPromptOptions(),
+		getProjectDescriptionPromptOptions(),
+		getIfProjectIsNodejsSite(),
+		getCartridgeModulesPromptOptions(moduleList),
+		getUserConfirmCopyPromptOptions()
 	]);
 }
+
+// function getProjectServerSetupPromptOptions() {
+// 	return {
+// 		type: 'list',
+// 		name: 'baseInstallServerModule',
+// 		message: 'What server setup do you need?',
+// 		choices: ['cartridge-local-server', 'cartridge-node-server'],
+// 		default: 0
+// 	}
+// }
 
 function getCartridgeModulesPromptOptions(moduleData) {
 	return {

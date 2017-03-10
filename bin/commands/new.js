@@ -64,11 +64,23 @@ function runBaseInstall() {
 	_log.info(' · Ability to copy static assets');
 	_log.warn('');
 
-	inquirer.prompt(promptOptions.getBaseInstallPrompt(), function(answers) {
-		answers.cartridgeModules = ['cartridge-sass', 'cartridge-javascript', 'cartridge-local-server', 'cartridge-copy-assets'];
+	promptOptions
+		.getBaseInstallPromptData()
+		.then(function(promptOptions) {
+			inquirer.prompt(promptOptions, function(answers) {
 
-		promptCallback(answers);
-	});
+				answers.cartridgeModules = ['cartridge-sass', 'cartridge-javascript','cartridge-copy-assets'];
+
+				if(answers.isNodejsSite === true) {
+					answers.cartridgeModules.push('cartridge-node-server')
+				} else {
+					answers.cartridgeModules.push('cartridge-static-html');
+					answers.cartridgeModules.push('cartridge-local-server');
+				}
+
+				promptCallback(answers);
+			});
+		})
 }
 
 function runCompleteInstall() {
