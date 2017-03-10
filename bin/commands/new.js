@@ -159,18 +159,16 @@ function templateCopiedFiles() {
 	_log.debug('');
 	_log.info(emoji.get('floppy_disk') +'  Booting up files...');
 
-	//@TODO - LOOK AT MAKING FILE TEMPLATER PROMISE BASED
-	fileTemplater.setConfig({
-		data: templateDataManager.getData(),
-		basePath: CURRENT_WORKING_DIR,
-		files: getTemplateFileList(),
-		onEachFile: singleFileCallback,
-		onCompleted: function() {
+	fileTemplater()
+		.run({
+			data: templateDataManager.getData(),
+			basePath: CURRENT_WORKING_DIR,
+			files: getTemplateFileList(),
+			onEachFile: singleFileCallback
+		})
+		.then(function() {
 			installNpmPackages(_promptAnswers.cartridgeModules)
-		}
-	})
-
-	fileTemplater.run();
+		})
 }
 
 function getTemplateFileList() {

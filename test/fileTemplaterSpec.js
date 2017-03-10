@@ -11,7 +11,6 @@ chai.should();
 
 var TEST_TEMP_DIR = path.join(os.tmpdir(), 'file-templater');
 
-
 function changeToOsTempDirAndCopyFixtures() {
 	fs.ensureDirSync(TEST_TEMP_DIR);
 	fs.copySync(path.resolve('./', 'test', 'fixtures', 'templateFiles'), TEST_TEMP_DIR);
@@ -35,11 +34,8 @@ describe('As a user of the file templater module', function() {
 
 	describe('When templating one file', function() {
 
-		var onCompletedSpy = sinon.spy();
 		var onEachFileSpy = sinon.spy();
-
 		var templateData = getTemplateData();
-
 		var fileList = [];
 
 		before(function(done) {
@@ -49,18 +45,14 @@ describe('As a user of the file templater module', function() {
 				dest: path.join(TEST_TEMP_DIR, 'creds-templated.json')
 			})
 
-			fileTemplater.setConfig({
+			fileTemplater().run({
 				data: templateData,
 				basePath: process.cwd(),
 				files: fileList,
-				onEachFile: onEachFileSpy,
-				onCompleted: function() {
-					done();
-					onCompletedSpy();
-				}
+				onEachFile: onEachFileSpy
+			}).then(function() {
+				done();
 			})
-
-			fileTemplater.run();
 		})
 
 		it('should correctly create the templated file', function() {
@@ -83,10 +75,6 @@ describe('As a user of the file templater module', function() {
       srcTemplateFile.should.be.a.path();
     })
 
-		it('should have called the onCompleted callback once', function() {
-			onCompletedSpy.calledOnce.should.be.true;
-		})
-
 		it('should have called the onEachFile callback once', function() {
 			onEachFileSpy.calledOnce.should.be.true;
 		})
@@ -94,11 +82,9 @@ describe('As a user of the file templater module', function() {
 	})
 
 	describe('When templating multiple files', function() {
-		var onCompletedSpy = sinon.spy();
+
 		var onEachFileSpy = sinon.spy();
-
 		var templateData = getTemplateData();
-
 		var fileList = [];
 
 		before(function(done) {
@@ -120,25 +106,17 @@ describe('As a user of the file templater module', function() {
         deleteSrcFile: true
       })
 
-			fileTemplater.setConfig({
+			fileTemplater().run({
 				data: templateData,
 				basePath: process.cwd(),
 				files: fileList,
-				onEachFile: onEachFileSpy,
-				onCompleted: function() {
-					done();
-					onCompletedSpy();
-				}
+				onEachFile: onEachFileSpy
+			}).then(function() {
+				done();
 			})
-
-			fileTemplater.run();
 		})
 
-		it('should have called the onCompleted callback once', function() {
-			onCompletedSpy.calledOnce.should.be.true;
-		})
-
-		it('should have called the onEachFile callback twice', function() {
+		it('should have called the onEachFile callback thrice', function() {
 			onEachFileSpy.calledThrice.should.be.true;
 		})
 
@@ -161,4 +139,5 @@ describe('As a user of the file templater module', function() {
     })
 
 	})
+
 })
