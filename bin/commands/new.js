@@ -61,8 +61,8 @@ function runBaseInstall() {
 	_log.warn(chalk.bold('This will create a cartridge project that has:'));
 	_log.info(' · Sass setup');
 	_log.info(' · JavaScript setup');
-	_log.info(' · A local server');
-	_log.info(' · Ability to copy static assets');
+	_log.info(' · Server setup');
+	_log.info(' · Copy over static assets etc. fonts');
 	_log.warn('');
 
 	promptOptions
@@ -104,7 +104,6 @@ function promptCallback(answers) {
 		_log.info('');
 		_log.info(emoji.get('joystick') + '  Inserting the cartridge...');
 
-		//@TODO - THIS MAY NEED TO BE EXTRACTED IN OWN METHOD
 		releaseService
 			.downloadLatestRelease(_options)
 			.then(copyCartridgeSourceFilesToCwd)
