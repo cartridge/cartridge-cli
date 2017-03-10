@@ -53,16 +53,6 @@ function setPromptOptionsData(moduleList) {
 	]);
 }
 
-// function getProjectServerSetupPromptOptions() {
-// 	return {
-// 		type: 'list',
-// 		name: 'baseInstallServerModule',
-// 		message: 'What server setup do you need?',
-// 		choices: ['cartridge-local-server', 'cartridge-node-server'],
-// 		default: 0
-// 	}
-// }
-
 function getCartridgeModulesPromptOptions(moduleData) {
 	return {
 		type: 'checkbox',
