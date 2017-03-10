@@ -47,7 +47,7 @@ function preSetup() {
 }
 
 function setupOnScreenPrompts() {
-	if(_isBaseInstall) {
+	if(_isBaseInstall === true) {
 		runBaseInstall();
 	} else {
 		runCompleteInstall();
@@ -98,7 +98,7 @@ function promptCallback(answers) {
 
 	templateDataManager.setData(answers);
 
-	if(_promptAnswers.userHasConfirmed) {
+	if(_promptAnswers.userHasConfirmed === true) {
 
 		_log.info('');
 		_log.info('Inserting the cartridge...');
@@ -126,12 +126,12 @@ function fileCopyFilter(path) {
 	for (var i = 0; i < filesDirsToExclude.length; i++) {
 		//Check if needToCopyFile is still true and
 		//hasn't been flipped during loop
-		if(needToCopyFile) {
+		if(needToCopyFile === true) {
 			needToCopyFile = path.indexOf(filesDirsToExclude[i]) === -1;
 		}
 	};
 
-	if(!needToCopyFile) {
+	if(needToCopyFile === false) {
 		_log.debug(chalk.underline('Skipping path - ' + path));
 	} else {
 		_log.debug('Copying path  -', path);
@@ -213,7 +213,7 @@ function installNpmPackages(packages) {
 	var spinner = new Spinner('%s');
 	spinner.setSpinnerString('|/-\\');
 
-	if(_promptAnswers.isNodejsSite) {
+	if(_promptAnswers.isNodejsSite === true) {
 		packages.push('cartridge-node-server');
 	}
 
