@@ -47,31 +47,37 @@ function preSetup() {
 }
 
 function setupOnScreenPrompts() {
-
 	if(_isBaseInstall) {
-		_log.warn('');
-
-		_log.warn(chalk.bold('This will create a cartridge project that has:'));
-		_log.info(' · Sass setup');
-		_log.info(' · JavaScript setup');
-		_log.info(' · A local server');
-		_log.info(' · Ability to copy static assets');
-		_log.warn('');
-
-		inquirer.prompt(promptOptions.getConfirmationPrompt(), function(answers) {
-			if(answers.userHasConfirmed) {
-				console.log('@TODO - DO THE BASE INSTALL');
-			}
-		});
-		
+		runBaseInstall();
 	} else {
-		promptOptions
-			.getNewCommandPromptOptions()
-			.then(function(promptOptions) {
-				console.log('');
-				inquirer.prompt(promptOptions, promptCallback);
-			})
+		runCompleteInstall();
 	}
+}
+
+function runBaseInstall() {
+	_log.warn('');
+
+	_log.warn(chalk.bold('This will create a cartridge project that has:'));
+	_log.info(' · Sass setup');
+	_log.info(' · JavaScript setup');
+	_log.info(' · A local server');
+	_log.info(' · Ability to copy static assets');
+	_log.warn('');
+
+	inquirer.prompt(promptOptions.getConfirmationPrompt(), function(answers) {
+		if(answers.userHasConfirmed) {
+			console.log('@TODO - DO THE BASE INSTALL');
+		}
+	});
+}
+
+function runCompleteInstall() {
+	promptOptions
+		.getNewCommandPromptOptions()
+		.then(function(promptOptions) {
+			console.log('');
+			inquirer.prompt(promptOptions, promptCallback);
+		})
 }
 
 function promptCallback(answers) {
@@ -83,6 +89,7 @@ function promptCallback(answers) {
 		_log.info('');
 		_log.info('Inserting the cartridge...');
 
+		//@TODO - THIS WILL NEED TO BE EXTRACTED IN OWN METHOD
 		releaseService
 			.downloadLatestRelease(_options)
 			.then(copyCartridgeSourceFilesToCwd)
