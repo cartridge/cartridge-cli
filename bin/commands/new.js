@@ -62,7 +62,7 @@ function runBaseInstall() {
 	_log.info(' · Sass setup');
 	_log.info(' · JavaScript setup');
 	_log.info(' · Server setup');
-	_log.info(' · Copy over static assets etc. fonts');
+	_log.info(' · Copy over static assets fonts etc');
 	_log.warn('');
 
 	promptOptions
