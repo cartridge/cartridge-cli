@@ -290,9 +290,11 @@ function finishSetup() {
 	_log.info(chalk.green('Setup complete!'));
 	_log.info('Cartridge project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed!');
 	_log.info('');
-	_log.info('Project ready to go:');
-	_log.info(' · Run ' + chalk.yellow('gulp') + ' for initial setup of styles and scripts.');
-	_log.info(' · Run ' + chalk.yellow('gulp watch') + ' to setup watching of files.');
+	_log.info(emoji.get('fire') + '  Project ready to go:');
+	_log.info('');
+	_log.info('· Run ' + chalk.yellow('gulp build') + ' for asset generation');
+	_log.info('· Run ' + chalk.yellow('gulp watch') + ' to setup watching of files.');
+	_log.info('· Run ' + chalk.yellow('gulp') + ' to do both asset generation + file watchers');
 	_log.info('');
 }
 
