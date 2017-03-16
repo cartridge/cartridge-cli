@@ -3,5 +3,5 @@ module.exports = {
     projectName: 'test project',
     projectAuthor: 'test author',
     projectDescription: '',
-    isOkToCopyFiles: true
+    userHasConfirmed: true
 }

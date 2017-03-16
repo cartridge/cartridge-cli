@@ -6,8 +6,8 @@ var chalk = require('chalk');
 var utils = require('./utils');
 var errorHandler = require('./errorHandler');
 var modulePromptsOptions = require('./promptModuleOptions');
+var emoji = require('node-emoji')
 
-var _promptOptions = [];
 var _log;
 
 var promptOptionsApi = {};
@@ -30,22 +30,35 @@ promptOptionsApi.getNewCommandPromptOptions = function() {
 		})
 }
 
-function setPromptOptionsData(moduleList) {
-	_promptOptions.push(getProjectNamePromptOptions());
-	_promptOptions.push(getProjectAuthorPromptOptions());
-	_promptOptions.push(getProjectDescriptionPromptOptions());
-	_promptOptions.push(getIfProjectIsNodejsSite());
-	_promptOptions.push(getCartridgeModulesPromptOptions(moduleList));
-	_promptOptions.push(getUserConfirmCopyPromptOptions());
+promptOptionsApi.getBaseInstallPromptData = function() {
+	_log.debug('');
+	_log.debug('Getting base install prompt options data');
 
-	return Promise.resolve(_promptOptions);
+	return Promise.resolve([
+		getProjectNamePromptOptions(),
+		getProjectAuthorPromptOptions(),
+		getProjectDescriptionPromptOptions(),
+		getIfProjectIsNodejsSite(),
+		getUserConfirmCopyPromptOptions()
+	]);
+}
+
+function setPromptOptionsData(moduleList) {
+	return Promise.resolve([
+		getProjectNamePromptOptions(),
+		getProjectAuthorPromptOptions(),
+		getProjectDescriptionPromptOptions(),
+		getIfProjectIsNodejsSite(),
+		getCartridgeModulesPromptOptions(moduleList),
+		getUserConfirmCopyPromptOptions()
+	]);
 }
 
 function getCartridgeModulesPromptOptions(moduleData) {
 	return {
 		type: 'checkbox',
 		name: 'cartridgeModules',
-		message: 'What modules would you like included?',
+		message: emoji.get('star') + '  What modules would you like included?',
 		choices: moduleData,
 		filter: extractModuleNames
 	}
@@ -67,7 +80,7 @@ function getIfProjectIsNodejsSite() {
 	return {
 		type: 'confirm',
 		name: 'isNodejsSite',
-		message: 'Is the project using Node.js server-side? (This will install a blank Node.js server setup)',
+		message: emoji.get('sparkles') + '  Is the project using Node.js server-side? (This will install a blank Node.js server setup)',
 		default: false
 	}
 }
@@ -76,7 +89,7 @@ function getProjectNamePromptOptions() {
 	return {
 		type: 'input',
 		name: 'projectName',
-		message: 'What is the project name?',
+		message: emoji.get('blue_book')  + '  What is the project name?',
 		validate: function(value) { return inputNotEmpty(value, 'Project Name'); },
 	}
 }
@@ -85,7 +98,7 @@ function getProjectAuthorPromptOptions() {
 	return {
 		type: 'input',
 		name: 'projectAuthor',
-		message: 'Who is the author of the project?',
+		message: emoji.get('sleuth_or_spy') + '  Who is the author of the project?',
 		validate: function(value) { return inputNotEmpty(value, 'Author'); },
 		filter: function(value) { return titleize(value); }
 	}
@@ -95,7 +108,7 @@ function getProjectDescriptionPromptOptions() {
 	return {
 		type: 'input',
 		name: 'projectDescription',
-		message: 'What is the project description?',
+		message: emoji.get('pencil2') + '  What is the project description?',
 		default: function () { return ''; }
 	}
 }
@@ -103,8 +116,8 @@ function getProjectDescriptionPromptOptions() {
 function getUserConfirmCopyPromptOptions() {
 	return {
 		type: 'confirm',
-		name: 'isOkToCopyFiles',
-		message: 'Ready to start setup! Press enter to confirm',
+		name: 'userHasConfirmed',
+		message: emoji.get('warning') + '  Ready to start setup! Press enter to confirm',
 		default: true
 	}
 }
