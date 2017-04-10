@@ -75,9 +75,7 @@ function runBaseInstall() {
 function handleBaseInstallPromptData(answers) {
 	answers.cartridgeModules = ['cartridge-sass', 'cartridge-javascript','cartridge-copy-assets'];
 
-	if(answers.isNodejsSite === true) {
-		answers.cartridgeModules.push('cartridge-node-server')
-	} else {
+	if(answers.isNodejsSite === false) {
 		answers.cartridgeModules.push('cartridge-static-html');
 		answers.cartridgeModules.push('cartridge-local-server');
 	}
@@ -208,14 +206,52 @@ function singleFileCallback(templateFilePath) {
 }
 
 function installNpmPackages(packages) {
-	var spinner = new Spinner('%s');
-	spinner.setSpinnerString('|/-\\');
-
-	if(_promptAnswers.isNodejsSite === true) {
+	if(_promptAnswers.isNodejsSite) {
 		packages.push('cartridge-node-server');
 	}
 
 	if(packages.length > 0) {
+		installExpansionPacks(packages)
+			.then(installBaseModules)
+			.then(postInstallCleanUp)
+			.catch(errorHandler);
+	} else {
+		installBaseModules()
+			.then(postInstallCleanUp)
+			.catch(errorHandler);
+	}
+}
+
+function installBaseModules() {
+	return new Promise(function(resolve, reject) {
+		var spinner = new Spinner('%s');
+		spinner.setSpinnerString('|/-\\');
+
+		_log.info('Installing core modules...');
+
+		if(_log.getLevel() <= _log.levels.INFO) {
+			spinner.start();
+		}
+
+		npmInstallPackage([], {}, function(err) {
+			if (err) reject(err);
+
+			if(_log.getLevel() <= _log.levels.INFO) {
+				spinner.stop(true);
+			}
+
+			_log.info(chalk.bold('...done'));
+
+			resolve();
+		})
+	})
+}
+
+function installExpansionPacks(packages, callback) {
+	return new Promise(function(resolve, reject) {
+		var spinner = new Spinner('%s');
+		spinner.setSpinnerString('|/-\\');
+
 		console.log('');
 		_log.info('Installing expansion packs...');
 
@@ -223,18 +259,19 @@ function installNpmPackages(packages) {
 			spinner.start();
 		}
 
-		npmInstallPackage(packages, { saveDev: true }, function(err) {
-			if (err) errorHandler(err);
+		npmInstallPackage(_promptAnswers.cartridgeModules, { saveDev: true }, function(err) {
+			if (err) reject(err);
 
 			if(_log.getLevel() <= _log.levels.INFO) {
 				spinner.stop(true);
 			}
 
-			postInstallCleanUp();
+			_log.info(chalk.bold('...done'));
+			_log.info('');
+
+			resolve();
 		})
-	} else {
-		postInstallCleanUp();
-	}
+	})
 }
 
 function postInstallCleanUp() {
@@ -253,10 +290,11 @@ function finishSetup() {
 	_log.info(chalk.green('Setup complete!'));
 	_log.info('Cartridge project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed!');
 	_log.info('');
-	_log.info(emoji.get('bulb') + '  Final steps:');
-	_log.info(' · Run ' + chalk.yellow('npm install') + ' to download all project dependencies. (If this fails you may need to run ' + chalk.yellow('sudo npm install') + ')');
-	_log.info(' · Run ' + chalk.yellow('gulp') + ' for initial setup of styles and scripts.');
-	_log.info(' · Run ' + chalk.yellow('gulp watch') + ' to setup watching of files.');
+	_log.info(emoji.get('fire') + '  Project ready to go:');
+	_log.info('');
+	_log.info('· Run ' + chalk.yellow('gulp build') + ' for asset generation');
+	_log.info('· Run ' + chalk.yellow('gulp watch') + ' to setup watching of files.');
+	_log.info('· Run ' + chalk.yellow('gulp') + ' to do both asset generation + file watchers');
 	_log.info('');
 }
 
