@@ -1,11 +1,11 @@
 "use strict";
 
+var path = require('path');
+
 var program = require('commander');
-var path    = require('path');
-var os = require('os');
 
 var newCommand = require('./commands/new');
-var pkg        = require(path.resolve(__dirname, '..', 'package.json'));
+var pkg = require(path.resolve(__dirname, '..', 'package.json'));
 
 /**
  * Get the ball-rolling for the whole program

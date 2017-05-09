@@ -1,4 +1,8 @@
 #!/usr/bin/env node
 "use strict";
 
-require('./programBuilder.js')();
+var updateNotifier = require('update-notifier');
+var pkg = require('../package.json');
+var program = require('./programBuilder.js');
+
+updateNotifier({ pkg: pkg, callback: program }).notify();
