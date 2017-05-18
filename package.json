@@ -4,7 +4,7 @@
   "description": "Start with a clean cartridge and get yourself going with a ready made basic website setup",
   "license": "ISC",
   "bin": {
-    "cartridge": "./bin/cli.js"
+    "cart": "./bin/cli.js"
   },
   "repository": {
     "type": "git",

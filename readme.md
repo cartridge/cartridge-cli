@@ -17,7 +17,7 @@ cartridge
 ```
 
 ```sh
-Usage: cartridge [options] [command]
+Usage: cart [options] [command]
 
 Commands:
 
