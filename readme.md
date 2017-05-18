@@ -13,7 +13,7 @@ npm install -g cartridge-cli
 
 ## Usage
 ```sh
-cartridge
+cart
 ```
 
 ```sh
