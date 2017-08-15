@@ -290,11 +290,16 @@ function finishSetup() {
 	_log.info(chalk.green('Setup complete!'));
 	_log.info('Cartridge project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed!');
 	_log.info('');
-	_log.info(emoji.get('fire') + '  Project ready to go:');
+	_log.info(emoji.get('fire') + '  Project ready to go - next steps');
 	_log.info('');
 	_log.info('· Run ' + chalk.yellow('gulp build') + ' for asset generation');
+	_log.info('· Run ' + chalk.yellow('gulp build --prod') + ' for production ready / minified asset generation');
+	_log.info('');
+	_log.info(emoji.get('hammer_and_wrench') + '  Extra, optional steps');
+	_log.info('');
 	_log.info('· Run ' + chalk.yellow('gulp watch') + ' to setup watching of files.');
-	_log.info('· Run ' + chalk.yellow('gulp') + ' to do both asset generation + file watchers');
+	_log.info('· Run ' + chalk.yellow('gulp') + ' to run both asset generation + setup file watchers');
+	_log.info('· Run ' + chalk.yellow('gulp --tasks') + ' to list out all available tasks');
 	_log.info('');
 }
 
