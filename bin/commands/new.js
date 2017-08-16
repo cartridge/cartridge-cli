@@ -100,11 +100,36 @@ function promptCallback(answers) {
 	if(_promptAnswers.userHasConfirmed === true) {
 
 		_log.info('');
-		_log.info(emoji.get('joystick') + '  Inserting the cartridge...');
+		_log.info(emoji.get('joystick') + '  Inserting the cartridge...');;
 
-		releaseService
-			.downloadLatestRelease(_options)
-			.then(copyCartridgeSourceFilesToCwd)
+
+
+
+		//REFACTOR THIS INTO IT'S OWN FUNCTION, PROMISE BASED? --------- START
+
+		var areInsideProjectDirectory = (path.basename(CURRENT_WORKING_DIR) === _promptAnswers.projectName);
+
+		if (areInsideProjectDirectory) {
+			_log.info('Already inside directory: ' + CURRENT_WORKING_DIR + ', skipping create step');
+		} else {
+			_log.info('Not currently inside directory: ' + path.resolve(CURRENT_WORKING_DIR, _promptAnswers.projectName) + ', ensuring it exists');
+			fs.ensureDirSync(path.resolve(CURRENT_WORKING_DIR, _promptAnswers.projectName));
+
+			process.chdir(path.resolve(CURRENT_WORKING_DIR, _promptAnswers.projectName));
+			
+			//REMOVE DUPLICATION, MAKE THIS GENERIC? (USED AT THE TOP OF THE FILE ALSO)
+			CURRENT_WORKING_DIR = process.cwd();
+			TEMPLATE_FILES_PATH = path.join(CURRENT_WORKING_DIR, '_cartridge');
+
+			_log.info('Change working directory to: ' + path.resolve(CURRENT_WORKING_DIR));
+			_log.info('Change template files path to: ' + path.resolve(TEMPLATE_FILES_PATH));
+		}
+
+		//REFACTOR THIS INTO IT'S OWN FUNCTION, PROMISE BASED? --------- END
+
+		// releaseService
+		// 	.downloadLatestRelease(_options)
+		// 	.then(copyCartridgeSourceFilesToCwd)
 
 	} else {
 		_log.info(emoji.get('x') + '  User cancelled - no files copied')
