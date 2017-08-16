@@ -327,10 +327,11 @@ function postInstallCleanUp() {
 function finishSetup() {
 	_log.info('');
 	_log.info(chalk.green('Setup complete!'));
-	_log.info('Cartridge project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed!');
+	_log.info('Cartridge project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed in ' + chalk.yellow(CURRENT_WORKING_DIR));
 	_log.info('');
 	_log.info(emoji.get('fire') + '  Project ready to go - next steps');
 	_log.info('');
+	_log.info('· Run ' + chalk.yellow('cd ' + CURRENT_WORKING_DIR));
 	_log.info('· Run ' + chalk.yellow('gulp build') + ' for asset generation');
 	_log.info('· Run ' + chalk.yellow('gulp build --prod') + ' for production ready / minified asset generation');
 	_log.info('');
