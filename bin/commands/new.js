@@ -80,7 +80,7 @@ function handleBaseInstallPromptData(answers) {
 		answers.cartridgeModules.push('cartridge-local-server');
 	}
 
-	promptCallback(answers);
+	runCartridgeInstallation(answers);
 }
 
 function runCompleteInstall() {
@@ -88,11 +88,16 @@ function runCompleteInstall() {
 		.getNewCommandPromptOptions()
 		.then(function(promptOptions) {
 			console.log('');
-			inquirer.prompt(promptOptions, promptCallback);
+			inquirer.prompt(promptOptions, runCartridgeInstallation);
 		})
 }
 
-function promptCallback(answers) {
+function areInsideProjectDirectory() {
+	return (path.basename(CURRENT_WORKING_DIR) === _promptAnswers.projectName);
+}
+
+
+function runCartridgeInstallation(answers) {
 	_promptAnswers = answers;
 
 	templateDataManager.setData(answers);
@@ -107,9 +112,7 @@ function promptCallback(answers) {
 
 		//REFACTOR THIS INTO IT'S OWN FUNCTION, PROMISE BASED? --------- START
 
-		var areInsideProjectDirectory = (path.basename(CURRENT_WORKING_DIR) === _promptAnswers.projectName);
-
-		if (areInsideProjectDirectory) {
+		if (areInsideProjectDirectory()) {
 			_log.info('Already inside directory: ' + CURRENT_WORKING_DIR + ', skipping create step');
 		} else {
 			_log.info('Not currently inside directory: ' + path.resolve(CURRENT_WORKING_DIR, _promptAnswers.projectName) + ', ensuring it exists');
@@ -127,9 +130,9 @@ function promptCallback(answers) {
 
 		//REFACTOR THIS INTO IT'S OWN FUNCTION, PROMISE BASED? --------- END
 
-		// releaseService
-		// 	.downloadLatestRelease(_options)
-		// 	.then(copyCartridgeSourceFilesToCwd)
+		releaseService
+			.downloadLatestRelease(_options)
+			.then(copyCartridgeSourceFilesToCwd)
 
 	} else {
 		_log.info(emoji.get('x') + '  User cancelled - no files copied')
