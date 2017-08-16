@@ -1,6 +1,6 @@
 {
   "name": "cartridge-cli",
-  "version": "0.0.0--version-handled-by-semantic-release",
+  "version": "1.2.0",
   "description": "Start with a clean cartridge and get yourself going with a ready made basic website setup",
   "license": "ISC",
   "bin": {
@@ -12,7 +12,8 @@
   },
   "scripts": {
     "test": "mocha",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "semantic-test": "semantic-release pre"
   },
   "dependencies": {
     "bluebird": "^3.3.1",
