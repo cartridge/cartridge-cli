@@ -21,8 +21,8 @@ var _promptAnswers;
 var _options;
 var _isBaseInstall;
 
-var CURRENT_WORKING_DIR = process.cwd();
-var TEMPLATE_FILES_PATH = path.join(CURRENT_WORKING_DIR, '_cartridge');
+var CURRENT_WORKING_DIR;
+var TEMPLATE_FILES_PATH;
 
 var newCommandApi = {};
 
@@ -32,8 +32,14 @@ newCommandApi.init = function(options, baseInstall) {
 
 	_log = utils.getLogInstance(_options);
 
+	setDirectoryPaths();
 	preSetup();
 	setupOnScreenPrompts();
+}
+
+function setDirectoryPaths() {
+	CURRENT_WORKING_DIR = process.cwd();
+	TEMPLATE_FILES_PATH = path.join(CURRENT_WORKING_DIR, '_cartridge');
 }
 
 function preSetup() {
@@ -96,6 +102,29 @@ function areInsideProjectDirectory() {
 	return (path.basename(CURRENT_WORKING_DIR) === _promptAnswers.projectName);
 }
 
+function ensureProjectDirectoryExists() {
+	return new Promise(function(resolve, reject) {
+		if (areInsideProjectDirectory()) {
+			_log.debug('Already inside directory: ' + chalk.underline(CURRENT_WORKING_DIR) + ', skipping create directory step');
+			
+			resolve();
+		} else {
+			var projectPath = path.resolve(CURRENT_WORKING_DIR, _promptAnswers.projectName);
+
+			_log.debug('Making sure the path: ' + chalk.underline(projectPath) + ' exists');
+
+			fs.ensureDirSync(projectPath);
+			process.chdir(projectPath);
+
+			setDirectoryPaths();
+
+			_log.debug('Changing working directory to: ' + chalk.underline(path.resolve(CURRENT_WORKING_DIR)));
+			_log.debug('Changing template files path to: ' + chalk.underline(path.resolve(TEMPLATE_FILES_PATH)));
+
+			resolve();
+		}
+	})
+}
 
 function runCartridgeInstallation(answers) {
 	_promptAnswers = answers;
@@ -107,35 +136,15 @@ function runCartridgeInstallation(answers) {
 		_log.info('');
 		_log.info(emoji.get('joystick') + '  Inserting the cartridge...');;
 
-
-
-
-		//REFACTOR THIS INTO IT'S OWN FUNCTION, PROMISE BASED? --------- START
-
-		if (areInsideProjectDirectory()) {
-			_log.info('Already inside directory: ' + CURRENT_WORKING_DIR + ', skipping create step');
-		} else {
-			_log.info('Not currently inside directory: ' + path.resolve(CURRENT_WORKING_DIR, _promptAnswers.projectName) + ', ensuring it exists');
-			fs.ensureDirSync(path.resolve(CURRENT_WORKING_DIR, _promptAnswers.projectName));
-
-			process.chdir(path.resolve(CURRENT_WORKING_DIR, _promptAnswers.projectName));
-			
-			//REMOVE DUPLICATION, MAKE THIS GENERIC? (USED AT THE TOP OF THE FILE ALSO)
-			CURRENT_WORKING_DIR = process.cwd();
-			TEMPLATE_FILES_PATH = path.join(CURRENT_WORKING_DIR, '_cartridge');
-
-			_log.info('Change working directory to: ' + path.resolve(CURRENT_WORKING_DIR));
-			_log.info('Change template files path to: ' + path.resolve(TEMPLATE_FILES_PATH));
-		}
-
-		//REFACTOR THIS INTO IT'S OWN FUNCTION, PROMISE BASED? --------- END
-
-		releaseService
-			.downloadLatestRelease(_options)
+		ensureProjectDirectoryExists()
+			.then(function() {
+				return releaseService.downloadLatestRelease(_options)
+			})
 			.then(copyCartridgeSourceFilesToCwd)
+			.catch(errorHandler);
 
 	} else {
-		_log.info(emoji.get('x') + '  User cancelled - no files copied')
+		_log.info(emoji.get('x') + '  User cancelled - cartridge installation aborted!')
 	}
 }
 
@@ -167,7 +176,9 @@ function fileCopyFilter(path) {
 }
 
 function fileCopyComplete(err) {
-	if (err) errorHandler(err);
+	if (err) {
+		errorHandler(err);
+	}
 
 	templateCopiedFiles();
 }
