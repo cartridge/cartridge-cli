@@ -1,6 +1,6 @@
 {
   "name": "cartridge-cli",
-  "version": "1.1.0",
+  "version": "0.0.0-development",
   "description": "Start with a clean cartridge and get yourself going with a ready made basic website setup",
   "license": "ISC",
   "bin": {
@@ -8,10 +8,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cartridge/cartridge-cli"
+    "url": "https://github.com/cartridge/cartridge-cli"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {
     "bluebird": "^3.3.1",
@@ -43,7 +44,8 @@
     "proxyquire": "^1.7.3",
     "sinon": "^1.17.3",
     "timekeeper": "0.0.5",
-    "validate-commit-msg": "^2.6.0"
+    "validate-commit-msg": "^2.6.0",
+    "semantic-release": "^7.0.1"
   },
   "preferGlobal": true,
   "config": {
