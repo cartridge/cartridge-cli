@@ -32,9 +32,24 @@ newCommandApi.init = function(options, baseInstall) {
 
 	_log = utils.getLogInstance(_options);
 
+	utils.checkIfOnline()
+		.then(startInstallation)
+		.catch(handleNoInternetConnection);
+}
+
+function startInstallation() {
 	setDirectoryPaths();
 	preSetup();
 	setupOnScreenPrompts();
+}
+
+function handleNoInternetConnection() {
+	_log.info('');
+	_log.info(emoji.get('rotating_light') + '  ' + chalk.bold.underline('No internet connection detected') + ' ' + emoji.get('rotating_light'))
+	_log.info('');
+	_log.info('Cartridge requires an internet connection to fully run the installation');
+	_log.info('Try again when an internet connection is available');
+	_log.info('');
 }
 
 function setDirectoryPaths() {
