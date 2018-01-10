@@ -3,6 +3,9 @@
   "version": "1.2.0",
   "description": "Start with a clean cartridge and get yourself going with a ready made basic website setup",
   "license": "ISC",
+  "engines": {
+    "node": ">=4.8.*"
+  },
   "bin": {
     "cart": "./bin/cli.js"
   },
@@ -43,6 +46,10 @@
     "chai": "^1.6.1",
     "chai-fs": "^0.1.0",
     "cz-conventional-changelog": "^1.1.5",
+    "eslint": "^4.15.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.8.0",
     "husky": "^0.14.3",
     "proxyquire": "^1.7.3",
     "semantic-release": "^7.0.1",
