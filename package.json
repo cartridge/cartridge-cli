@@ -17,8 +17,10 @@
     "test": "mocha",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "semantic-test": "semantic-release pre",
+    "prettier": "prettier --write '{,!(report)/**/}*.js'",
     "commitmsg": "validate-commit-msg",
-    "prepush": "npm t"
+    "prepush": "npm t",
+    "precommit": "npm run prettier"
   },
   "dependencies": {
     "bluebird": "^3.3.1",
@@ -51,6 +53,7 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.8.0",
     "husky": "^0.14.3",
+    "prettier": "^1.10.1",
     "proxyquire": "^1.7.3",
     "semantic-release": "^7.0.1",
     "sinon": "^1.17.3",
