@@ -14,7 +14,8 @@
     "url": "https://github.com/cartridge/cartridge-cli"
   },
   "scripts": {
-    "test": "mocha",
+		"test": "npm run prettier && mocha && npm run lint",
+		"lint": "eslint task.js \"{,!(test)/**/}*.js\"" ,
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "semantic-test": "semantic-release pre",
     "prettier": "prettier --write '{,!(report)/**/}*.js'",

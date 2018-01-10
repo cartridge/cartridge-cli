@@ -1,18 +1,18 @@
-"use strict";
+// Enable strict mode for older versions of node
+// eslint-disable-next-line strict, lines-around-directive
+'use strict';
 
-var http = require('http');
+const http = require('http');
+const log = require('loglevel');
 
-var log = require('loglevel');
-var inArray = require('in-array');
-
-var utilsApi = {};
+const utilsApi = {};
 
 /**
  * Set the internal log level and return a log module instance
  * @param  {Object} options Command line options e.g silent, verbose
  * @return {Object}         Log module instance
  */
-utilsApi.getLogInstance = function(options) {
+utilsApi.getLogInstance = (options) => {
 	if(options.silent) {
 		log.setLevel(log.levels.SILENT);
 	} else if(options.verbose) {
@@ -24,20 +24,18 @@ utilsApi.getLogInstance = function(options) {
 	return log;
 }
 
-utilsApi.checkIfOnline = function() {
-	return new Promise(function(resolve, reject) {
+utilsApi.checkIfOnline = () => new Promise((resolve, reject) => {
 
-		http.get('http://captive.apple.com/hotspot-detect.html', function(response, one, two) {
+    http.get('http://captive.apple.com/hotspot-detect.html', (response) => {
 
-			if(response.statusCode < 400) {
-				resolve()
-			} else {
-				reject()
-			}
-		}).on('error', function(error) {
-			reject();
-		});
-	});
-}
+        if(response.statusCode < 400) {
+            resolve()
+        } else {
+            reject()
+        }
+    }).on('error', (error) => {
+        reject(error);
+    });
+})
 
 module.exports = utilsApi;

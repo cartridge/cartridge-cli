@@ -1,7 +1,10 @@
-"use strict"
+// Enable strict mode for older versions of node
+// eslint-disable-next-line strict, lines-around-directive
+'use strict';
 
-var PrettyError = require('pretty-error');
-var pe = new PrettyError();
+const PrettyError = require('pretty-error');
+
+const pe = new PrettyError();
 
 /**
  * Main error handler function.
@@ -10,7 +13,7 @@ var pe = new PrettyError();
  */
 function errorHandler(error) {
 
-	var prettyError = pe.render(new Error(error));
+	const prettyError = pe.render(new Error(error));
 
 	console.error('');
 	console.error(prettyError);
@@ -35,7 +38,7 @@ function setPrettyErrrorTheme() {
 		// our error message
 		'pretty-error > header > message': {
 			color: 'bright-white',
-			//colour range red, green, yellow, blue, magenta, cyan, white,
+			// colour range red, green, yellow, blue, magenta, cyan, white,
 			background: 'red',
 			padding: '0 1' // top/bottom left/right
 		},

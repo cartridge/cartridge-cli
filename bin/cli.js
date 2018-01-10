@@ -1,8 +1,10 @@
 #!/usr/bin/env node
-"use strict";
+// Enable strict mode for older versions of node
+// eslint-disable-next-line strict, lines-around-directive
+'use strict';
 
-var updateNotifier = require('update-notifier');
-var pkg = require('../package.json');
-var program = require('./programBuilder.js');
+const updateNotifier = require('update-notifier');
+const pkg = require('../package.json');
+const program = require('./programBuilder.js');
 
-updateNotifier({ pkg: pkg, callback: program }).notify();
+updateNotifier({ pkg, callback: program }).notify();

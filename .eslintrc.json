@@ -10,5 +10,8 @@
         "airbnb-base",
         "prettier"
     ],
-    "rules": {}
+    "rules": {
+		"no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+		"consistent-return": 0
+	}
 }

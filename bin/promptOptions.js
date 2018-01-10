@@ -1,46 +1,90 @@
-"'use strict";
+// Enable strict mode for older versions of node
+// eslint-disable-next-line strict, lines-around-directive
+'use strict';
 
-var titleize = require('titleize');
-var chalk = require('chalk');
+const titleize = require('titleize');
 
-var utils = require('./utils');
-var errorHandler = require('./errorHandler');
-var modulePromptsOptions = require('./promptModuleOptions');
-var emoji = require('node-emoji')
+const utils = require('./utils');
+const errorHandler = require('./errorHandler');
+const modulePromptsOptions = require('./promptModuleOptions');
+const emoji = require('node-emoji')
 
-var _log;
+let log;
 
-var promptOptionsApi = {};
+const promptOptionsApi = {};
 
-promptOptionsApi.setup = function(options) {
-	_log = utils.getLogInstance(options);
+function extractModuleNames(values) {
+	const moduleNames = [];
 
-	modulePromptsOptions.setup(options);
+	values.forEach(value => {
+		const regex = /\s([^\s]+)\s.*/g;
+		const matches = regex.exec(value);
+		moduleNames.push(matches[1]);
+	});
+
+	return moduleNames;
 }
 
-promptOptionsApi.getNewCommandPromptOptions = function() {
-	_log.debug('');
-	_log.debug('Getting prompt options data');
+function inputNotEmpty(value, fieldName) {
+	const isValid = (value !== '');
 
-	return modulePromptsOptions
-		.getOptions()
-		.then(setPromptOptionsData)
-		.catch(function(err) {
-			errorHandler(err)
-		})
+	return (isValid) ? true : `${fieldName} cannot be empty` ;
 }
 
-promptOptionsApi.getBaseInstallPromptData = function() {
-	_log.debug('');
-	_log.debug('Getting base install prompt options data');
+function getCartridgeModulesPromptOptions(moduleData) {
+	return {
+		type: 'checkbox',
+		name: 'cartridgeModules',
+		message: `${emoji.get('star')}  What modules would you like included?`,
+		choices: moduleData,
+		filter: extractModuleNames
+	}
+}
 
-	return Promise.resolve([
-		getProjectNamePromptOptions(),
-		getProjectAuthorPromptOptions(),
-		getProjectDescriptionPromptOptions(),
-		getIfProjectIsNodejsSite(),
-		getUserConfirmCopyPromptOptions()
-	]);
+function getIfProjectIsNodejsSite() {
+	return {
+		type: 'confirm',
+		name: 'isNodejsSite',
+		message: `${emoji.get('sparkles')}  Is the project using Node.js server-side? (This will install a blank Node.js server setup)`,
+		default: false
+	}
+}
+
+function getProjectNamePromptOptions() {
+	return {
+		type: 'input',
+		name: 'projectName',
+		message: `${emoji.get('blue_book')}  What is the project name?`,
+		validate(value) { return inputNotEmpty(value, 'Project Name'); },
+	}
+}
+
+function getProjectAuthorPromptOptions() {
+	return {
+		type: 'input',
+		name: 'projectAuthor',
+		message: `${emoji.get('sleuth_or_spy')}  Who is the author of the project?`,
+		validate(value) { return inputNotEmpty(value, 'Author'); },
+		filter(value) { return titleize(value); }
+	}
+}
+
+function getProjectDescriptionPromptOptions() {
+	return {
+		type: 'input',
+		name: 'projectDescription',
+		message: `${emoji.get('pencil2')}  What is the project description?`,
+		default() { return ''; }
+	}
+}
+
+function getUserConfirmCopyPromptOptions() {
+	return {
+		type: 'confirm',
+		name: 'userHasConfirmed',
+		message: `${emoji.get('warning')}  Ready to start setup! Press enter to confirm`,
+		default: true
+	}
 }
 
 function setPromptOptionsData(moduleList) {
@@ -54,78 +98,35 @@ function setPromptOptionsData(moduleList) {
 	]);
 }
 
-function getCartridgeModulesPromptOptions(moduleData) {
-	return {
-		type: 'checkbox',
-		name: 'cartridgeModules',
-		message: emoji.get('star') + '  What modules would you like included?',
-		choices: moduleData,
-		filter: extractModuleNames
-	}
+promptOptionsApi.setup = options => {
+	log = utils.getLogInstance(options);
+
+	modulePromptsOptions.setup(options);
 }
 
-function extractModuleNames(values) {
-	var moduleNames = [];
+promptOptionsApi.getNewCommandPromptOptions = () => {
+	log.debug('');
+	log.debug('Getting prompt options data');
 
-	values.forEach(function (value) {
-		var regex = /\s([^\s]+)\s.*/g;
-		var matches = regex.exec(value);
-		moduleNames.push(matches[1]);
-	});
-
-	return moduleNames;
+	return modulePromptsOptions
+		.getOptions()
+		.then(setPromptOptionsData)
+		.catch(err => {
+			errorHandler(err)
+		})
 }
 
-function getIfProjectIsNodejsSite() {
-	return {
-		type: 'confirm',
-		name: 'isNodejsSite',
-		message: emoji.get('sparkles') + '  Is the project using Node.js server-side? (This will install a blank Node.js server setup)',
-		default: false
-	}
-}
+promptOptionsApi.getBaseInstallPromptData = () => {
+	log.debug('');
+	log.debug('Getting base install prompt options data');
 
-function getProjectNamePromptOptions() {
-	return {
-		type: 'input',
-		name: 'projectName',
-		message: emoji.get('blue_book')  + '  What is the project name?',
-		validate: function(value) { return inputNotEmpty(value, 'Project Name'); },
-	}
-}
-
-function getProjectAuthorPromptOptions() {
-	return {
-		type: 'input',
-		name: 'projectAuthor',
-		message: emoji.get('sleuth_or_spy') + '  Who is the author of the project?',
-		validate: function(value) { return inputNotEmpty(value, 'Author'); },
-		filter: function(value) { return titleize(value); }
-	}
-}
-
-function getProjectDescriptionPromptOptions() {
-	return {
-		type: 'input',
-		name: 'projectDescription',
-		message: emoji.get('pencil2') + '  What is the project description?',
-		default: function () { return ''; }
-	}
-}
-
-function getUserConfirmCopyPromptOptions() {
-	return {
-		type: 'confirm',
-		name: 'userHasConfirmed',
-		message: emoji.get('warning') + '  Ready to start setup! Press enter to confirm',
-		default: true
-	}
-}
-
-function inputNotEmpty(value, fieldName) {
-	var isValid = (value !== '');
-
-	return (isValid) ? true : fieldName + ' cannot be empty' ;
+	return Promise.resolve([
+		getProjectNamePromptOptions(),
+		getProjectAuthorPromptOptions(),
+		getProjectDescriptionPromptOptions(),
+		getIfProjectIsNodejsSite(),
+		getUserConfirmCopyPromptOptions()
+	]);
 }
 
 module.exports = promptOptionsApi;

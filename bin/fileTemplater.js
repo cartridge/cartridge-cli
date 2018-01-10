@@ -1,46 +1,28 @@
-var fs = require('fs');
-var path = require('path');
-var extend = require('extend');
-var template = require('lodash/template');
+// Enable strict mode for older versions of node
+// eslint-disable-next-line strict, lines-around-directive
+'use strict';
 
-var errorHandler = require('./errorHandler');
+const fs = require('fs');
+// const path = require('path');
+const extend = require('extend');
+const template = require('lodash/template');
+
+// const errorHandler = require('./errorHandler');
 
 function fileTemplater() {
 
-  var config = {};
-  var defaultConfig = {
+  let config = {};
+  const defaultConfig = {
     data: {},
     basePath: process.cwd(),
     files: [],
-    onEachFile: function() {}
-  }
+    onEachFile() {}
+  };
 
-  function run(userConfig) {
-    var filesToRead = [];
-    config = extend(defaultConfig, userConfig);
+	function writeToFile(fileConfig) {
+    return new Promise((resolve, reject) => {
 
-    for (var i = 0; i < config.files.length; i++) {
-      filesToRead.push(readFile(config.files[i]));
-    }
-
-    return Promise.all(filesToRead)
-      .then(writeToAllFiles)
-  }
-
-  function writeToAllFiles(filesData) {
-    var templatedFiles = [];
-
-    for (var i = 0; i < filesData.length; i++) {
-      templatedFiles.push(writeToFile(filesData[i]));
-    }
-
-    return Promise.all(templatedFiles);
-  }
-
-  function writeToFile(fileConfig) {
-    return new Promise(function(resolve, reject) {
-
-      fs.writeFile(fileConfig.config.dest, fileConfig.output, 'utf8', function writeFileCallback(err) {
+      fs.writeFile(fileConfig.config.dest, fileConfig.output, 'utf8', (err) => {
           if (err) reject(err);
 
           config.onEachFile(fileConfig.config.dest);
@@ -54,12 +36,22 @@ function fileTemplater() {
     });
   }
 
-  function readFile(templateFileConfig) {
-    return new Promise(function(resolve, reject) {
-      var compiled;
-      var output;
+	function writeToAllFiles(filesData) {
+    const templatedFiles = [];
 
-      fs.readFile(templateFileConfig.src, 'utf8', function readFileCallback(err, fileContents) {
+    for (let i = 0; i < filesData.length; i++) {
+      templatedFiles.push(writeToFile(filesData[i]));
+    }
+
+    return Promise.all(templatedFiles);
+  }
+
+	function readFile(templateFileConfig) {
+    return new Promise((resolve, reject) => {
+      let compiled;
+      let output;
+
+      fs.readFile(templateFileConfig.src, 'utf8', (err, fileContents) => {
           if (err) reject(err);
 
           compiled = template(fileContents);
@@ -67,14 +59,26 @@ function fileTemplater() {
 
           resolve({
             config: templateFileConfig,
-            output: output
+            output
           });
       });
     })
   }
 
+  function run(userConfig) {
+    const filesToRead = [];
+    config = extend(defaultConfig, userConfig);
+
+    for (let i = 0; i < config.files.length; i++) {
+      filesToRead.push(readFile(config.files[i]));
+    }
+
+    return Promise.all(filesToRead)
+      .then(writeToAllFiles)
+  }
+
   return {
-    run: run
+    run
   }
 }
 
