@@ -13,7 +13,9 @@
   "scripts": {
     "test": "mocha",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "semantic-test": "semantic-release pre"
+    "semantic-test": "semantic-release pre",
+    "commitmsg": "validate-commit-msg",
+    "prepush": "npm t"
   },
   "dependencies": {
     "bluebird": "^3.3.1",
@@ -41,20 +43,17 @@
     "chai": "^1.6.1",
     "chai-fs": "^0.1.0",
     "cz-conventional-changelog": "^1.1.5",
-    "ghooks": "^1.2.1",
+    "husky": "^0.14.3",
     "proxyquire": "^1.7.3",
+    "semantic-release": "^7.0.1",
     "sinon": "^1.17.3",
     "timekeeper": "0.0.5",
-    "validate-commit-msg": "^2.6.0",
-    "semantic-release": "^7.0.1"
+    "validate-commit-msg": "^2.6.0"
   },
   "preferGlobal": true,
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
-    },
-    "ghooks": {
-      "commit-msg": "validate-commit-msg"
     },
     "validate-commit-msg": {
       "types": [
