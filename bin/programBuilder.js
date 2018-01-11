@@ -29,7 +29,7 @@ function getProgramOptions() {
 	return {
 		silent: program.silent,
 		verbose: program.verbose
-	}
+	};
 }
 
 /**
@@ -39,7 +39,7 @@ function setNewCommand() {
 	program
 		.command('new [baseInstall]')
 		.description('Create a new project (on-screen wizard)')
-		.option("-B, --base", "Use the base install pre-set")
+		.option('-B, --base', 'Use the base install pre-set')
 		.action((env, options) => {
 			newCommand.init(getProgramOptions(), options.base);
 		});

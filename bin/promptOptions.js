@@ -7,7 +7,7 @@ const titleize = require('titleize');
 const utils = require('./utils');
 const errorHandler = require('./errorHandler');
 const modulePromptsOptions = require('./promptModuleOptions');
-const emoji = require('node-emoji')
+const emoji = require('node-emoji');
 
 let log;
 
@@ -26,9 +26,9 @@ function extractModuleNames(values) {
 }
 
 function inputNotEmpty(value, fieldName) {
-	const isValid = (value !== '');
+	const isValid = value !== '';
 
-	return (isValid) ? true : `${fieldName} cannot be empty` ;
+	return isValid ? true : `${fieldName} cannot be empty`;
 }
 
 function getCartridgeModulesPromptOptions(moduleData) {
@@ -38,16 +38,18 @@ function getCartridgeModulesPromptOptions(moduleData) {
 		message: `${emoji.get('star')}  What modules would you like included?`,
 		choices: moduleData,
 		filter: extractModuleNames
-	}
+	};
 }
 
 function getIfProjectIsNodejsSite() {
 	return {
 		type: 'confirm',
 		name: 'isNodejsSite',
-		message: `${emoji.get('sparkles')}  Is the project using Node.js server-side? (This will install a blank Node.js server setup)`,
+		message: `${emoji.get(
+			'sparkles'
+		)}  Is the project using Node.js server-side? (This will install a blank Node.js server setup)`,
 		default: false
-	}
+	};
 }
 
 function getProjectNamePromptOptions() {
@@ -55,8 +57,10 @@ function getProjectNamePromptOptions() {
 		type: 'input',
 		name: 'projectName',
 		message: `${emoji.get('blue_book')}  What is the project name?`,
-		validate(value) { return inputNotEmpty(value, 'Project Name'); },
-	}
+		validate(value) {
+			return inputNotEmpty(value, 'Project Name');
+		}
+	};
 }
 
 function getProjectAuthorPromptOptions() {
@@ -64,9 +68,13 @@ function getProjectAuthorPromptOptions() {
 		type: 'input',
 		name: 'projectAuthor',
 		message: `${emoji.get('sleuth_or_spy')}  Who is the author of the project?`,
-		validate(value) { return inputNotEmpty(value, 'Author'); },
-		filter(value) { return titleize(value); }
-	}
+		validate(value) {
+			return inputNotEmpty(value, 'Author');
+		},
+		filter(value) {
+			return titleize(value);
+		}
+	};
 }
 
 function getProjectDescriptionPromptOptions() {
@@ -74,8 +82,10 @@ function getProjectDescriptionPromptOptions() {
 		type: 'input',
 		name: 'projectDescription',
 		message: `${emoji.get('pencil2')}  What is the project description?`,
-		default() { return ''; }
-	}
+		default() {
+			return '';
+		}
+	};
 }
 
 function getUserConfirmCopyPromptOptions() {
@@ -84,7 +94,7 @@ function getUserConfirmCopyPromptOptions() {
 		name: 'userHasConfirmed',
 		message: `${emoji.get('warning')}  Ready to start setup! Press enter to confirm`,
 		default: true
-	}
+	};
 }
 
 function setPromptOptionsData(moduleList) {
@@ -102,7 +112,7 @@ promptOptionsApi.setup = options => {
 	log = utils.getLogInstance(options);
 
 	modulePromptsOptions.setup(options);
-}
+};
 
 promptOptionsApi.getNewCommandPromptOptions = () => {
 	log.debug('');
@@ -112,9 +122,9 @@ promptOptionsApi.getNewCommandPromptOptions = () => {
 		.getOptions()
 		.then(setPromptOptionsData)
 		.catch(err => {
-			errorHandler(err)
-		})
-}
+			errorHandler(err);
+		});
+};
 
 promptOptionsApi.getBaseInstallPromptData = () => {
 	log.debug('');
@@ -127,6 +137,6 @@ promptOptionsApi.getBaseInstallPromptData = () => {
 		getIfProjectIsNodejsSite(),
 		getUserConfirmCopyPromptOptions()
 	]);
-}
+};
 
 module.exports = promptOptionsApi;

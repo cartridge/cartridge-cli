@@ -6,7 +6,7 @@ const path = require('path');
 
 const extend = require('extend');
 /* eslint import/no-dynamic-require:0  */
-const pkg = require(path.resolve(__dirname, '..' ,'package.json'));
+const pkg = require(path.resolve(__dirname, '..', 'package.json'));
 
 let templateData = {};
 let templateBaseData;
@@ -41,10 +41,10 @@ function getCurrentDateFormatted() {
  */
 function getTemplateMetaData() {
 	return {
-		projectNameFileName:  templateBaseData.projectName.toLowerCase().replace(/ /g,"-"),
+		projectNameFileName: templateBaseData.projectName.toLowerCase().replace(/ /g, '-'),
 		projectGeneratedDate: getCurrentDateFormatted(),
-		currentVersion:       pkg.version
-	}
+		currentVersion: pkg.version
+	};
 }
 
 /**
@@ -53,13 +53,13 @@ function getTemplateMetaData() {
  */
 templateDataApi.setData = baseData => {
 	templateBaseData = baseData;
-	templateData = extend({}, templateBaseData, getTemplateMetaData())
-}
+	templateData = extend({}, templateBaseData, getTemplateMetaData());
+};
 
 /**
  * Get the template data
  * @return {Object} Template data
  */
-templateDataApi.getData = () => templateData
+templateDataApi.getData = () => templateData;
 
 module.exports = templateDataApi;

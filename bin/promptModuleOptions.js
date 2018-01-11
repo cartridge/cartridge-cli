@@ -24,32 +24,26 @@ const promptModuleOptionsApi = {};
  * Get name, description of all cartridge modules with the task keyword
  */
 function getCartridgeTaskModulesFromNpm() {
-
-	return new Promise((resolve) => {
-
+	return new Promise(resolve => {
 		npm.packages.keyword(NPM_CARTRIDGE_TASK_KEYWORD, (err, data) => {
-			if(err) errorHandler(err);
+			if (err) errorHandler(err);
 
 			resolve(data);
 		});
-
-	})
+	});
 }
 
 /**
  * Get name, description of all cartridge modules using the default keyword
  */
 function getCartridgeDefaultModulesFromNpm() {
-
-	return new Promise((resolve) => {
-
+	return new Promise(resolve => {
 		npm.packages.keyword(NPM_CARTRIDGE_DEFAULT_KEYWORD, (err, data) => {
-			if(err) errorHandler(err);
+			if (err) errorHandler(err);
 
 			resolve(data);
 		});
-
-	})
+	});
 }
 
 /**
@@ -58,26 +52,25 @@ function getCartridgeDefaultModulesFromNpm() {
  * @param  {Array} data Data for both module keyword sets
  */
 function parseDefaultModuleData(data) {
-	return new Promise((resolve) => {
-
+	return new Promise(resolve => {
 		const moduleList = data[0];
 		const defaultModuleList = data[1];
 		const moduleAlreadyChecked = [];
 
 		for (let i = 0; i < defaultModuleList.length; i++) {
-		    for (let j = 0; j < moduleList.length; j++) {
-		    	const defaultModuleName = defaultModuleList[i].name;
-		    	const moduleName = moduleList[j].name;
+			for (let j = 0; j < moduleList.length; j++) {
+				const defaultModuleName = defaultModuleList[i].name;
+				const moduleName = moduleList[j].name;
 
-		    	if(!inArray(moduleAlreadyChecked, moduleName) && defaultModuleName === moduleName) {
-		        	moduleList[j].checked = true;
-		        	moduleAlreadyChecked.push(moduleName);
-		    	}
-		    }
+				if (!inArray(moduleAlreadyChecked, moduleName) && defaultModuleName === moduleName) {
+					moduleList[j].checked = true;
+					moduleAlreadyChecked.push(moduleName);
+				}
+			}
 		}
 
 		resolve(moduleList);
-	})
+	});
 }
 
 /**
@@ -87,20 +80,18 @@ function parseDefaultModuleData(data) {
  * @return {Array}            Formatted module data
  */
 function formatModuleData(moduleData) {
-
 	const formattedData = moduleData.map(module => {
-	   const formattedModule = {};
-	   const description = ((module.description) ? ` -  ${module.description}` : '');
+		const formattedModule = {};
+		const description = module.description ? ` -  ${module.description}` : '';
 
-	   formattedModule.name = ` ${module.name}${description}`;
-	   formattedModule.checked = module.checked || false;
+		formattedModule.name = ` ${module.name}${description}`;
+		formattedModule.checked = module.checked || false;
 
-	   return formattedModule;
+		return formattedModule;
 	});
 
-	return Promise.resolve(formattedData)
+	return Promise.resolve(formattedData);
 }
-
 
 /**
  * Setup function. Assigns internal log instance
@@ -108,14 +99,13 @@ function formatModuleData(moduleData) {
  */
 promptModuleOptionsApi.setup = options => {
 	log = utils.getLogInstance(options);
-}
+};
 
 /**
  * Get cartridge module data, formatted for inquirer
  * @return {Promise}
  */
 promptModuleOptionsApi.getOptions = () => {
-
 	log.debug('Getting prompt module data');
 
 	return Promise.all([getCartridgeTaskModulesFromNpm(), getCartridgeDefaultModulesFromNpm()])
@@ -123,7 +113,7 @@ promptModuleOptionsApi.getOptions = () => {
 		.then(formatModuleData)
 		.catch(err => {
 			errorHandler(err);
-		})
-}
+		});
+};
 
 module.exports = promptModuleOptionsApi;

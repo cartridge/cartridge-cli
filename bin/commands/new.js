@@ -2,12 +2,12 @@
 // eslint-disable-next-line strict, lines-around-directive
 'use strict';
 
-const chalk    = require('chalk');
+const chalk = require('chalk');
 const inquirer = require('inquirer');
-const fs       = require('fs-extra');
-const path     = require('path');
+const fs = require('fs-extra');
+const path = require('path');
 
-const npmInstallPackage = require('npm-install-package')
+const npmInstallPackage = require('npm-install-package');
 const emoji = require('node-emoji');
 
 const releaseService = require('../releaseService');
@@ -29,7 +29,7 @@ let TEMPLATE_FILES_PATH;
 const newCommandApi = {};
 
 function areInsideProjectDirectory() {
-	return (path.basename(CURRENT_WORKING_DIR) === promptAnswers.projectName);
+	return path.basename(CURRENT_WORKING_DIR) === promptAnswers.projectName;
 }
 
 function setDirectoryPaths() {
@@ -38,9 +38,13 @@ function setDirectoryPaths() {
 }
 
 function ensureProjectDirectoryExists() {
-	return new Promise((resolve) => {
+	return new Promise(resolve => {
 		if (areInsideProjectDirectory()) {
-			log.debug(`Already inside directory: ${chalk.underline(CURRENT_WORKING_DIR)}, skipping create directory step`);
+			log.debug(
+				`Already inside directory: ${chalk.underline(
+					CURRENT_WORKING_DIR
+				)}, skipping create directory step`
+			);
 
 			resolve();
 		} else {
@@ -53,19 +57,21 @@ function ensureProjectDirectoryExists() {
 
 			setDirectoryPaths();
 
-			log.debug(`Changing working directory to: ${chalk.underline(path.resolve(CURRENT_WORKING_DIR))}`);
-			log.debug(`Changing template files path to: ${chalk.underline(path.resolve(TEMPLATE_FILES_PATH))}`);
+			log.debug(
+				`Changing working directory to: ${chalk.underline(path.resolve(CURRENT_WORKING_DIR))}`
+			);
+			log.debug(
+				`Changing template files path to: ${chalk.underline(path.resolve(TEMPLATE_FILES_PATH))}`
+			);
 
 			resolve();
 		}
-	})
+	});
 }
 
 function getCopyExcludeList() {
 	// Default exclude folders / files
-	const excludeList = [
-		'node_modules'
-	];
+	const excludeList = ['node_modules'];
 
 	return excludeList;
 }
@@ -77,12 +83,12 @@ function fileCopyFilter(filePath) {
 	for (let i = 0; i < filesDirsToExclude.length; i++) {
 		// Check if needToCopyFile is still true and
 		// hasn't been flipped during loop
-		if(needToCopyFile === true) {
+		if (needToCopyFile === true) {
 			needToCopyFile = !filePath.includes(filesDirsToExclude[i]);
 		}
-	};
+	}
 
-	if(needToCopyFile === false) {
+	if (needToCopyFile === false) {
 		log.debug(chalk.underline(`Skipping path - ${filePath}`));
 	} else {
 		log.debug('Copying path  -', filePath);
@@ -96,27 +102,27 @@ function getTemplateFileList() {
 
 	// Creds file
 	fileList.push({
-		src:  path.join(TEMPLATE_FILES_PATH, 'creds.tpl'),
+		src: path.join(TEMPLATE_FILES_PATH, 'creds.tpl'),
 		dest: path.join(CURRENT_WORKING_DIR, '_config', 'creds.json'),
 		deleteSrcFile: true
 	});
 
 	// Project package file
 	fileList.push({
-		src:  path.join(TEMPLATE_FILES_PATH, 'package.tpl'),
+		src: path.join(TEMPLATE_FILES_PATH, 'package.tpl'),
 		dest: path.join(CURRENT_WORKING_DIR, 'package.json'),
 		deleteSrcFile: true
 	});
 
 	// Project readme
 	fileList.push({
-		src:  path.join(TEMPLATE_FILES_PATH, 'readme.tpl'),
+		src: path.join(TEMPLATE_FILES_PATH, 'readme.tpl'),
 		dest: path.join(CURRENT_WORKING_DIR, 'readme.md')
 	});
 
 	// Cartridge config
 	fileList.push({
-		src:  path.join(TEMPLATE_FILES_PATH, 'rc.tpl'),
+		src: path.join(TEMPLATE_FILES_PATH, 'rc.tpl'),
 		dest: path.join(CURRENT_WORKING_DIR, '.cartridgerc')
 	});
 
@@ -134,22 +140,22 @@ function installBaseModules() {
 
 		log.info('Installing core modules...');
 
-		if(log.getLevel() <= log.levels.INFO) {
+		if (log.getLevel() <= log.levels.INFO) {
 			spinner.start();
 		}
 
 		npmInstallPackage([], {}, err => {
 			if (err) reject(err);
 
-			if(log.getLevel() <= log.levels.INFO) {
+			if (log.getLevel() <= log.levels.INFO) {
 				spinner.stop(true);
 			}
 
 			log.info(chalk.bold('...done'));
 
 			resolve();
-		})
-	})
+		});
+	});
 }
 
 function installExpansionPacks() {
@@ -160,14 +166,14 @@ function installExpansionPacks() {
 		console.log('');
 		log.info('Installing expansion packs...');
 
-		if(log.getLevel() <= log.levels.INFO) {
+		if (log.getLevel() <= log.levels.INFO) {
 			spinner.start();
 		}
 
 		npmInstallPackage(promptAnswers.cartridgeModules, { saveDev: true }, err => {
 			if (err) reject(err);
 
-			if(log.getLevel() <= log.levels.INFO) {
+			if (log.getLevel() <= log.levels.INFO) {
 				spinner.stop(true);
 			}
 
@@ -175,20 +181,26 @@ function installExpansionPacks() {
 			log.info('');
 
 			resolve();
-		})
-	})
+		});
+	});
 }
 
 function finishSetup() {
 	log.info('');
 	log.info(chalk.green('Setup complete!'));
-	log.info(`Cartridge project ${chalk.yellow(promptAnswers.projectName)} has been installed in ${chalk.yellow(CURRENT_WORKING_DIR)}`);
+	log.info(
+		`Cartridge project ${chalk.yellow(
+			promptAnswers.projectName
+		)} has been installed in ${chalk.yellow(CURRENT_WORKING_DIR)}`
+	);
 	log.info('');
 	log.info(`${emoji.get('fire')}  Project ready to go - next steps`);
 	log.info('');
 	log.info(`· Run ${chalk.yellow(`cd ${CURRENT_WORKING_DIR}`)}`);
 	log.info(`· Run ${chalk.yellow('gulp build')} for asset generation`);
-	log.info(`· Run ${chalk.yellow('gulp build --prod')} for production ready / minified asset generation`);
+	log.info(
+		`· Run ${chalk.yellow('gulp build --prod')} for production ready / minified asset generation`
+	);
 	log.info('');
 	log.info(`${emoji.get('hammer_and_wrench')}  Extra, optional steps`);
 	log.info('');
@@ -210,11 +222,11 @@ function postInstallCleanUp() {
 }
 
 function installNpmPackages(packages) {
-	if(promptAnswers.isNodejsSite) {
+	if (promptAnswers.isNodejsSite) {
 		packages.push('cartridge-node-server');
 	}
 
-	if(packages.length > 0) {
+	if (packages.length > 0) {
 		installExpansionPacks(packages)
 			.then(installBaseModules)
 			.then(postInstallCleanUp)
@@ -238,8 +250,8 @@ function templateCopiedFiles() {
 			onEachFile: singleFileCallback
 		})
 		.then(() => {
-			installNpmPackages(promptAnswers.cartridgeModules)
-		})
+			installNpmPackages(promptAnswers.cartridgeModules);
+		});
 }
 
 function fileCopyComplete(err) {
@@ -251,9 +263,14 @@ function fileCopyComplete(err) {
 }
 
 function copyCartridgeSourceFilesToCwd(copyPath) {
-	fs.copy(copyPath, CURRENT_WORKING_DIR, {
-		filter: fileCopyFilter
-	}, fileCopyComplete)
+	fs.copy(
+		copyPath,
+		CURRENT_WORKING_DIR,
+		{
+			filter: fileCopyFilter
+		},
+		fileCopyComplete
+	);
 }
 
 function runCartridgeInstallation(answers) {
@@ -261,26 +278,28 @@ function runCartridgeInstallation(answers) {
 
 	templateDataManager.setData(answers);
 
-	if(promptAnswers.userHasConfirmed === true) {
-
+	if (promptAnswers.userHasConfirmed === true) {
 		log.info('');
-		log.info(`${emoji.get('joystick')}  Inserting the cartridge...`);;
+		log.info(`${emoji.get('joystick')}  Inserting the cartridge...`);
 
 		ensureProjectDirectoryExists()
 			.then(() => releaseService.downloadLatestRelease(cliOptions))
 			.then(copyCartridgeSourceFilesToCwd)
 			.catch(errorHandler);
-
 	} else {
-		log.info(`${emoji.get('x')}  User cancelled - cartridge installation aborted!`)
+		log.info(`${emoji.get('x')}  User cancelled - cartridge installation aborted!`);
 	}
 }
 
 function handleBaseInstallPromptData(answers) {
 	const augmentedAnswers = answers;
-	augmentedAnswers.cartridgeModules = ['cartridge-sass', 'cartridge-javascript','cartridge-copy-assets'];
+	augmentedAnswers.cartridgeModules = [
+		'cartridge-sass',
+		'cartridge-javascript',
+		'cartridge-copy-assets'
+	];
 
-	if(augmentedAnswers.isNodejsSite === false) {
+	if (augmentedAnswers.isNodejsSite === false) {
 		augmentedAnswers.cartridgeModules.push('cartridge-static-html');
 		augmentedAnswers.cartridgeModules.push('cartridge-local-server');
 	}
@@ -298,16 +317,18 @@ function runBaseInstall() {
 	log.info(' · Copy over static assets fonts etc');
 	log.warn('');
 
-	promptOptionsService
-		.getBaseInstallPromptData()
-		.then(promptOptions => {
-			inquirer.prompt(promptOptions, handleBaseInstallPromptData);
-		})
+	promptOptionsService.getBaseInstallPromptData().then(promptOptions => {
+		inquirer.prompt(promptOptions, handleBaseInstallPromptData);
+	});
 }
 
 function handleNoInternetConnection() {
 	log.info('');
-	log.info(`${emoji.get('rotating_light')}  ${chalk.bold.underline('No internet connection detected')} ${emoji.get('rotating_light')}`)
+	log.info(
+		`${emoji.get('rotating_light')}  ${chalk.bold.underline(
+			'No internet connection detected'
+		)} ${emoji.get('rotating_light')}`
+	);
 	log.info('');
 	log.info('Cartridge requires an internet connection to fully run the installation');
 	log.info('Try again when an internet connection is available');
@@ -322,20 +343,20 @@ function preSetup() {
 	log.warn(chalk.bold('This can be exited out by pressing [Ctrl+C]'));
 	log.warn('');
 
-	log.warn(chalk.bold('Make sure you are running this command in the folder you want all files copied to'));
+	log.warn(
+		chalk.bold('Make sure you are running this command in the folder you want all files copied to')
+	);
 }
 
 function runCompleteInstall() {
-	promptOptionsService
-		.getNewCommandPromptOptions()
-		.then(promptOptions => {
-			console.log('');
-			inquirer.prompt(promptOptions, runCartridgeInstallation);
-		})
+	promptOptionsService.getNewCommandPromptOptions().then(promptOptions => {
+		console.log('');
+		inquirer.prompt(promptOptions, runCartridgeInstallation);
+	});
 }
 
 function setupOnScreenPrompts() {
-	if(isBaseInstall === true) {
+	if (isBaseInstall === true) {
 		runBaseInstall();
 	} else {
 		runCompleteInstall();
@@ -354,9 +375,10 @@ newCommandApi.init = (options, baseInstall) => {
 
 	log = utils.getLogInstance(cliOptions);
 
-	utils.checkIfOnline()
+	utils
+		.checkIfOnline()
 		.then(startInstallation)
 		.catch(handleNoInternetConnection);
-}
+};
 
 module.exports = newCommandApi;

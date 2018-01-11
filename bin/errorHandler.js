@@ -12,7 +12,6 @@ const pe = new PrettyError();
  * @param  {Object} error Error object
  */
 function errorHandler(error) {
-
 	const prettyError = pe.render(new Error(error));
 
 	console.error('');
@@ -83,4 +82,4 @@ function setPrettyErrorConfig() {
 setPrettyErrrorTheme();
 setPrettyErrorConfig();
 
-module.exports = errorHandler
+module.exports = errorHandler;

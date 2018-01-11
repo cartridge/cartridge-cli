@@ -10,76 +10,73 @@ const template = require('lodash/template');
 // const errorHandler = require('./errorHandler');
 
 function fileTemplater() {
-
-  let config = {};
-  const defaultConfig = {
-    data: {},
-    basePath: process.cwd(),
-    files: [],
-    onEachFile() {}
-  };
+	let config = {};
+	const defaultConfig = {
+		data: {},
+		basePath: process.cwd(),
+		files: [],
+		onEachFile() {}
+	};
 
 	function writeToFile(fileConfig) {
-    return new Promise((resolve, reject) => {
+		return new Promise((resolve, reject) => {
+			fs.writeFile(fileConfig.config.dest, fileConfig.output, 'utf8', err => {
+				if (err) reject(err);
 
-      fs.writeFile(fileConfig.config.dest, fileConfig.output, 'utf8', (err) => {
-          if (err) reject(err);
+				config.onEachFile(fileConfig.config.dest);
 
-          config.onEachFile(fileConfig.config.dest);
+				if (fileConfig.config.deleteSrcFile) {
+					fs.unlinkSync(fileConfig.config.src);
+				}
 
-          if(fileConfig.config.deleteSrcFile) {
-            fs.unlinkSync(fileConfig.config.src);
-          }
-
-          resolve();
-      });
-    });
-  }
+				resolve();
+			});
+		});
+	}
 
 	function writeToAllFiles(filesData) {
-    const templatedFiles = [];
+		const templatedFiles = [];
 
-    for (let i = 0; i < filesData.length; i++) {
-      templatedFiles.push(writeToFile(filesData[i]));
-    }
+		for (let i = 0; i < filesData.length; i++) {
+			templatedFiles.push(writeToFile(filesData[i]));
+		}
 
-    return Promise.all(templatedFiles);
-  }
+		return Promise.all(templatedFiles);
+	}
 
 	function readFile(templateFileConfig) {
-    return new Promise((resolve, reject) => {
-      let compiled;
-      let output;
+		return new Promise((resolve, reject) => {
+			let compiled;
+			let output;
 
-      fs.readFile(templateFileConfig.src, 'utf8', (err, fileContents) => {
-          if (err) reject(err);
+			fs.readFile(templateFileConfig.src, 'utf8', (err, fileContents) => {
+				if (err) reject(err);
 
-          compiled = template(fileContents);
-          output = compiled(config.data);
+				compiled = template(fileContents);
+				output = compiled(config.data);
 
-          resolve({
-            config: templateFileConfig,
-            output
-          });
-      });
-    })
-  }
+				resolve({
+					config: templateFileConfig,
+					output
+				});
+			});
+		});
+	}
 
-  function run(userConfig) {
-    const filesToRead = [];
-    config = extend(defaultConfig, userConfig);
+	function run(userConfig) {
+		const filesToRead = [];
+		config = extend(defaultConfig, userConfig);
 
-    for (let i = 0; i < config.files.length; i++) {
-      filesToRead.push(readFile(config.files[i]));
-    }
+		for (let i = 0; i < config.files.length; i++) {
+			filesToRead.push(readFile(config.files[i]));
+		}
 
-    return Promise.all(filesToRead)
-      .then(writeToAllFiles)
-  }
+		return Promise.all(filesToRead).then(writeToAllFiles);
+	}
 
-  return {
-    run
-  }
+	return {
+		run
+	};
 }
 
 module.exports = fileTemplater;

@@ -2,11 +2,11 @@
 // eslint-disable-next-line strict, lines-around-directive
 'use strict';
 
-const os   = require('os');
+const os = require('os');
 const path = require('path');
 
-const fs        = require('fs-extra');
-const gotZip    = require('got-zip');
+const fs = require('fs-extra');
+const gotZip = require('got-zip');
 const GitHubApi = require('github');
 
 const github = new GitHubApi({
@@ -32,20 +32,17 @@ let CARTRIDGE_FOLDER_PATH;
  * @param  {Object} args gotZip argument object
  */
 function getCartridgeFolderPath(args) {
-
 	return new Promise((resolve, reject) => {
 		fs.readdir(args.dest, (err, files) => {
-
-			if(err) reject(err);
+			if (err) reject(err);
 
 			for (let i = 0; i < files.length; i += 1) {
-
-				if(CARTRIDGE_FOLDER_REGEX.test(files[i])) {
-					CARTRIDGE_FOLDER_PATH = path.join(args.dest, files[i])
+				if (CARTRIDGE_FOLDER_REGEX.test(files[i])) {
+					CARTRIDGE_FOLDER_PATH = path.join(args.dest, files[i]);
 					resolve(CARTRIDGE_FOLDER_PATH);
 				}
 			}
-		})
+		});
 	});
 }
 
@@ -58,20 +55,20 @@ function downloadGitHubZipFile(downloadUrl) {
 	log.debug('');
 
 	return gotZip(downloadUrl, {
-		dest:    OS_TMP_DIR,
+		dest: OS_TMP_DIR,
 		extract: true,
 		cleanup: true,
-		strip:   0
-	})
+		strip: 0
+	});
 }
 function gitHubApiCallback(resolve, reject, err, data) {
-	if(err) {
+	if (err) {
 		return reject(err);
 	}
 
 	log.debug(`Release ${data[0].name} is latest`);
 
-	if(data.length > 0) {
+	if (data.length > 0) {
 		return resolve(data[0].zipball_url);
 	}
 }
@@ -83,12 +80,15 @@ function getLatestGitHubRelease() {
 	log.debug('Getting latest release URL from GitHub');
 
 	return new Promise((resolve, reject) => {
-		github.releases.listReleases({
-			owner:    'cartridge',
-			repo:     'cartridge',
-			page:     1,
-			per_page: 1
-		}, (err, data) => gitHubApiCallback(resolve, reject, err, data));
+		github.releases.listReleases(
+			{
+				owner: 'cartridge',
+				repo: 'cartridge',
+				page: 1,
+				per_page: 1
+			},
+			(err, data) => gitHubApiCallback(resolve, reject, err, data)
+		);
 	});
 }
 
@@ -103,9 +103,9 @@ releaseServiceApi.downloadLatestRelease = options => {
 		.then(downloadGitHubZipFile)
 		.then(getCartridgeFolderPath)
 		.catch(err => {
-			errorHandler(err)
-		})
-}
+			errorHandler(err);
+		});
+};
 
 /**
  * Delete the temp release directory
@@ -113,7 +113,7 @@ releaseServiceApi.downloadLatestRelease = options => {
 releaseServiceApi.deleteReleaseTmpDirectory = () => {
 	log.debug(`Deleting cartridge temp directory in ${OS_TMP_DIR}`);
 
-	fs.removeSync(CARTRIDGE_FOLDER_PATH)
-}
+	fs.removeSync(CARTRIDGE_FOLDER_PATH);
+};
 
 module.exports = releaseServiceApi;

@@ -31,121 +31,118 @@ function tearDown() {
 
 function getTemplateData() {
 	return {
-		answer: "La Li Lu Le Lo",
-		modelName: "Metal Gear Ray"
-	}
+		answer: 'La Li Lu Le Lo',
+		modelName: 'Metal Gear Ray'
+	};
 }
 
 describe('As a user of the file templater module', () => {
 	before(changeToOsTempDirAndCopyFixtures);
-	after(tearDown)
+	after(tearDown);
 
 	describe('When templating one file', () => {
-
 		const onEachFileSpy = sinon.spy();
 		const templateData = getTemplateData();
 		const fileList = [];
 
 		before(done => {
-
 			fileList.push({
 				src: path.join(TEST_TEMP_DIR, 'creds.tpl'),
 				dest: path.join(TEST_TEMP_DIR, 'creds-templated.json')
-			})
+			});
 
-			fileTemplater().run({
-				data: templateData,
-				basePath: process.cwd(),
-				files: fileList,
-				onEachFile: onEachFileSpy
-			}).then(() => {
-				done();
-			})
-		})
+			fileTemplater()
+				.run({
+					data: templateData,
+					basePath: process.cwd(),
+					files: fileList,
+					onEachFile: onEachFileSpy
+				})
+				.then(() => {
+					done();
+				});
+		});
 
 		it('should correctly create the templated file', () => {
 			const templatedFilePath = path.join(TEST_TEMP_DIR, 'creds-templated.json');
 
 			templatedFilePath.should.be.a.file();
-		})
+		});
 
 		it('should correctly template the contents with template data', () => {
 			const templatedFilePath = path.join(TEST_TEMP_DIR, 'creds-templated.json');
 			const templateFileContents = fs.readFileSync(templatedFilePath, 'utf8');
 			const templateFileJson = JSON.parse(templateFileContents);
 
-			templateFileJson.answer.should.equal(templateData.answer)
-		})
+			templateFileJson.answer.should.equal(templateData.answer);
+		});
 
-    it('should not delete source file when `deleteSrcFile` is not provided', () => {
-      const srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds.tpl');
+		it('should not delete source file when `deleteSrcFile` is not provided', () => {
+			const srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds.tpl');
 
-      srcTemplateFile.should.be.a.path();
-    })
+			srcTemplateFile.should.be.a.path();
+		});
 
 		it('should have called the onEachFile callback once', () => {
 			onEachFileSpy.calledOnce.should.be.true;
-		})
-
-	})
+		});
+	});
 
 	describe('When templating multiple files', () => {
-
 		const onEachFileSpy = sinon.spy();
 		const templateData = getTemplateData();
 		const fileList = [];
 
 		before(done => {
-
 			fileList.push({
 				src: path.join(TEST_TEMP_DIR, 'creds.tpl'),
 				dest: path.join(TEST_TEMP_DIR, 'creds-templated.json')
-			})
+			});
 
 			fileList.push({
 				src: path.join(TEST_TEMP_DIR, 'creds-again.tpl'),
 				dest: path.join(TEST_TEMP_DIR, 'creds-again-templated.json'),
-        deleteSrcFile: false
-			})
+				deleteSrcFile: false
+			});
 
-      fileList.push({
-        src: path.join(TEST_TEMP_DIR, 'fileToBeDeleted.tpl'),
-        dest: path.join(TEST_TEMP_DIR, 'fileToBeDeleted-templated.json'),
-        deleteSrcFile: true
-      })
+			fileList.push({
+				src: path.join(TEST_TEMP_DIR, 'fileToBeDeleted.tpl'),
+				dest: path.join(TEST_TEMP_DIR, 'fileToBeDeleted-templated.json'),
+				deleteSrcFile: true
+			});
 
-			fileTemplater().run({
-				data: templateData,
-				basePath: process.cwd(),
-				files: fileList,
-				onEachFile: onEachFileSpy
-			}).then(() => {
-				done();
-			})
-		})
+			fileTemplater()
+				.run({
+					data: templateData,
+					basePath: process.cwd(),
+					files: fileList,
+					onEachFile: onEachFileSpy
+				})
+				.then(() => {
+					done();
+				});
+		});
 
 		it('should have called the onEachFile callback thrice', () => {
 			onEachFileSpy.calledThrice.should.be.true;
-		})
+		});
 
-    it('should not deleted source file when `deleteSrcFile` is not provided', () => {
-      const srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds.tpl');
+		it('should not deleted source file when `deleteSrcFile` is not provided', () => {
+			const srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds.tpl');
 
-      srcTemplateFile.should.be.a.path();
-    })
+			srcTemplateFile.should.be.a.path();
+		});
 
-    it('should not delete source file when `deleteSrcFile` is set to false', () => {
-      const srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds-again.tpl');
+		it('should not delete source file when `deleteSrcFile` is set to false', () => {
+			const srcTemplateFile = path.join(TEST_TEMP_DIR, 'creds-again.tpl');
 
-      srcTemplateFile.should.be.a.path();
-    })
+			srcTemplateFile.should.be.a.path();
+		});
 
-    it('should delete `fileToBeDeleted.tpl` when `deleteSrcFile` is set to true', () => {
-      const srcTemplateFile = path.join(TEST_TEMP_DIR, 'fileToBeDeleted.tpl');
+		it('should delete `fileToBeDeleted.tpl` when `deleteSrcFile` is set to true', () => {
+			const srcTemplateFile = path.join(TEST_TEMP_DIR, 'fileToBeDeleted.tpl');
 
-      srcTemplateFile.should.not.be.a.path();
-    })
-
-	})
-
-})
+			srcTemplateFile.should.not.be.a.path();
+		});
+	});
+});
