@@ -16,7 +16,7 @@ const promptModuleOptionsModule = require('../bin/promptModuleOptions');
 
 chai.should();
 
-describe('As a user of the prompt module options module', () => {
+describe('As a user of the prompt module options module', function suite() {
 
 	let moduleOptionsData;
 

@@ -7,13 +7,13 @@
 
 const chai = require('chai');
 
-const { expect } = chai.expect;
+const { expect } = chai;
 
 const promptOptionsModule = require('../bin/promptOptions');
 
 chai.should();
 
-describe('As a user of the promptOptions module', () => {
+describe('As a user of the promptOptions module', function suite() {
 
     it('should return an object', () => {
         const test = promptOptionsModule;
