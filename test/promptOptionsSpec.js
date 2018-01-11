@@ -13,7 +13,7 @@ const promptOptionsModule = require('../bin/promptOptions');
 
 chai.should();
 
-describe('As a user of the promptOptions module', function suite() {
+describe('As a user of the promptOptions module', () => {
 	it('should return an object', () => {
 		const test = promptOptionsModule;
 
