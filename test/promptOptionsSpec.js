@@ -7,7 +7,7 @@
 
 const chai = require('chai');
 
-const { expect } = chai;
+const expect = chai.expect;
 
 const promptOptionsModule = require('../bin/promptOptions');
 

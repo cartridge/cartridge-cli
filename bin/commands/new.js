@@ -16,7 +16,7 @@ const promptOptionsService = require('../promptOptions');
 const templateDataManager = require('../templateDataManager');
 const errorHandler = require('../errorHandler');
 const utils = require('../utils');
-const { Spinner } = require('cli-spinner');
+const Spinner = require('cli-spinner').Spinner;
 
 let log;
 let promptAnswers;
