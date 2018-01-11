@@ -1,45 +1,53 @@
-var chai = require('chai');
-var expect = chai.expect;
+/* eslint-env node, mocha */
+/* eslint no-unused-expressions: 0 */
 
-var promptOptionsModule = require('../bin/promptOptions');
+// Enable strict mode for older versions of node
+// eslint-disable-next-line strict, lines-around-directive
+'use strict';
+
+const chai = require('chai');
+
+const { expect } = chai.expect;
+
+const promptOptionsModule = require('../bin/promptOptions');
 
 chai.should();
 
-describe('As a user of the promptOptions module', function() {
+describe('As a user of the promptOptions module', () => {
 
-    it('should return an object', function() {
-        var test = promptOptionsModule;
+    it('should return an object', () => {
+        const test = promptOptionsModule;
 
         expect(test).to.be.a('object');
     })
 
-    describe('When using getNewCommandPromptOptions()', function() {
+    describe('When using getNewCommandPromptOptions()', () => {
 
-        before(function() {
+        before(() => {
             promptOptionsModule.setup({
                 silent: true
             })
         })
 
-        it('should be a function', function() {
-            var test = promptOptionsModule.getNewCommandPromptOptions;
+        it('should be a function', () => {
+            const test = promptOptionsModule.getNewCommandPromptOptions;
 
             expect(test).to.be.a('function');
         })
 
-        it('should return an array', function(done) {
+        it('should return an array', done => {
             promptOptionsModule
                 .getNewCommandPromptOptions()
-                .then(function(promptOptions) {
+                .then(promptOptions => {
                     expect(promptOptions instanceof Array).to.be.true;
                     done();
                 })
         })
 
-        it('should return an array that is not empty', function(done) {
+        it('should return an array that is not empty', done => {
             promptOptionsModule
                 .getNewCommandPromptOptions()
-                .then(function(promptOptions) {
+                .then(promptOptions => {
                     expect(promptOptions.length).to.be.above(1);
                     done();
                 })

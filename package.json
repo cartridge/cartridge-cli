@@ -15,7 +15,7 @@
   },
   "scripts": {
 		"test": "npm run prettier && mocha && npm run lint",
-		"lint": "eslint task.js \"{,!(test)/**/}*.js\"" ,
+		"lint": "eslint task.js \"**/*.js\"" ,
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "semantic-test": "semantic-release pre",
     "prettier": "prettier --write '{,!(report)/**/}*.js'",

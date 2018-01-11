@@ -1,31 +1,40 @@
-var chai = require('chai');
-var expect = chai.expect;
+/* eslint-env node, mocha */
 
-var utils = require('../bin/utils');
+// Enable strict mode for older versions of node
+// eslint-disable-next-line strict, lines-around-directive
+'use strict';
+
+const chai = require('chai');
+
+const {
+	expect
+}  = chai;
+
+const utils = require('../bin/utils');
 
 chai.should();
 
-describe('As a user of the utils module', function() {
+describe('As a user of the utils module', () => {
 
-	describe('When using getLogInstance', function() {
+	describe('When using getLogInstance', () => {
 
-		describe('And passing silent as an option', function() {
+		describe('And passing silent as an option', () => {
 
-			it('should have a log level of silent', function() {
-				var logInstance = utils.getLogInstance({ silent: true });
-				var actual = logInstance.getLevel();
-				var expected = logInstance.levels.SILENT;
+			it('should have a log level of silent', () => {
+				const logInstance = utils.getLogInstance({ silent: true });
+				const actual = logInstance.getLevel();
+				const expected = logInstance.levels.SILENT;
 
 				expect(actual).to.be.equal(expected);
 			})
 		})
 
-		describe('And passing verbose as an option', function() {
+		describe('And passing verbose as an option', () => {
 
-			it('should have a log level of trace', function() {
-				var logInstance = utils.getLogInstance({ verbose: true });
-				var actual = logInstance.getLevel();
-				var expected = logInstance.levels.TRACE;
+			it('should have a log level of trace', () => {
+				const logInstance = utils.getLogInstance({ verbose: true });
+				const actual = logInstance.getLevel();
+				const expected = logInstance.levels.TRACE;
 
 				expect(actual).to.be.equal(expected);
 			})
