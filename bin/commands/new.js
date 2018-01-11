@@ -28,7 +28,6 @@ let TEMPLATE_FILES_PATH;
 
 const newCommandApi = {};
 
-
 function areInsideProjectDirectory() {
 	return (path.basename(CURRENT_WORKING_DIR) === promptAnswers.projectName);
 }
@@ -257,7 +256,6 @@ function copyCartridgeSourceFilesToCwd(copyPath) {
 	}, fileCopyComplete)
 }
 
-
 function runCartridgeInstallation(answers) {
 	promptAnswers = answers;
 
@@ -307,27 +305,6 @@ function runBaseInstall() {
 		})
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function handleNoInternetConnection() {
 	log.info('');
 	log.info(`${emoji.get('rotating_light')}  ${chalk.bold.underline('No internet connection detected')} ${emoji.get('rotating_light')}`)
@@ -336,8 +313,6 @@ function handleNoInternetConnection() {
 	log.info('Try again when an internet connection is available');
 	log.info('');
 }
-
-
 
 function preSetup() {
 	promptOptionsService.setup(cliOptions);
@@ -350,10 +325,6 @@ function preSetup() {
 	log.warn(chalk.bold('Make sure you are running this command in the folder you want all files copied to'));
 }
 
-
-
-
-
 function runCompleteInstall() {
 	promptOptionsService
 		.getNewCommandPromptOptions()
@@ -363,26 +334,6 @@ function runCompleteInstall() {
 		})
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function setupOnScreenPrompts() {
 	if(isBaseInstall === true) {
 		runBaseInstall();
@@ -390,7 +341,6 @@ function setupOnScreenPrompts() {
 		runCompleteInstall();
 	}
 }
-
 
 function startInstallation() {
 	setDirectoryPaths();
