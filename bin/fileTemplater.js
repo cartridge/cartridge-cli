@@ -1,81 +1,82 @@
-var fs = require('fs');
-var path = require('path');
-var extend = require('extend');
-var template = require('lodash/template');
+// Enable strict mode for older versions of node
+// eslint-disable-next-line strict, lines-around-directive
+'use strict';
 
-var errorHandler = require('./errorHandler');
+const fs = require('fs');
+// const path = require('path');
+const extend = require('extend');
+const template = require('lodash/template');
+
+// const errorHandler = require('./errorHandler');
 
 function fileTemplater() {
+	let config = {};
+	const defaultConfig = {
+		data: {},
+		basePath: process.cwd(),
+		files: [],
+		onEachFile() {}
+	};
 
-  var config = {};
-  var defaultConfig = {
-    data: {},
-    basePath: process.cwd(),
-    files: [],
-    onEachFile: function() {}
-  }
+	function writeToFile(fileConfig) {
+		return new Promise((resolve, reject) => {
+			fs.writeFile(fileConfig.config.dest, fileConfig.output, 'utf8', err => {
+				if (err) reject(err);
 
-  function run(userConfig) {
-    var filesToRead = [];
-    config = extend(defaultConfig, userConfig);
+				config.onEachFile(fileConfig.config.dest);
 
-    for (var i = 0; i < config.files.length; i++) {
-      filesToRead.push(readFile(config.files[i]));
-    }
+				if (fileConfig.config.deleteSrcFile) {
+					fs.unlinkSync(fileConfig.config.src);
+				}
 
-    return Promise.all(filesToRead)
-      .then(writeToAllFiles)
-  }
+				resolve();
+			});
+		});
+	}
 
-  function writeToAllFiles(filesData) {
-    var templatedFiles = [];
+	function writeToAllFiles(filesData) {
+		const templatedFiles = [];
 
-    for (var i = 0; i < filesData.length; i++) {
-      templatedFiles.push(writeToFile(filesData[i]));
-    }
+		for (let i = 0; i < filesData.length; i++) {
+			templatedFiles.push(writeToFile(filesData[i]));
+		}
 
-    return Promise.all(templatedFiles);
-  }
+		return Promise.all(templatedFiles);
+	}
 
-  function writeToFile(fileConfig) {
-    return new Promise(function(resolve, reject) {
+	function readFile(templateFileConfig) {
+		return new Promise((resolve, reject) => {
+			let compiled;
+			let output;
 
-      fs.writeFile(fileConfig.config.dest, fileConfig.output, 'utf8', function writeFileCallback(err) {
-          if (err) reject(err);
+			fs.readFile(templateFileConfig.src, 'utf8', (err, fileContents) => {
+				if (err) reject(err);
 
-          config.onEachFile(fileConfig.config.dest);
+				compiled = template(fileContents);
+				output = compiled(config.data);
 
-          if(fileConfig.config.deleteSrcFile) {
-            fs.unlinkSync(fileConfig.config.src);
-          }
+				resolve({
+					config: templateFileConfig,
+					output
+				});
+			});
+		});
+	}
 
-          resolve();
-      });
-    });
-  }
+	function run(userConfig) {
+		const filesToRead = [];
+		config = extend(defaultConfig, userConfig);
 
-  function readFile(templateFileConfig) {
-    return new Promise(function(resolve, reject) {
-      var compiled;
-      var output;
+		for (let i = 0; i < config.files.length; i++) {
+			filesToRead.push(readFile(config.files[i]));
+		}
 
-      fs.readFile(templateFileConfig.src, 'utf8', function readFileCallback(err, fileContents) {
-          if (err) reject(err);
+		return Promise.all(filesToRead).then(writeToAllFiles);
+	}
 
-          compiled = template(fileContents);
-          output = compiled(config.data);
-
-          resolve({
-            config: templateFileConfig,
-            output: output
-          });
-      });
-    })
-  }
-
-  return {
-    run: run
-  }
+	return {
+		run
+	};
 }
 
 module.exports = fileTemplater;

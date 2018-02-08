@@ -1,0 +1,15 @@
+{
+	"parserOptions": {
+		"ecmaVersion": 6
+	},
+	"env": {
+		"node": true,
+		"es6": true
+	},
+	"extends": ["airbnb-base", "prettier"],
+	"rules": {
+		"no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+		"consistent-return": 0,
+		"prefer-destructuring": 0
+	}
+}
