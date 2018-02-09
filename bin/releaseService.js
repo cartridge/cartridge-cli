@@ -1,12 +1,15 @@
-"use strict";
+// Enable strict mode for older versions of node
+// eslint-disable-next-line strict, lines-around-directive
+'use strict';
 
-var os   = require('os');
-var path = require('path');
+const os = require('os');
+const path = require('path');
 
-var fs        = require('fs-extra');
-var gotZip    = require('got-zip');
-var GitHubApi = require('github');
-var github = new GitHubApi({
+const fs = require('fs-extra');
+const gotZip = require('got-zip');
+const GitHubApi = require('github');
+
+const github = new GitHubApi({
 	version: '3.0.0',
 	protocol: 'https',
 	headers: {
@@ -14,60 +17,32 @@ var github = new GitHubApi({
 	}
 });
 
-var utils = require('./utils');
+const utils = require('./utils');
+const errorHandler = require('./errorHandler');
 
-var errorHandler = require('./errorHandler');
+const releaseServiceApi = {};
+let log;
 
-var releaseServiceApi = {};
-var _log;
-
-var OS_TMP_DIR       = os.tmpdir();
-var CARTRIDGE_FOLDER_REGEX = /^cartridge-cartridge/;
-var CARTRIDGE_FOLDER_PATH;
-
-/**
- * Download the latest cartridge release from github
- * @param  {Object} logInstance Log module instance used for internal logging
- */
-releaseServiceApi.downloadLatestRelease = function(options) {
-	_log = utils.getLogInstance(options);
-
-	return getLatestGitHubRelease()
-		.then(downloadGitHubZipFile)
-		.then(getCartridgeFolderPath)
-		.catch(function(err) {
-			errorHandler(err)
-		})
-}
-
-/**
- * Delete the temp release directory
- */
-releaseServiceApi.deleteReleaseTmpDirectory = function() {
-	_log.debug('Deleting cartridge temp directory in ' + OS_TMP_DIR);
-
-	fs.removeSync(CARTRIDGE_FOLDER_PATH)
-}
+const OS_TMP_DIR = os.tmpdir();
+const CARTRIDGE_FOLDER_REGEX = /^cartridge-cartridge/;
+let CARTRIDGE_FOLDER_PATH;
 
 /**
  * Get the full cartridge temp directory path
  * @param  {Object} args gotZip argument object
  */
 function getCartridgeFolderPath(args) {
+	return new Promise((resolve, reject) => {
+		fs.readdir(args.dest, (err, files) => {
+			if (err) reject(err);
 
-	return new Promise(function(resolve, reject) {
-		fs.readdir(args.dest, function(err, files) {
-
-			if(err) reject(err);
-
-			for (var i = 0; i < files.length; i++) {
-
-				if(CARTRIDGE_FOLDER_REGEX.test(files[i])) {
-					CARTRIDGE_FOLDER_PATH = path.join(args.dest, files[i])
+			for (let i = 0; i < files.length; i += 1) {
+				if (CARTRIDGE_FOLDER_REGEX.test(files[i])) {
+					CARTRIDGE_FOLDER_PATH = path.join(args.dest, files[i]);
 					resolve(CARTRIDGE_FOLDER_PATH);
 				}
 			}
-		})
+		});
 	});
 }
 
@@ -76,39 +51,69 @@ function getCartridgeFolderPath(args) {
  * @param  {String} downloadUrl Download URL
  */
 function downloadGitHubZipFile(downloadUrl) {
-	_log.debug('Downloading release from URL ' + downloadUrl);
-	_log.debug('');
+	log.debug(`Downloading release from URL ${downloadUrl}`);
+	log.debug('');
 
 	return gotZip(downloadUrl, {
-		dest:    OS_TMP_DIR,
+		dest: OS_TMP_DIR,
 		extract: true,
 		cleanup: true,
-		strip:   0
-	})
+		strip: 0
+	});
+}
+function gitHubApiCallback(resolve, reject, err, data) {
+	if (err) {
+		return reject(err);
+	}
+
+	log.debug(`Release ${data[0].name} is latest`);
+
+	if (data.length > 0) {
+		return resolve(data[0].zipball_url);
+	}
 }
 
 /**
  * Get the latest github release data
  */
 function getLatestGitHubRelease() {
-	_log.debug('Getting latest release URL from GitHub');
+	log.debug('Getting latest release URL from GitHub');
 
-	return new Promise(function(resolve, reject) {
-		github.releases.listReleases({
-			owner:    'cartridge',
-			repo:     'cartridge',
-			page:     1,
-			per_page: 1
-		}, function(err, data) {
-			if(err) return reject(err);
-
-			_log.debug('Release ' + data[0].name + ' is latest');
-
-			if(data.length > 0) {
-				resolve(data[0].zipball_url);
-			}
-		});
+	return new Promise((resolve, reject) => {
+		github.releases.listReleases(
+			{
+				owner: 'cartridge',
+				repo: 'cartridge',
+				page: 1,
+				per_page: 1
+			},
+			(err, data) => gitHubApiCallback(resolve, reject, err, data)
+		);
 	});
 }
+
+/**
+ * Download the latest cartridge release from github
+ * @param  {Object} logInstance Log module instance used for internal logging
+ */
+releaseServiceApi.downloadLatestRelease = options => {
+	log = utils.getLogInstance(options);
+
+	return getLatestGitHubRelease()
+		.then(downloadGitHubZipFile)
+		.then(getCartridgeFolderPath)
+		.catch(err => {
+			errorHandler(err);
+		});
+};
+
+/**
+ * Delete the temp release directory
+ */
+releaseServiceApi.deleteReleaseTmpDirectory = () => {
+	log.debug(`Deleting cartridge temp directory in ${OS_TMP_DIR}`);
+
+	fs.removeSync(CARTRIDGE_FOLDER_PATH);
+};
 
 module.exports = releaseServiceApi;

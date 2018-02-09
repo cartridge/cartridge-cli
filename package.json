@@ -1,77 +1,90 @@
 {
-  "name": "cartridge-cli",
-  "version": "1.2.0",
-  "description": "Start with a clean cartridge and get yourself going with a ready made basic website setup",
-  "license": "ISC",
-  "bin": {
-    "cart": "./bin/cli.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/cartridge/cartridge-cli"
-  },
-  "scripts": {
-    "test": "mocha",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "semantic-test": "semantic-release pre",
-    "commitmsg": "validate-commit-msg",
-    "prepush": "npm t"
-  },
-  "dependencies": {
-    "bluebird": "^3.3.1",
-    "chalk": "^1.1.1",
-    "cli-spinner": "^0.2.4",
-    "commander": "^2.9.0",
-    "del": "^2.1.0",
-    "extend": "^3.0.0",
-    "fs-extra": "^0.26.5",
-    "github": "^0.2.4",
-    "got-zip": "^0.2.6",
-    "in-array": "^0.1.0",
-    "inquirer": "^0.11.4",
-    "lodash": "^4.0.1",
-    "loglevel": "^1.4.0",
-    "node-emoji": "^1.5.1",
-    "npm-install-package": "^1.0.2",
-    "npm-registry": "^0.1.13",
-    "pretty-error": "^2.0.0",
-    "titleize": "^1.0.0",
-    "unzip": "^0.1.11",
-    "update-notifier": "^2.1.0"
-  },
-  "devDependencies": {
-    "chai": "^1.6.1",
-    "chai-fs": "^0.1.0",
-    "cz-conventional-changelog": "^1.1.5",
-    "husky": "^0.14.3",
-    "proxyquire": "^1.7.3",
-    "semantic-release": "^7.0.1",
-    "sinon": "^1.17.3",
-    "timekeeper": "0.0.5",
-    "validate-commit-msg": "^2.6.0"
-  },
-  "preferGlobal": true,
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    },
-    "validate-commit-msg": {
-      "types": [
-        "feat",
-        "fix",
-        "docs",
-        "style",
-        "refactor",
-        "perf",
-        "test",
-        "chore",
-        "revert"
-      ],
-      "warnOnFail": false,
-      "maxSubjectLength": 100,
-      "subjectPattern": ".+",
-      "subjectPatternErrorMsg": "subject does not match subject pattern!",
-      "helpMessage": ""
-    }
-  }
+	"name": "cartridge-cli",
+	"version": "1.2.0",
+	"description":
+		"Start with a clean cartridge and get yourself going with a ready made basic website setup",
+	"license": "ISC",
+	"engines": {
+		"node": ">=4.8.*"
+	},
+	"bin": {
+		"cart": "./bin/cli.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cartridge/cartridge-cli"
+	},
+	"scripts": {
+		"test": "npm run prettier && mocha && npm run lint",
+		"lint": "eslint task.js \"**/*.js\"",
+		"semantic-release": "semantic-release pre && npm publish && semantic-release post",
+		"semantic-test": "semantic-release pre",
+		"prettier": "prettier --write '{,!(report)/**/}*.js' '**/*.json'",
+		"commitmsg": "validate-commit-msg",
+		"prepush": "npm t",
+		"precommit": "npm run prettier"
+	},
+	"dependencies": {
+		"bluebird": "^3.3.1",
+		"chalk": "^1.1.1",
+		"cli-spinner": "^0.2.4",
+		"commander": "^2.9.0",
+		"del": "^2.1.0",
+		"extend": "^3.0.0",
+		"fs-extra": "^0.26.5",
+		"github": "^0.2.4",
+		"got-zip": "^0.2.6",
+		"in-array": "^0.1.0",
+		"inquirer": "^0.11.4",
+		"lodash": "^4.0.1",
+		"loglevel": "^1.4.0",
+		"node-emoji": "^1.5.1",
+		"npm-install-package": "^1.0.2",
+		"npm-registry": "^0.1.13",
+		"pretty-error": "^2.0.0",
+		"titleize": "^1.0.0",
+		"unzip": "^0.1.11",
+		"update-notifier": "^2.1.0"
+	},
+	"devDependencies": {
+		"chai": "^1.6.1",
+		"chai-fs": "^0.1.0",
+		"cz-conventional-changelog": "^1.1.5",
+		"eslint": "^4.15.0",
+		"eslint-config-airbnb-base": "^12.1.0",
+		"eslint-config-prettier": "^2.9.0",
+		"eslint-plugin-import": "^2.8.0",
+		"husky": "^0.14.3",
+		"prettier": "^1.10.1",
+		"proxyquire": "^1.7.3",
+		"semantic-release": "^7.0.1",
+		"sinon": "^1.17.3",
+		"timekeeper": "0.0.5",
+		"validate-commit-msg": "^2.6.0"
+	},
+	"preferGlobal": true,
+	"config": {
+		"commitizen": {
+			"path": "./node_modules/cz-conventional-changelog"
+		},
+		"validate-commit-msg": {
+			"types": [
+				"feat",
+				"fix",
+				"docs",
+				"style",
+				"refactor",
+				"perf",
+				"test",
+				"chore",
+				"revert",
+				"ci"
+			],
+			"warnOnFail": false,
+			"maxSubjectLength": 100,
+			"subjectPattern": ".+",
+			"subjectPatternErrorMsg": "subject does not match subject pattern!",
+			"helpMessage": ""
+		}
+	}
 }

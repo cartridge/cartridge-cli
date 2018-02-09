@@ -1,55 +1,35 @@
-"use strict";
+// Enable strict mode for older versions of node
+// eslint-disable-next-line strict, lines-around-directive
+'use strict';
 
-var chalk    = require('chalk');
-var inquirer = require('inquirer');
-var fs       = require('fs-extra');
-var path     = require('path');
+const chalk = require('chalk');
+const inquirer = require('inquirer');
+const fs = require('fs-extra');
+const path = require('path');
 
-var npmInstallPackage = require('npm-install-package')
-var emoji = require('node-emoji');
+const npmInstallPackage = require('npm-install-package');
+const emoji = require('node-emoji');
 
-var releaseService = require('../releaseService');
-var fileTemplater = require('../fileTemplater');
-var promptOptions = require('../promptOptions');
-var templateDataManager = require('../templateDataManager');
-var errorHandler = require('../errorHandler');
-var utils = require('../utils');
-var Spinner = require('cli-spinner').Spinner;
+const releaseService = require('../releaseService');
+const fileTemplater = require('../fileTemplater');
+const promptOptionsService = require('../promptOptions');
+const templateDataManager = require('../templateDataManager');
+const errorHandler = require('../errorHandler');
+const utils = require('../utils');
+const Spinner = require('cli-spinner').Spinner;
 
-var _log;
-var _promptAnswers;
-var _options;
-var _isBaseInstall;
+let log;
+let promptAnswers;
+let cliOptions;
+let isBaseInstall;
 
-var CURRENT_WORKING_DIR;
-var TEMPLATE_FILES_PATH;
+let CURRENT_WORKING_DIR;
+let TEMPLATE_FILES_PATH;
 
-var newCommandApi = {};
+const newCommandApi = {};
 
-newCommandApi.init = function(options, baseInstall) {
-	_options = options;
-	_isBaseInstall = baseInstall;
-
-	_log = utils.getLogInstance(_options);
-
-	utils.checkIfOnline()
-		.then(startInstallation)
-		.catch(handleNoInternetConnection);
-}
-
-function startInstallation() {
-	setDirectoryPaths();
-	preSetup();
-	setupOnScreenPrompts();
-}
-
-function handleNoInternetConnection() {
-	_log.info('');
-	_log.info(emoji.get('rotating_light') + '  ' + chalk.bold.underline('No internet connection detected') + ' ' + emoji.get('rotating_light'))
-	_log.info('');
-	_log.info('Cartridge requires an internet connection to fully run the installation');
-	_log.info('Try again when an internet connection is available');
-	_log.info('');
+function areInsideProjectDirectory() {
+	return path.basename(CURRENT_WORKING_DIR) === promptAnswers.projectName;
 }
 
 function setDirectoryPaths() {
@@ -57,198 +37,92 @@ function setDirectoryPaths() {
 	TEMPLATE_FILES_PATH = path.join(CURRENT_WORKING_DIR, '_cartridge');
 }
 
-function preSetup() {
-	promptOptions.setup(_options);
-
-	_log.warn('');
-	_log.warn(chalk.bold('Running through setup for a new project.'));
-	_log.warn(chalk.bold('This can be exited out by pressing [Ctrl+C]'));
-	_log.warn('');
-
-	_log.warn(chalk.bold('Make sure you are running this command in the folder you want all files copied to'));
-}
-
-function setupOnScreenPrompts() {
-	if(_isBaseInstall === true) {
-		runBaseInstall();
-	} else {
-		runCompleteInstall();
-	}
-}
-
-function runBaseInstall() {
-	_log.warn('');
-
-	_log.warn(chalk.bold('This will create a cartridge project that has:'));
-	_log.info(' · Sass setup');
-	_log.info(' · JavaScript setup');
-	_log.info(' · Server setup');
-	_log.info(' · Copy over static assets fonts etc');
-	_log.warn('');
-
-	promptOptions
-		.getBaseInstallPromptData()
-		.then(function(promptOptions) {
-			inquirer.prompt(promptOptions, handleBaseInstallPromptData);
-		})
-}
-
-function handleBaseInstallPromptData(answers) {
-	answers.cartridgeModules = ['cartridge-sass', 'cartridge-javascript','cartridge-copy-assets'];
-
-	if(answers.isNodejsSite === false) {
-		answers.cartridgeModules.push('cartridge-static-html');
-		answers.cartridgeModules.push('cartridge-local-server');
-	}
-
-	runCartridgeInstallation(answers);
-}
-
-function runCompleteInstall() {
-	promptOptions
-		.getNewCommandPromptOptions()
-		.then(function(promptOptions) {
-			console.log('');
-			inquirer.prompt(promptOptions, runCartridgeInstallation);
-		})
-}
-
-function areInsideProjectDirectory() {
-	return (path.basename(CURRENT_WORKING_DIR) === _promptAnswers.projectName);
-}
-
 function ensureProjectDirectoryExists() {
-	return new Promise(function(resolve, reject) {
+	return new Promise(resolve => {
 		if (areInsideProjectDirectory()) {
-			_log.debug('Already inside directory: ' + chalk.underline(CURRENT_WORKING_DIR) + ', skipping create directory step');
-			
+			log.debug(
+				`Already inside directory: ${chalk.underline(
+					CURRENT_WORKING_DIR
+				)}, skipping create directory step`
+			);
+
 			resolve();
 		} else {
-			var projectPath = path.resolve(CURRENT_WORKING_DIR, _promptAnswers.projectName);
+			const projectPath = path.resolve(CURRENT_WORKING_DIR, promptAnswers.projectName);
 
-			_log.debug('Making sure the path: ' + chalk.underline(projectPath) + ' exists');
+			log.debug(`Making sure the path: ${chalk.underline(projectPath)} exists`);
 
 			fs.ensureDirSync(projectPath);
 			process.chdir(projectPath);
 
 			setDirectoryPaths();
 
-			_log.debug('Changing working directory to: ' + chalk.underline(path.resolve(CURRENT_WORKING_DIR)));
-			_log.debug('Changing template files path to: ' + chalk.underline(path.resolve(TEMPLATE_FILES_PATH)));
+			log.debug(
+				`Changing working directory to: ${chalk.underline(path.resolve(CURRENT_WORKING_DIR))}`
+			);
+			log.debug(
+				`Changing template files path to: ${chalk.underline(path.resolve(TEMPLATE_FILES_PATH))}`
+			);
 
 			resolve();
 		}
-	})
+	});
 }
 
-function runCartridgeInstallation(answers) {
-	_promptAnswers = answers;
+function getCopyExcludeList() {
+	// Default exclude folders / files
+	const excludeList = ['node_modules'];
 
-	templateDataManager.setData(answers);
-
-	if(_promptAnswers.userHasConfirmed === true) {
-
-		_log.info('');
-		_log.info(emoji.get('joystick') + '  Inserting the cartridge...');;
-
-		ensureProjectDirectoryExists()
-			.then(function() {
-				return releaseService.downloadLatestRelease(_options)
-			})
-			.then(copyCartridgeSourceFilesToCwd)
-			.catch(errorHandler);
-
-	} else {
-		_log.info(emoji.get('x') + '  User cancelled - cartridge installation aborted!')
-	}
+	return excludeList;
 }
 
-function copyCartridgeSourceFilesToCwd(copyPath) {
-	fs.copy(copyPath, CURRENT_WORKING_DIR, {
-		filter: fileCopyFilter
-	}, fileCopyComplete)
-}
+function fileCopyFilter(filePath) {
+	let needToCopyFile = true;
+	const filesDirsToExclude = getCopyExcludeList();
 
-function fileCopyFilter(path) {
-	var needToCopyFile = true;
-	var filesDirsToExclude = getCopyExcludeList();
-
-	for (var i = 0; i < filesDirsToExclude.length; i++) {
-		//Check if needToCopyFile is still true and
-		//hasn't been flipped during loop
-		if(needToCopyFile === true) {
-			needToCopyFile = path.indexOf(filesDirsToExclude[i]) === -1;
+	for (let i = 0; i < filesDirsToExclude.length; i++) {
+		// Check if needToCopyFile is still true and
+		// hasn't been flipped during loop
+		if (needToCopyFile === true) {
+			needToCopyFile = !filePath.includes(filesDirsToExclude[i]);
 		}
-	};
+	}
 
-	if(needToCopyFile === false) {
-		_log.debug(chalk.underline('Skipping path - ' + path));
+	if (needToCopyFile === false) {
+		log.debug(chalk.underline(`Skipping path - ${filePath}`));
 	} else {
-		_log.debug('Copying path  -', path);
+		log.debug('Copying path  -', filePath);
 	}
 
 	return needToCopyFile;
 }
 
-function fileCopyComplete(err) {
-	if (err) {
-		errorHandler(err);
-	}
-
-	templateCopiedFiles();
-}
-
-function getCopyExcludeList() {
-	//Default exclude folders / files
-	var excludeList = [
-		'node_modules'
-	];
-
-	return excludeList;
-}
-
-function templateCopiedFiles() {
-	_log.debug('');
-	_log.info(emoji.get('floppy_disk') +'  Booting up files...');
-
-	fileTemplater()
-		.run({
-			data: templateDataManager.getData(),
-			basePath: CURRENT_WORKING_DIR,
-			files: getTemplateFileList(),
-			onEachFile: singleFileCallback
-		})
-		.then(function() {
-			installNpmPackages(_promptAnswers.cartridgeModules)
-		})
-}
-
 function getTemplateFileList() {
-	var fileList = [];
+	const fileList = [];
 
 	// Creds file
 	fileList.push({
-		src:  path.join(TEMPLATE_FILES_PATH, 'creds.tpl'),
+		src: path.join(TEMPLATE_FILES_PATH, 'creds.tpl'),
 		dest: path.join(CURRENT_WORKING_DIR, '_config', 'creds.json'),
 		deleteSrcFile: true
 	});
 
 	// Project package file
 	fileList.push({
-		src:  path.join(TEMPLATE_FILES_PATH, 'package.tpl'),
+		src: path.join(TEMPLATE_FILES_PATH, 'package.tpl'),
 		dest: path.join(CURRENT_WORKING_DIR, 'package.json'),
 		deleteSrcFile: true
 	});
 
 	// Project readme
 	fileList.push({
-		src:  path.join(TEMPLATE_FILES_PATH, 'readme.tpl'),
+		src: path.join(TEMPLATE_FILES_PATH, 'readme.tpl'),
 		dest: path.join(CURRENT_WORKING_DIR, 'readme.md')
 	});
 
 	// Cartridge config
 	fileList.push({
-		src:  path.join(TEMPLATE_FILES_PATH, 'rc.tpl'),
+		src: path.join(TEMPLATE_FILES_PATH, 'rc.tpl'),
 		dest: path.join(CURRENT_WORKING_DIR, '.cartridgerc')
 	});
 
@@ -256,15 +130,103 @@ function getTemplateFileList() {
 }
 
 function singleFileCallback(templateFilePath) {
-	_log.debug('Templating file -', templateFilePath);
+	log.debug('Templating file -', templateFilePath);
+}
+
+function installBaseModules() {
+	return new Promise((resolve, reject) => {
+		const spinner = new Spinner('%s');
+		spinner.setSpinnerString('|/-\\');
+
+		log.info('Installing core modules...');
+
+		if (log.getLevel() <= log.levels.INFO) {
+			spinner.start();
+		}
+
+		npmInstallPackage([], {}, err => {
+			if (err) reject(err);
+
+			if (log.getLevel() <= log.levels.INFO) {
+				spinner.stop(true);
+			}
+
+			log.info(chalk.bold('...done'));
+
+			resolve();
+		});
+	});
+}
+
+function installExpansionPacks() {
+	return new Promise((resolve, reject) => {
+		const spinner = new Spinner('%s');
+		spinner.setSpinnerString('|/-\\');
+
+		console.log('');
+		log.info('Installing expansion packs...');
+
+		if (log.getLevel() <= log.levels.INFO) {
+			spinner.start();
+		}
+
+		npmInstallPackage(promptAnswers.cartridgeModules, { saveDev: true }, err => {
+			if (err) reject(err);
+
+			if (log.getLevel() <= log.levels.INFO) {
+				spinner.stop(true);
+			}
+
+			log.info(chalk.bold('...done'));
+			log.info('');
+
+			resolve();
+		});
+	});
+}
+
+function finishSetup() {
+	log.info('');
+	log.info(chalk.green('Setup complete!'));
+	log.info(
+		`Cartridge project ${chalk.yellow(
+			promptAnswers.projectName
+		)} has been installed in ${chalk.yellow(CURRENT_WORKING_DIR)}`
+	);
+	log.info('');
+	log.info(`${emoji.get('fire')}  Project ready to go - next steps`);
+	log.info('');
+	log.info(`· Run ${chalk.yellow(`cd ${CURRENT_WORKING_DIR}`)}`);
+	log.info(`· Run ${chalk.yellow('gulp build')} for asset generation`);
+	log.info(
+		`· Run ${chalk.yellow('gulp build --prod')} for production ready / minified asset generation`
+	);
+	log.info('');
+	log.info(`${emoji.get('hammer_and_wrench')}  Extra, optional steps`);
+	log.info('');
+	log.info(`· Run ${chalk.yellow('gulp watch')} to setup watching of files.`);
+	log.info(`· Run ${chalk.yellow('gulp')} to run both asset generation + setup file watchers`);
+	log.info(`· Run ${chalk.yellow('gulp --tasks')} to list out all available tasks`);
+	log.info('');
+}
+
+function postInstallCleanUp() {
+	log.debug('');
+	log.debug('Running post install cleanup');
+
+	releaseService.deleteReleaseTmpDirectory();
+
+	log.debug(`Deleting templates file directory: ${TEMPLATE_FILES_PATH}`);
+
+	finishSetup();
 }
 
 function installNpmPackages(packages) {
-	if(_promptAnswers.isNodejsSite) {
+	if (promptAnswers.isNodejsSite) {
 		packages.push('cartridge-node-server');
 	}
 
-	if(packages.length > 0) {
+	if (packages.length > 0) {
 		installExpansionPacks(packages)
 			.then(installBaseModules)
 			.then(postInstallCleanUp)
@@ -276,86 +238,147 @@ function installNpmPackages(packages) {
 	}
 }
 
-function installBaseModules() {
-	return new Promise(function(resolve, reject) {
-		var spinner = new Spinner('%s');
-		spinner.setSpinnerString('|/-\\');
+function templateCopiedFiles() {
+	log.debug('');
+	log.info(`${emoji.get('floppy_disk')}  Booting up files...`);
 
-		_log.info('Installing core modules...');
-
-		if(_log.getLevel() <= _log.levels.INFO) {
-			spinner.start();
-		}
-
-		npmInstallPackage([], {}, function(err) {
-			if (err) reject(err);
-
-			if(_log.getLevel() <= _log.levels.INFO) {
-				spinner.stop(true);
-			}
-
-			_log.info(chalk.bold('...done'));
-
-			resolve();
+	fileTemplater()
+		.run({
+			data: templateDataManager.getData(),
+			basePath: CURRENT_WORKING_DIR,
+			files: getTemplateFileList(),
+			onEachFile: singleFileCallback
 		})
-	})
+		.then(() => {
+			installNpmPackages(promptAnswers.cartridgeModules);
+		});
 }
 
-function installExpansionPacks(packages, callback) {
-	return new Promise(function(resolve, reject) {
-		var spinner = new Spinner('%s');
-		spinner.setSpinnerString('|/-\\');
+function fileCopyComplete(err) {
+	if (err) {
+		errorHandler(err);
+	}
 
+	templateCopiedFiles();
+}
+
+function copyCartridgeSourceFilesToCwd(copyPath) {
+	fs.copy(
+		copyPath,
+		CURRENT_WORKING_DIR,
+		{
+			filter: fileCopyFilter
+		},
+		fileCopyComplete
+	);
+}
+
+function runCartridgeInstallation(answers) {
+	promptAnswers = answers;
+
+	templateDataManager.setData(answers);
+
+	if (promptAnswers.userHasConfirmed === true) {
+		log.info('');
+		log.info(`${emoji.get('joystick')}  Inserting the cartridge...`);
+
+		ensureProjectDirectoryExists()
+			.then(() => releaseService.downloadLatestRelease(cliOptions))
+			.then(copyCartridgeSourceFilesToCwd)
+			.catch(errorHandler);
+	} else {
+		log.info(`${emoji.get('x')}  User cancelled - cartridge installation aborted!`);
+	}
+}
+
+function handleBaseInstallPromptData(answers) {
+	const augmentedAnswers = answers;
+	augmentedAnswers.cartridgeModules = [
+		'cartridge-sass',
+		'cartridge-javascript',
+		'cartridge-copy-assets'
+	];
+
+	if (augmentedAnswers.isNodejsSite === false) {
+		augmentedAnswers.cartridgeModules.push('cartridge-static-html');
+		augmentedAnswers.cartridgeModules.push('cartridge-local-server');
+	}
+
+	runCartridgeInstallation(augmentedAnswers);
+}
+
+function runBaseInstall() {
+	log.warn('');
+
+	log.warn(chalk.bold('This will create a cartridge project that has:'));
+	log.info(' · Sass setup');
+	log.info(' · JavaScript setup');
+	log.info(' · Server setup');
+	log.info(' · Copy over static assets fonts etc');
+	log.warn('');
+
+	promptOptionsService.getBaseInstallPromptData().then(promptOptions => {
+		inquirer.prompt(promptOptions, handleBaseInstallPromptData);
+	});
+}
+
+function handleNoInternetConnection() {
+	log.info('');
+	log.info(
+		`${emoji.get('rotating_light')}  ${chalk.bold.underline(
+			'No internet connection detected'
+		)} ${emoji.get('rotating_light')}`
+	);
+	log.info('');
+	log.info('Cartridge requires an internet connection to fully run the installation');
+	log.info('Try again when an internet connection is available');
+	log.info('');
+}
+
+function preSetup() {
+	promptOptionsService.setup(cliOptions);
+
+	log.warn('');
+	log.warn(chalk.bold('Running through setup for a new project.'));
+	log.warn(chalk.bold('This can be exited out by pressing [Ctrl+C]'));
+	log.warn('');
+
+	log.warn(
+		chalk.bold('Make sure you are running this command in the folder you want all files copied to')
+	);
+}
+
+function runCompleteInstall() {
+	promptOptionsService.getNewCommandPromptOptions().then(promptOptions => {
 		console.log('');
-		_log.info('Installing expansion packs...');
-
-		if(_log.getLevel() <= _log.levels.INFO) {
-			spinner.start();
-		}
-
-		npmInstallPackage(_promptAnswers.cartridgeModules, { saveDev: true }, function(err) {
-			if (err) reject(err);
-
-			if(_log.getLevel() <= _log.levels.INFO) {
-				spinner.stop(true);
-			}
-
-			_log.info(chalk.bold('...done'));
-			_log.info('');
-
-			resolve();
-		})
-	})
+		inquirer.prompt(promptOptions, runCartridgeInstallation);
+	});
 }
 
-function postInstallCleanUp() {
-	_log.debug('');
-	_log.debug('Running post install cleanup');
-
-	releaseService.deleteReleaseTmpDirectory();
-
-	_log.debug('Deleting templates file directory: ' + TEMPLATE_FILES_PATH);
-
-	finishSetup();
+function setupOnScreenPrompts() {
+	if (isBaseInstall === true) {
+		runBaseInstall();
+	} else {
+		runCompleteInstall();
+	}
 }
 
-function finishSetup() {
-	_log.info('');
-	_log.info(chalk.green('Setup complete!'));
-	_log.info('Cartridge project ' + chalk.yellow(_promptAnswers.projectName) + ' has been installed in ' + chalk.yellow(CURRENT_WORKING_DIR));
-	_log.info('');
-	_log.info(emoji.get('fire') + '  Project ready to go - next steps');
-	_log.info('');
-	_log.info('· Run ' + chalk.yellow('cd ' + CURRENT_WORKING_DIR));
-	_log.info('· Run ' + chalk.yellow('gulp build') + ' for asset generation');
-	_log.info('· Run ' + chalk.yellow('gulp build --prod') + ' for production ready / minified asset generation');
-	_log.info('');
-	_log.info(emoji.get('hammer_and_wrench') + '  Extra, optional steps');
-	_log.info('');
-	_log.info('· Run ' + chalk.yellow('gulp watch') + ' to setup watching of files.');
-	_log.info('· Run ' + chalk.yellow('gulp') + ' to run both asset generation + setup file watchers');
-	_log.info('· Run ' + chalk.yellow('gulp --tasks') + ' to list out all available tasks');
-	_log.info('');
+function startInstallation() {
+	setDirectoryPaths();
+	preSetup();
+	setupOnScreenPrompts();
 }
+
+newCommandApi.init = (options, baseInstall) => {
+	cliOptions = options;
+	isBaseInstall = baseInstall;
+
+	log = utils.getLogInstance(cliOptions);
+
+	utils
+		.checkIfOnline()
+		.then(startInstallation)
+		.catch(handleNoInternetConnection);
+};
 
 module.exports = newCommandApi;

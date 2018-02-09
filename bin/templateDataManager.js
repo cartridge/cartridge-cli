@@ -1,30 +1,38 @@
-"use strict";
+// Enable strict mode for older versions of node
+// eslint-disable-next-line strict, lines-around-directive
+'use strict';
 
-var path = require('path');
+const path = require('path');
 
-var extend = require('extend');
-var pkg = require(path.resolve(__dirname, '..' ,'package.json'));
+const extend = require('extend');
+/* eslint import/no-dynamic-require:0  */
+const pkg = require(path.resolve(__dirname, '..', 'package.json'));
 
-var _templateData = {};
-var _baseData;
+let templateData = {};
+let templateBaseData;
 
-var templateDataApi = {};
+const templateDataApi = {};
 
 /**
- * Set internal template data
- * @param {Object} baseData Base template data object
+ * Pad a date number if necessary e.g. 9 would be 09
+ * @param  {Number} number The number to pad
+ * @return {Number}        Padded number
  */
-templateDataApi.setData = function(baseData) {
-	_baseData = baseData;
-	_templateData = extend({}, _baseData, getTemplateMetaData())
+function padDateNumber(number) {
+	return number <= 9 ? `0${number}` : number;
 }
 
 /**
- * Get the template data
- * @return {Object} Template data
+ * Get the current DD/MM/YYYY formatted date
+ * @return {String} Current date
  */
-templateDataApi.getData = function() {
-	return _templateData;
+function getCurrentDateFormatted() {
+	const date = new Date();
+	const day = padDateNumber(date.getDate());
+	const month = padDateNumber(date.getMonth() + 1);
+	const year = padDateNumber(date.getFullYear());
+
+	return [day, month, year].join('/');
 }
 
 /**
@@ -33,32 +41,25 @@ templateDataApi.getData = function() {
  */
 function getTemplateMetaData() {
 	return {
-		projectNameFileName:  _baseData.projectName.toLowerCase().replace(/ /g,"-"),
+		projectNameFileName: templateBaseData.projectName.toLowerCase().replace(/ /g, '-'),
 		projectGeneratedDate: getCurrentDateFormatted(),
-		currentVersion:       pkg.version
-	}
-
-}
-/**
- * Get the current DD/MM/YYYY formatted date
- * @return {String} Current date
- */
-function getCurrentDateFormatted() {
-	var date = new Date();
-	var day = padDateNumber(date.getDate());
-	var month = padDateNumber(date.getMonth() + 1);
-	var year = padDateNumber(date.getFullYear());
-
-	return [day, month, year].join('/');
+		currentVersion: pkg.version
+	};
 }
 
 /**
- * Pad a date number if necessary e.g. 9 would be 09
- * @param  {Number} number The number to pad
- * @return {Number}        Padded number
+ * Set internal template data
+ * @param {Object} baseData Base template data object
  */
-function padDateNumber(number) {
-	return number <= 9 ? '0' + number : number;
-}
+templateDataApi.setData = baseData => {
+	templateBaseData = baseData;
+	templateData = extend({}, templateBaseData, getTemplateMetaData());
+};
+
+/**
+ * Get the template data
+ * @return {Object} Template data
+ */
+templateDataApi.getData = () => templateData;
 
 module.exports = templateDataApi;
