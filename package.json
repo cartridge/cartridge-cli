@@ -1,7 +1,8 @@
 {
 	"name": "cartridge-cli",
 	"version": "1.2.0",
-	"description": "Start with a clean cartridge and get yourself going with a ready made basic website setup",
+	"description":
+		"Start with a clean cartridge and get yourself going with a ready made basic website setup",
 	"license": "ISC",
 	"engines": {
 		"node": ">=4.8.*"
