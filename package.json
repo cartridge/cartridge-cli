@@ -1,8 +1,7 @@
 {
 	"name": "cartridge-cli",
 	"version": "1.2.0",
-	"description":
-		"Start with a clean cartridge and get yourself going with a ready made basic website setup",
+	"description": "Start with a clean cartridge and get yourself going with a ready made basic website setup",
 	"license": "ISC",
 	"engines": {
 		"node": ">=4.8.*"
@@ -41,7 +40,6 @@
 		"node-emoji": "^1.5.1",
 		"npm-install-package": "^1.0.2",
 		"npm-keyword": "^5.0.0",
-		"npm-registry": "^0.1.13",
 		"pretty-error": "^2.0.0",
 		"titleize": "^1.0.0",
 		"unzip": "^0.1.11",
