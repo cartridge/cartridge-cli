@@ -9,11 +9,6 @@ const utils = require('./utils');
 const errorHandler = require('./errorHandler');
 const npmKeyword = require('npm-keyword');
 
-const npm = new Registry({
-	registry: 'http://registry.npmjs.org',
-	retries: 4
-});
-
 const NPM_CARTRIDGE_TASK_KEYWORD = 'cartridge-task';
 const NPM_CARTRIDGE_DEFAULT_KEYWORD = 'cartridge-module-default';
 
