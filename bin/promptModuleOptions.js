@@ -2,7 +2,6 @@
 // eslint-disable-next-line strict, lines-around-directive
 'use strict';
 
-const Registry = require('npm-registry');
 const inArray = require('in-array');
 
 const utils = require('./utils');
