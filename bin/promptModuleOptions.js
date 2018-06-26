@@ -7,6 +7,7 @@ const inArray = require('in-array');
 
 const utils = require('./utils');
 const errorHandler = require('./errorHandler');
+const npmKeyword = require('npm-keyword');
 
 const npm = new Registry({
 	registry: 'http://registry.npmjs.org',
@@ -24,26 +25,14 @@ const promptModuleOptionsApi = {};
  * Get name, description of all cartridge modules with the task keyword
  */
 function getCartridgeTaskModulesFromNpm() {
-	return new Promise(resolve => {
-		npm.packages.keyword(NPM_CARTRIDGE_TASK_KEYWORD, (err, data) => {
-			if (err) errorHandler(err);
-
-			resolve(data);
-		});
-	});
+	return npmKeyword(NPM_CARTRIDGE_TASK_KEYWORD);
 }
 
 /**
  * Get name, description of all cartridge modules using the default keyword
  */
 function getCartridgeDefaultModulesFromNpm() {
-	return new Promise(resolve => {
-		npm.packages.keyword(NPM_CARTRIDGE_DEFAULT_KEYWORD, (err, data) => {
-			if (err) errorHandler(err);
-
-			resolve(data);
-		});
-	});
+	return npmKeyword(NPM_CARTRIDGE_DEFAULT_KEYWORD);
 }
 
 /**
