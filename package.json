@@ -40,7 +40,7 @@
 		"loglevel": "^1.4.0",
 		"node-emoji": "^1.5.1",
 		"npm-install-package": "^1.0.2",
-		"npm-registry": "^0.1.13",
+		"npm-keyword": "^5.0.0",
 		"pretty-error": "^2.0.0",
 		"titleize": "^1.0.0",
 		"unzip": "^0.1.11",

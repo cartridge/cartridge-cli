@@ -2,16 +2,11 @@
 // eslint-disable-next-line strict, lines-around-directive
 'use strict';
 
-const Registry = require('npm-registry');
 const inArray = require('in-array');
 
 const utils = require('./utils');
 const errorHandler = require('./errorHandler');
-
-const npm = new Registry({
-	registry: 'http://registry.npmjs.org',
-	retries: 4
-});
+const npmKeyword = require('npm-keyword');
 
 const NPM_CARTRIDGE_TASK_KEYWORD = 'cartridge-task';
 const NPM_CARTRIDGE_DEFAULT_KEYWORD = 'cartridge-module-default';
@@ -24,26 +19,14 @@ const promptModuleOptionsApi = {};
  * Get name, description of all cartridge modules with the task keyword
  */
 function getCartridgeTaskModulesFromNpm() {
-	return new Promise(resolve => {
-		npm.packages.keyword(NPM_CARTRIDGE_TASK_KEYWORD, (err, data) => {
-			if (err) errorHandler(err);
-
-			resolve(data);
-		});
-	});
+	return npmKeyword(NPM_CARTRIDGE_TASK_KEYWORD);
 }
 
 /**
  * Get name, description of all cartridge modules using the default keyword
  */
 function getCartridgeDefaultModulesFromNpm() {
-	return new Promise(resolve => {
-		npm.packages.keyword(NPM_CARTRIDGE_DEFAULT_KEYWORD, (err, data) => {
-			if (err) errorHandler(err);
-
-			resolve(data);
-		});
-	});
+	return npmKeyword(NPM_CARTRIDGE_DEFAULT_KEYWORD);
 }
 
 /**
